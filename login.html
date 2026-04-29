@@ -92,12 +92,12 @@
             <form id="login-form" novalidate>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required placeholder="votre@email.com" autocomplete="email">
+                    <input type="email" id="email" name="email" required placeholder="votre@email.com" autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
                     <div class="pwd-wrap">
-                        <input type="password" id="password" name="password" required placeholder="********" autocomplete="current-password">
+                        <input type="password" id="password" name="password" required placeholder="********" autocomplete="off">
                         <button type="button" class="toggle-pwd" id="toggle-pwd" aria-label="Afficher/masquer">
                             <i class="fas fa-eye" id="pwd-icon"></i>
                         </button>
@@ -123,98 +123,206 @@
     <script>
         'use strict';
 
-        document.addEventListener('DOMContentLoaded', function () {
+        // Fonction pour nettoyer les champs (vider email et mot de passe)
+        function clearFormFields() {
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            
+            if (emailInput) emailInput.value = '';
+            if (passwordInput) passwordInput.value = '';
+        }
+
+        // Fonction pour charger les données sauvegardées (si "Se souvenir de moi" était coché)
+        function loadSavedCredentials() {
             try {
-                const rem = localStorage.getItem('ngozistes_remember');
-                if (rem) {
-                    document.getElementById('email').value = rem;
-                    document.getElementById('remember').checked = true;
+                const savedEmail = localStorage.getItem('ngozistes_remember');
+                const rememberCheckbox = document.getElementById('remember');
+                
+                if (savedEmail && rememberCheckbox) {
+                    document.getElementById('email').value = savedEmail;
+                    rememberCheckbox.checked = true;
+                } else if (rememberCheckbox) {
+                    rememberCheckbox.checked = false;
                 }
-            } catch (_) {}
+            } catch (e) {
+                console.error('Erreur chargement mémoire:', e);
+            }
+        }
 
-            document.getElementById('toggle-pwd').addEventListener('click', function () {
-                var i = document.getElementById('password');
-                var ic = document.getElementById('pwd-icon');
-                if (i.type === 'password') {
-                    i.type = 'text';
-                    ic.className = 'fas fa-eye-slash';
+        // Fonction pour sauvegarder l'email si "Se souvenir de moi" est coché
+        function saveEmailIfRemembered(email, remember) {
+            try {
+                if (remember) {
+                    localStorage.setItem('ngozistes_remember', email);
                 } else {
-                    i.type = 'password';
-                    ic.className = 'fas fa-eye';
+                    localStorage.removeItem('ngozistes_remember');
                 }
-            });
+            } catch (e) {
+                console.error('Erreur sauvegarde:', e);
+            }
+        }
 
-            document.getElementById('forgot-btn').addEventListener('click', function () {
-                window.showToast('Contactez un administrateur pour réinitialiser votre mot de passe.', 'info');
-            });
+        // Fonction pour déconnecter l'utilisateur avant la connexion
+        async function logoutBeforeLogin() {
+            try {
+                // Vérifier si l'utilisateur est connecté
+                const { data: { session } } = await window.supabase.auth.getSession();
+                if (session) {
+                    // Déconnecter l'utilisateur
+                    await window.supabase.auth.signOut();
+                    console.log('[Login] Utilisateur préalablement déconnecté avec succès');
+                    return true;
+                }
+                return false;
+            } catch (err) {
+                console.warn('[Login] Erreur lors de la déconnexion préalable:', err.message);
+                return false;
+            }
+        }
 
-            document.getElementById('login-form').addEventListener('submit', handleLogin);
+        document.addEventListener('DOMContentLoaded', async function () {
+            // Déconnecter automatiquement l'utilisateur s'il est déjà connecté
+            // Cela garantit que la page de connexion est propre
+            await logoutBeforeLogin();
+            
+            // Charger les identifiants sauvegardés au chargement de la page
+            loadSavedCredentials();
+
+            // Gestionnaire d'affichage/masquage du mot de passe
+            const togglePwdBtn = document.getElementById('toggle-pwd');
+            if (togglePwdBtn) {
+                togglePwdBtn.addEventListener('click', function () {
+                    const pwdInput = document.getElementById('password');
+                    const pwdIcon = document.getElementById('pwd-icon');
+                    if (pwdInput.type === 'password') {
+                        pwdInput.type = 'text';
+                        pwdIcon.className = 'fas fa-eye-slash';
+                    } else {
+                        pwdInput.type = 'password';
+                        pwdIcon.className = 'fas fa-eye';
+                    }
+                });
+            }
+
+            // Gestionnaire mot de passe oublié
+            const forgotBtn = document.getElementById('forgot-btn');
+            if (forgotBtn) {
+                forgotBtn.addEventListener('click', function () {
+                    if (typeof window.showToast === 'function') {
+                        window.showToast('Contactez un administrateur pour réinitialiser votre mot de passe.', 'info');
+                    } else {
+                        alert('Contactez un administrateur pour réinitialiser votre mot de passe.');
+                    }
+                });
+            }
+
+            // Gestionnaire de soumission du formulaire
+            const loginForm = document.getElementById('login-form');
+            if (loginForm) {
+                loginForm.addEventListener('submit', handleLogin);
+            }
         });
 
         function showAlert(msg, type) {
-            var el = document.getElementById('login-alert');
-            el.textContent = msg;
-            el.className = 'alert ' + type;
-            el.style.display = 'block';
+            const alertEl = document.getElementById('login-alert');
+            if (alertEl) {
+                alertEl.textContent = msg;
+                alertEl.className = 'alert ' + type;
+                alertEl.style.display = 'block';
+            }
         }
 
         function shakeBox() {
-            var b = document.querySelector('.login-box');
-            b.classList.add('shake');
-            setTimeout(function(){ b.classList.remove('shake'); }, 400);
+            const box = document.querySelector('.login-box');
+            if (box) {
+                box.classList.add('shake');
+                setTimeout(function(){ box.classList.remove('shake'); }, 400);
+            }
         }
 
         async function handleLogin(e) {
             e.preventDefault();
             
-            var email = document.getElementById('email').value.trim().toLowerCase();
-            var password = document.getElementById('password').value;
-            var remember = document.getElementById('remember').checked;
-            var btn = document.getElementById('login-btn');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const rememberCheckbox = document.getElementById('remember');
+            const loginBtn = document.getElementById('login-btn');
+            
+            const email = emailInput.value.trim().toLowerCase();
+            const password = passwordInput.value;
+            const remember = rememberCheckbox ? rememberCheckbox.checked : false;
 
+            // Validation des champs
             if (!email || !password) {
                 showAlert('Veuillez remplir tous les champs.', 'error');
+                shakeBox();
                 return;
             }
 
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spinner"></span> Connexion...';
-            document.getElementById('login-alert').style.display = 'none';
+            // Désactiver le bouton pendant la connexion
+            if (loginBtn) {
+                loginBtn.disabled = true;
+                loginBtn.innerHTML = '<span class="spinner"></span> Connexion...';
+            }
+            
+            // Masquer l'alerte précédente
+            const alertEl = document.getElementById('login-alert');
+            if (alertEl) alertEl.style.display = 'none';
 
             try {
-                var user = await window.Auth.login(email, password);
+                // Appel à la fonction de login (doit être définie dans supabase-config.js)
+                const user = await window.Auth.login(email, password);
 
-                if (remember) {
-                    try { localStorage.setItem('ngozistes_remember', email); } catch(_) {}
-                } else {
-                    try { localStorage.removeItem('ngozistes_remember'); } catch(_) {}
-                }
+                // Sauvegarder l'email si "Se souvenir de moi" est coché
+                saveEmailIfRemembered(email, remember);
 
-                showAlert('✅ Bienvenue ' + (user.prenom || '') + ' !', 'success');
+                // ✅ VIDER LES CHAMPS APRÈS CONNEXION RÉUSSIE
+                clearFormFields();
+                
+                // Afficher le message de succès
+                const welcomeName = (user && user.prenom) ? user.prenom : (user && user.email) ? user.email.split('@')[0] : '';
+                showAlert('✅ Bienvenue ' + welcomeName + ' !', 'success');
 
+                // Rediriger après un court délai
                 setTimeout(function () {
-                    if (user.role === 'admin' || user.role === 'super_admin') {
+                    if (user && (user.role === 'admin' || user.role === 'super_admin')) {
                         window.location.href = 'admin/dashboard.html';
                     } else {
                         window.location.href = 'member/dashboard.html';
                     }
                 }, 1000);
+                
             } catch (err) {
-                var msg = err.message;
+                // En cas d'erreur, on ne vide PAS les champs pour permettre à l'utilisateur de réessayer
+                let msg = err.message || 'Erreur lors de la connexion.';
+                
                 if (msg === 'pending') {
                     showAlert('⏳ Votre demande est en attente de validation par un administrateur.', 'warning');
                 } else if (msg === 'inactive') {
                     showAlert('🚫 Votre compte a été désactivé. Contactez un administrateur.', 'error');
                 } else if (msg === 'email_exists') {
                     showAlert('Cette adresse email est déjà utilisée.', 'error');
+                } else if (msg === 'Invalid login credentials') {
+                    showAlert('Email ou mot de passe incorrect.', 'error');
+                } else if (msg.includes('Email not confirmed')) {
+                    showAlert('Veuillez confirmer votre email avant de vous connecter.', 'warning');
                 } else {
                     showAlert(msg || 'Erreur lors de la connexion.', 'error');
                 }
+                
                 shakeBox();
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Se connecter';
+                
+                // Réactiver le bouton
+                if (loginBtn) {
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Se connecter';
+                }
             }
         }
+
+        // Exposer les fonctions globalement si nécessaire
+        window.clearFormFields = clearFormFields;
+        window.logoutBeforeLogin = logoutBeforeLogin;
     </script>
 </body>
 </html>
