@@ -335,7 +335,6 @@ body{font-family:'Segoe UI',sans-serif;padding-top:80px;line-height:1.6;color:va
               <option value="Secrétariat Bureautique (SB)">Secrétariat Bureautique (SB)</option>
               <option value="__autre__">Autre filière…</option>
             </select>
-            <!-- Champ libre si "Autre" sélectionné -->
             <div class="filiere-other-field" id="filiere-other-wrap">
               <input type="text" id="filiere-other" maxlength="200" placeholder="Précisez votre filière…">
             </div>
@@ -474,7 +473,7 @@ async function fillVilles() {
     sel.appendChild(opt);
   });
   var autre = document.createElement('option');
-  autre.value = '__autre__'; autre.textContent = 'Autre…';
+  autre.value = '__autre__'; autre.textContent = 'Autre ville…';
   sel.appendChild(autre);
 }
 
@@ -537,7 +536,8 @@ function initFiliereOther() {
 // ── Toggles mot de passe ──────────────────────────────────────────
 function initPwdToggles() {
   document.querySelectorAll('.toggle-pwd').forEach(function (btn) {
-    btn.addEventListener('click', function () {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
       var inp = this.previousElementSibling;
       var icon = this.querySelector('i');
       if (!inp) return;
@@ -692,13 +692,97 @@ async function loadAndShowConditionsModal() {
   }
 }
 
+// ── Fonction pour vider complètement le formulaire ────────────────
+function resetForm() {
+  var form = document.getElementById('adhesion-form');
+  
+  // Vider tous les champs texte, email, tel, password, textarea
+  form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="password"], textarea').forEach(function(el) {
+    el.value = '';
+  });
+  
+  // Remettre les selects à la valeur par défaut (option 0)
+  form.querySelectorAll('select').forEach(function(el) {
+    el.selectedIndex = 0;
+  });
+  
+  // Décocher toutes les cases à cocher et boutons radio
+  form.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(function(el) {
+    el.checked = false;
+  });
+  
+  // Masquer les champs "Autre" dynamiques
+  ['ville-other-wrap', 'lycee-other-wrap', 'filiere-other-wrap'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.classList.remove('show');
+  });
+  
+  // Vider les champs "Autre"
+  var villeOther = document.getElementById('ville-other');
+  if (villeOther) villeOther.value = '';
+  var lyceeOther = document.getElementById('lycee-other');
+  if (lyceeOther) lyceeOther.value = '';
+  var filiereOther = document.getElementById('filiere-other');
+  if (filiereOther) filiereOther.value = '';
+  
+  // Masquer la section lycée technique
+  var lyceeBox = document.getElementById('lycee-box');
+  if (lyceeBox) {
+    lyceeBox.classList.remove('visible');
+    lyceeBox.setAttribute('aria-hidden', 'true');
+  }
+  
+  // Masquer l'aperçu photo
+  var photoPreview = document.getElementById('photo-preview');
+  if (photoPreview) {
+    photoPreview.src = '';
+    photoPreview.classList.remove('visible');
+  }
+  var fileLabel = document.getElementById('file-label-txt');
+  if (fileLabel) fileLabel.textContent = 'Choisir une photo';
+  var photoFile = document.getElementById('photo-file');
+  if (photoFile) photoFile.value = '';
+  
+  // Réinitialiser la barre de force du mot de passe
+  var segIds = ['s1', 's2', 's3', 's4'];
+  segIds.forEach(function(id) {
+    var seg = document.getElementById(id);
+    if (seg) seg.className = 'seg';
+  });
+  var strengthTxt = document.getElementById('strength-txt');
+  if (strengthTxt) strengthTxt.textContent = 'Entrez un mot de passe';
+  
+  // Réinitialiser le message de correspondance des mots de passe
+  var matchMsg = document.getElementById('match-msg');
+  if (matchMsg) matchMsg.innerHTML = '';
+  
+  // Réinitialiser la barre de progression
+  var progressFill = document.getElementById('progress-fill');
+  if (progressFill) progressFill.style.width = '0%';
+  var progressLabel = document.getElementById('progress-label');
+  if (progressLabel) progressLabel.textContent = '0% complété';
+  
+  // Masquer la barre de progression d'upload
+  var uploadProgress = document.getElementById('upload-progress');
+  if (uploadProgress) uploadProgress.style.display = 'none';
+}
+
 // ── Soumission ────────────────────────────────────────────────────
 async function handleSubmit(e) {
   e.preventDefault();
+  
+  // Anti-spam honeypot
   if (document.getElementById('hp_website').value !== '') return;
-  if (Date.now() - PAGE_LOAD < 3000) { showAlert('Veuillez prendre le temps de remplir le formulaire.', 'error'); return; }
+  
+  // Vérification du temps de remplissage
+  if (Date.now() - PAGE_LOAD < 3000) { 
+    showAlert('Veuillez prendre le temps de remplir le formulaire.', 'error'); 
+    return; 
+  }
+  
   if (submitting) return;
 
+  // Récupération des valeurs du formulaire
   var nom        = document.getElementById('nom').value.trim();
   var prenom     = document.getElementById('prenom').value.trim();
   var email      = document.getElementById('email').value.trim().toLowerCase();
@@ -723,7 +807,7 @@ async function handleSubmit(e) {
     ? document.getElementById('lycee-other').value.trim()
     : lyceeSelect;
 
-  // Filière — récupère la valeur du SELECT, ou le champ libre si "Autre"
+  // Filière
   var filiereSelect = document.getElementById('filiere').value;
   var filiere = filiereSelect === '__autre__'
     ? document.getElementById('filiere-other').value.trim()
@@ -733,34 +817,44 @@ async function handleSubmit(e) {
 
   // ── Validations ──
   if (!nom || !prenom || !email || !tel || !ville || !motivation) {
-    showAlert('Veuillez remplir tous les champs obligatoires (*).', 'error'); return;
+    showAlert('Veuillez remplir tous les champs obligatoires (*).', 'error'); 
+    return;
   }
   if (villeSelect === '__autre__' && !ville) {
-    showAlert('Veuillez préciser votre ville.', 'error'); return;
+    showAlert('Veuillez préciser votre ville.', 'error'); 
+    return;
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    showAlert('Adresse email invalide.', 'error'); return;
+    showAlert('Adresse email invalide.', 'error'); 
+    return;
   }
   if (!/^[\+]?[\d\s\-\(\)]{8,20}$/.test(tel)) {
-    showAlert('Numéro de téléphone invalide.', 'error'); return;
+    showAlert('Numéro de téléphone invalide.', 'error'); 
+    return;
   }
   if (password.length < 8) {
-    showAlert('Le mot de passe doit contenir au moins 8 caractères.', 'error'); return;
+    showAlert('Le mot de passe doit contenir au moins 8 caractères.', 'error'); 
+    return;
   }
   if (password !== confirm) {
-    showAlert('Les mots de passe ne correspondent pas.', 'error'); return;
+    showAlert('Les mots de passe ne correspondent pas.', 'error'); 
+    return;
   }
   if (!document.getElementById('lycee-oui').checked && !document.getElementById('lycee-non').checked) {
-    showAlert('Indiquez si vous avez fréquenté un lycée technique.', 'error'); return;
+    showAlert('Indiquez si vous avez fréquenté un lycée technique.', 'error'); 
+    return;
   }
   if (lyceeOui && lyceeSelect === '__autre__' && !nomLycee) {
-    showAlert('Veuillez préciser le nom du lycée.', 'error'); return;
+    showAlert('Veuillez préciser le nom du lycée.', 'error'); 
+    return;
   }
   if (lyceeOui && filiereSelect === '__autre__' && !filiere) {
-    showAlert('Veuillez préciser votre filière.', 'error'); return;
+    showAlert('Veuillez préciser votre filière.', 'error'); 
+    return;
   }
   if (!conditions) {
-    showAlert('Vous devez accepter les conditions d\'adhésion.', 'error'); return;
+    showAlert('Vous devez accepter les conditions d\'adhésion.', 'error'); 
+    return;
   }
 
   submitting = true;
@@ -771,7 +865,12 @@ async function handleSubmit(e) {
 
   try {
     var result = await window.Auth.register(email, password, {
-      nom, prenom, telephone: tel, ville, motivation, newsletter,
+      nom: nom,
+      prenom: prenom, 
+      telephone: tel, 
+      ville: ville, 
+      motivation: motivation, 
+      newsletter: newsletter,
       metadata: {
         lycee_technique: lyceeOui,
         nom_lycee:    lyceeOui ? (nomLycee || null) : null,
@@ -785,12 +884,13 @@ async function handleSubmit(e) {
         ? 'Cette adresse email est déjà utilisée.'
         : ('Erreur : ' + (result.error || 'Inscription échouée'));
       showAlert(errMsg, 'error');
-      submitting = false; btn.disabled = false;
+      submitting = false; 
+      btn.disabled = false;
       btn.innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer ma demande';
       return;
     }
 
-    // Upload photo
+    // Upload photo si présente
     if (photoFile && result.user_id) {
       try {
         document.getElementById('upload-progress').style.display = 'block';
@@ -805,17 +905,21 @@ async function handleSubmit(e) {
       }
     }
 
-    document.getElementById('adhesion-form').style.opacity = '.5';
-    document.getElementById('adhesion-form').style.pointerEvents = 'none';
+    // ✅ VIDER COMPLÈTEMENT LE FORMULAIRE APRÈS ENVOI RÉUSSI
+    resetForm();
+
     showAlert('✅ Demande envoyée avec succès ! Redirection vers la connexion…', 'success');
-    setTimeout(function () { window.location.href = 'login.html'; }, 2800);
+    setTimeout(function () { 
+      window.location.href = 'login.html'; 
+    }, 2800);
 
   } catch (err) {
     console.error('[Adhesion] Erreur :', err);
     var msg = err.message || 'Une erreur est survenue. Veuillez réessayer.';
     if (msg === 'email_exists') msg = 'Cette adresse email est déjà utilisée.';
     showAlert('Erreur : ' + msg, 'error');
-    submitting = false; btn.disabled = false;
+    submitting = false; 
+    btn.disabled = false;
     btn.innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer ma demande';
   }
 }
