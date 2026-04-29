@@ -57,19 +57,12 @@ body{font-family:'Segoe UI',sans-serif;padding-top:80px;line-height:1.6;color:va
 .form-group input.error-field,.form-group select.error-field{border-color:var(--danger)}
 .form-text{color:var(--text);font-size:.82rem;margin-top:4px;display:block}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-
-/* Champ "Autre" dynamique */
 .other-field{display:none;margin-top:8px}
 .other-field.show{display:block}
 .other-field input{width:100%;padding:10px 14px;border:1px solid var(--primary);border-radius:8px;font-size:.95rem;color:var(--dark);font-family:inherit;background:#f0f9ff}
-.other-field input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(33,150,243,.1)}
-
-/* Champ "Autre filière" */
 .filiere-other-field{display:none;margin-top:8px}
 .filiere-other-field.show{display:block}
 .filiere-other-field input{width:100%;padding:10px 14px;border:1px solid var(--primary);border-radius:8px;font-size:.95rem;color:var(--dark);font-family:inherit;background:#f0f9ff}
-.filiere-other-field input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(33,150,243,.1)}
-
 .photo-wrap{display:flex;align-items:center;gap:18px;margin-top:8px}
 .photo-preview{width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--primary);background:#f0f0f0;display:none}
 .photo-preview.visible{display:block}
@@ -105,7 +98,6 @@ body{font-family:'Segoe UI',sans-serif;padding-top:80px;line-height:1.6;color:va
 .hp{position:absolute;left:-9999px;opacity:0;pointer-events:none}
 .upload-progress{width:100%;height:4px;background:#ddd;border-radius:2px;margin-top:6px;display:none;overflow:hidden}
 .upload-progress-fill{height:100%;background:var(--primary);border-radius:2px;width:0%;transition:width .3s}
-
 /* MODAL CONDITIONS */
 .modal-conditions{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:4000;align-items:center;justify-content:center}
 .modal-conditions.active{display:flex}
@@ -156,7 +148,6 @@ body{font-family:'Segoe UI',sans-serif;padding-top:80px;line-height:1.6;color:va
         <input type="text" id="hp_website" name="hp_website" tabindex="-1" autocomplete="off">
       </div>
 
-      <!-- Nom / Prénom -->
       <div class="form-row">
         <div class="form-group">
           <label for="nom">Nom *</label>
@@ -168,20 +159,17 @@ body{font-family:'Segoe UI',sans-serif;padding-top:80px;line-height:1.6;color:va
         </div>
       </div>
 
-      <!-- Email -->
       <div class="form-group">
         <label for="email">Email *</label>
         <input type="email" id="email" required maxlength="200" placeholder="exemple@email.com" autocomplete="email">
       </div>
 
-      <!-- Téléphone -->
       <div class="form-group">
         <label for="telephone">Téléphone *</label>
         <input type="tel" id="telephone" required placeholder="06 12 34 56 78" maxlength="20">
         <small class="form-text" id="tel-hint"></small>
       </div>
 
-      <!-- Ville — SELECT avec "Autre" -->
       <div class="form-group">
         <label for="ville">Ville de résidence *</label>
         <select id="ville" required>
@@ -193,7 +181,6 @@ body{font-family:'Segoe UI',sans-serif;padding-top:80px;line-height:1.6;color:va
         <small class="form-text" id="ville-hint"></small>
       </div>
 
-      <!-- Mot de passe -->
       <div class="form-row">
         <div class="form-group">
           <label for="password">Mot de passe * <small>(8 car. min.)</small></label>
@@ -217,13 +204,11 @@ body{font-family:'Segoe UI',sans-serif;padding-top:80px;line-height:1.6;color:va
         </div>
       </div>
 
-      <!-- Motivation -->
       <div class="form-group">
         <label for="motivation">Motivation *</label>
         <textarea id="motivation" required maxlength="2000" placeholder="Pourquoi souhaitez-vous rejoindre le collectif ?"></textarea>
       </div>
 
-      <!-- Photo de profil -->
       <div class="form-group">
         <label>Photo de profil <small>(optionnel)</small></label>
         <div class="photo-wrap">
@@ -242,7 +227,6 @@ body{font-family:'Segoe UI',sans-serif;padding-top:80px;line-height:1.6;color:va
         <small class="form-text">JPG, PNG, GIF ou WEBP. Max 5 Mo.</small>
       </div>
 
-      <!-- Lycée technique — OUI/NON -->
       <div class="form-group">
         <label>Avez-vous fréquenté un lycée technique ? *</label>
         <div class="radio-group">
@@ -257,11 +241,9 @@ body{font-family:'Segoe UI',sans-serif;padding-top:80px;line-height:1.6;color:va
         </div>
       </div>
 
-      <!-- Infos lycée -->
       <div id="lycee-box" class="lycee-box" aria-hidden="true">
         <h3><i class="fas fa-school"></i> Informations sur votre parcours technique</h3>
 
-        <!-- Nom du lycée — SELECT avec "Autre" -->
         <div class="form-group">
           <label for="nom-lycee">Nom du lycée</label>
           <select id="nom-lycee">
@@ -272,7 +254,6 @@ body{font-family:'Segoe UI',sans-serif;padding-top:80px;line-height:1.6;color:va
           </div>
         </div>
 
-        <!-- Filière — SELECT avec "Autre" -->
         <div class="form-row">
           <div class="form-group">
             <label for="filiere">Filière</label>
@@ -347,7 +328,6 @@ body{font-family:'Segoe UI',sans-serif;padding-top:80px;line-height:1.6;color:va
         </div>
       </div>
 
-      <!-- Conditions -->
       <div class="form-group">
         <div class="check-group">
           <input type="checkbox" id="conditions" required>
@@ -355,7 +335,6 @@ body{font-family:'Segoe UI',sans-serif;padding-top:80px;line-height:1.6;color:va
         </div>
       </div>
 
-      <!-- Newsletter -->
       <div class="form-group">
         <div class="check-group">
           <input type="checkbox" id="newsletter">
@@ -443,7 +422,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('adhesion-form').addEventListener('submit', handleSubmit);
 });
 
-// ── Années ────────────────────────────────────────────────────────
+// ── Années ──
 function fillYears() {
   var sel = document.getElementById('annee');
   var yr = new Date().getFullYear();
@@ -454,7 +433,7 @@ function fillYears() {
   }
 }
 
-// ── Villes ────────────────────────────────────────────────────────
+// ── Villes ──
 async function fillVilles() {
   var sel = document.getElementById('ville');
   var villes = VILLES_MAROC.slice();
@@ -477,7 +456,7 @@ async function fillVilles() {
   sel.appendChild(autre);
 }
 
-// ── Lycées ────────────────────────────────────────────────────────
+// ── Lycées ──
 async function fillLycees() {
   var sel = document.getElementById('nom-lycee');
   var lycees = LYCEES_TECHNIQUES.slice();
@@ -500,7 +479,6 @@ async function fillLycees() {
   sel.appendChild(autre);
 }
 
-// ── Gestion "Autre" ville ─────────────────────────────────────────
 function initVilleOther() {
   var sel = document.getElementById('ville');
   var wrap = document.getElementById('ville-other-wrap');
@@ -511,7 +489,6 @@ function initVilleOther() {
   });
 }
 
-// ── Gestion "Autre" lycée ─────────────────────────────────────────
 function initLyceeOther() {
   var sel = document.getElementById('nom-lycee');
   var wrap = document.getElementById('lycee-other-wrap');
@@ -522,7 +499,6 @@ function initLyceeOther() {
   });
 }
 
-// ── Gestion "Autre" filière ───────────────────────────────────────
 function initFiliereOther() {
   var sel = document.getElementById('filiere');
   var wrap = document.getElementById('filiere-other-wrap');
@@ -533,7 +509,6 @@ function initFiliereOther() {
   });
 }
 
-// ── Toggles mot de passe ──────────────────────────────────────────
 function initPwdToggles() {
   document.querySelectorAll('.toggle-pwd').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
@@ -547,7 +522,6 @@ function initPwdToggles() {
   });
 }
 
-// ── Force du mot de passe ─────────────────────────────────────────
 function initPwdStrength() {
   document.getElementById('password').addEventListener('input', checkStrength);
   document.getElementById('confirm').addEventListener('input', checkMatch);
@@ -578,7 +552,6 @@ function checkMatch() {
   else el.innerHTML = '<i class="fas fa-times-circle ko"></i><span class="ko">Ne correspondent pas</span>';
 }
 
-// ── Toggle section lycée ──────────────────────────────────────────
 function initLyceeToggle() {
   var oui = document.getElementById('lycee-oui');
   var non = document.getElementById('lycee-non');
@@ -592,7 +565,6 @@ function initLyceeToggle() {
   non.addEventListener('change', toggle);
 }
 
-// ── Upload photo ──────────────────────────────────────────────────
 function initPhotoUpload() {
   document.getElementById('photo-file').addEventListener('change', function (e) {
     var file = e.target.files[0];
@@ -607,7 +579,6 @@ function initPhotoUpload() {
   });
 }
 
-// ── Hint téléphone ────────────────────────────────────────────────
 function initTelHint() {
   var tel = document.getElementById('telephone');
   var hint = document.getElementById('tel-hint');
@@ -619,7 +590,6 @@ function initTelHint() {
   });
 }
 
-// ── Barre de progression ──────────────────────────────────────────
 function initProgress() {
   var fields = ['nom','prenom','email','telephone','ville','password','confirm','motivation'];
   var fill = document.getElementById('progress-fill');
@@ -641,7 +611,6 @@ function initProgress() {
   });
 }
 
-// ── Alert ─────────────────────────────────────────────────────────
 function showAlert(msg, type) {
   var el = document.getElementById('alert-msg');
   el.textContent = msg;
@@ -650,7 +619,6 @@ function showAlert(msg, type) {
   el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-// ── Modal conditions ──────────────────────────────────────────────
 function initConditionsModal() {
   var link = document.getElementById('conditions-link');
   var modal = document.getElementById('conditionsModal');
@@ -663,6 +631,7 @@ function initConditionsModal() {
   modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
   document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
 }
+
 async function loadAndShowConditionsModal() {
   var modalBody = document.getElementById('conditionsModalBody');
   var modal = document.getElementById('conditionsModal');
@@ -692,97 +661,71 @@ async function loadAndShowConditionsModal() {
   }
 }
 
-// ── Fonction pour vider complètement le formulaire ────────────────
+// ── Réinitialiser le formulaire ──
 function resetForm() {
   var form = document.getElementById('adhesion-form');
-  
-  // Vider tous les champs texte, email, tel, password, textarea
-  form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="password"], textarea').forEach(function(el) {
-    el.value = '';
-  });
-  
-  // Remettre les selects à la valeur par défaut (option 0)
-  form.querySelectorAll('select').forEach(function(el) {
-    el.selectedIndex = 0;
-  });
-  
-  // Décocher toutes les cases à cocher et boutons radio
-  form.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(function(el) {
-    el.checked = false;
-  });
-  
-  // Masquer les champs "Autre" dynamiques
+  form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="password"], textarea').forEach(function(el) { el.value = ''; });
+  form.querySelectorAll('select').forEach(function(el) { el.selectedIndex = 0; });
+  form.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(function(el) { el.checked = false; });
   ['ville-other-wrap', 'lycee-other-wrap', 'filiere-other-wrap'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.classList.remove('show');
   });
-  
-  // Vider les champs "Autre"
-  var villeOther = document.getElementById('ville-other');
-  if (villeOther) villeOther.value = '';
-  var lyceeOther = document.getElementById('lycee-other');
-  if (lyceeOther) lyceeOther.value = '';
-  var filiereOther = document.getElementById('filiere-other');
-  if (filiereOther) filiereOther.value = '';
-  
-  // Masquer la section lycée technique
   var lyceeBox = document.getElementById('lycee-box');
-  if (lyceeBox) {
-    lyceeBox.classList.remove('visible');
-    lyceeBox.setAttribute('aria-hidden', 'true');
-  }
-  
-  // Masquer l'aperçu photo
+  if (lyceeBox) { lyceeBox.classList.remove('visible'); lyceeBox.setAttribute('aria-hidden', 'true'); }
   var photoPreview = document.getElementById('photo-preview');
-  if (photoPreview) {
-    photoPreview.src = '';
-    photoPreview.classList.remove('visible');
-  }
+  if (photoPreview) { photoPreview.src = ''; photoPreview.classList.remove('visible'); }
   var fileLabel = document.getElementById('file-label-txt');
   if (fileLabel) fileLabel.textContent = 'Choisir une photo';
   var photoFile = document.getElementById('photo-file');
   if (photoFile) photoFile.value = '';
-  
-  // Réinitialiser la barre de force du mot de passe
-  var segIds = ['s1', 's2', 's3', 's4'];
-  segIds.forEach(function(id) {
-    var seg = document.getElementById(id);
-    if (seg) seg.className = 'seg';
-  });
-  var strengthTxt = document.getElementById('strength-txt');
-  if (strengthTxt) strengthTxt.textContent = 'Entrez un mot de passe';
-  
-  // Réinitialiser le message de correspondance des mots de passe
-  var matchMsg = document.getElementById('match-msg');
-  if (matchMsg) matchMsg.innerHTML = '';
-  
-  // Réinitialiser la barre de progression
-  var progressFill = document.getElementById('progress-fill');
-  if (progressFill) progressFill.style.width = '0%';
-  var progressLabel = document.getElementById('progress-label');
-  if (progressLabel) progressLabel.textContent = '0% complété';
-  
-  // Masquer la barre de progression d'upload
-  var uploadProgress = document.getElementById('upload-progress');
-  if (uploadProgress) uploadProgress.style.display = 'none';
+  ['s1','s2','s3','s4'].forEach(function(id) { var s = document.getElementById(id); if (s) s.className = 'seg'; });
+  var stTxt = document.getElementById('strength-txt'); if (stTxt) stTxt.textContent = 'Entrez un mot de passe';
+  var matchMsg = document.getElementById('match-msg'); if (matchMsg) matchMsg.innerHTML = '';
+  var pFill = document.getElementById('progress-fill'); if (pFill) pFill.style.width = '0%';
+  var pLabel = document.getElementById('progress-label'); if (pLabel) pLabel.textContent = '0% complété';
+  var upProg = document.getElementById('upload-progress'); if (upProg) upProg.style.display = 'none';
 }
 
-// ── Soumission ────────────────────────────────────────────────────
+// ── DÉCONNEXION COMPLÈTE et propre ──
+async function fullLogout() {
+  try {
+    // 1. Supprimer la session Supabase Auth si elle existe
+    if (window.supabase && window.supabase.auth) {
+      try { await window.supabase.auth.signOut(); } catch(_) {}
+    }
+    // 2. Supprimer la session custom
+    try { localStorage.removeItem('ngozistes_session'); } catch(_) {}
+    // 3. Réinitialiser l'utilisateur courant en mémoire
+    window._currentUser = null;
+    // 4. Invalider tout le cache
+    if (window.AppCache) { window.AppCache.invalidateAll(); }
+    // 5. Stopper RealtimeSync si actif
+    if (window.RealtimeSync) { window.RealtimeSync.stop(); }
+    // 6. Stopper Notif polling si actif
+    if (window.Notif) { try { window.Notif.stop(); } catch(_) {} }
+    console.log('[Adhesion] Déconnexion complète effectuée');
+    return true;
+  } catch (err) {
+    console.warn('[Adhesion] Erreur déconnexion:', err.message);
+    // Forcer quand même la suppression de la session
+    try { localStorage.removeItem('ngozistes_session'); } catch(_) {}
+    window._currentUser = null;
+    return true;
+  }
+}
+
+// ── Soumission ──
 async function handleSubmit(e) {
   e.preventDefault();
-  
-  // Anti-spam honeypot
+
   if (document.getElementById('hp_website').value !== '') return;
-  
-  // Vérification du temps de remplissage
-  if (Date.now() - PAGE_LOAD < 3000) { 
-    showAlert('Veuillez prendre le temps de remplir le formulaire.', 'error'); 
-    return; 
+  if (Date.now() - PAGE_LOAD < 3000) {
+    showAlert('Veuillez prendre le temps de remplir le formulaire.', 'error');
+    return;
   }
-  
   if (submitting) return;
 
-  // Récupération des valeurs du formulaire
   var nom        = document.getElementById('nom').value.trim();
   var prenom     = document.getElementById('prenom').value.trim();
   var email      = document.getElementById('email').value.trim().toLowerCase();
@@ -795,19 +738,16 @@ async function handleSubmit(e) {
   var conditions = document.getElementById('conditions').checked;
   var lyceeOui   = document.getElementById('lycee-oui').checked;
 
-  // Ville
   var villeSelect = document.getElementById('ville').value;
   var ville = villeSelect === '__autre__'
     ? document.getElementById('ville-other').value.trim()
     : villeSelect;
 
-  // Lycée
   var lyceeSelect = document.getElementById('nom-lycee').value;
   var nomLycee = lyceeSelect === '__autre__'
     ? document.getElementById('lycee-other').value.trim()
     : lyceeSelect;
 
-  // Filière
   var filiereSelect = document.getElementById('filiere').value;
   var filiere = filiereSelect === '__autre__'
     ? document.getElementById('filiere-other').value.trim()
@@ -815,46 +755,35 @@ async function handleSubmit(e) {
 
   var annee = document.getElementById('annee').value;
 
-  // ── Validations ──
   if (!nom || !prenom || !email || !tel || !ville || !motivation) {
-    showAlert('Veuillez remplir tous les champs obligatoires (*).', 'error'); 
-    return;
+    showAlert('Veuillez remplir tous les champs obligatoires (*).', 'error'); return;
   }
   if (villeSelect === '__autre__' && !ville) {
-    showAlert('Veuillez préciser votre ville.', 'error'); 
-    return;
+    showAlert('Veuillez préciser votre ville.', 'error'); return;
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    showAlert('Adresse email invalide.', 'error'); 
-    return;
+    showAlert('Adresse email invalide.', 'error'); return;
   }
   if (!/^[\+]?[\d\s\-\(\)]{8,20}$/.test(tel)) {
-    showAlert('Numéro de téléphone invalide.', 'error'); 
-    return;
+    showAlert('Numéro de téléphone invalide.', 'error'); return;
   }
   if (password.length < 8) {
-    showAlert('Le mot de passe doit contenir au moins 8 caractères.', 'error'); 
-    return;
+    showAlert('Le mot de passe doit contenir au moins 8 caractères.', 'error'); return;
   }
   if (password !== confirm) {
-    showAlert('Les mots de passe ne correspondent pas.', 'error'); 
-    return;
+    showAlert('Les mots de passe ne correspondent pas.', 'error'); return;
   }
   if (!document.getElementById('lycee-oui').checked && !document.getElementById('lycee-non').checked) {
-    showAlert('Indiquez si vous avez fréquenté un lycée technique.', 'error'); 
-    return;
+    showAlert('Indiquez si vous avez fréquenté un lycée technique.', 'error'); return;
   }
   if (lyceeOui && lyceeSelect === '__autre__' && !nomLycee) {
-    showAlert('Veuillez préciser le nom du lycée.', 'error'); 
-    return;
+    showAlert('Veuillez préciser le nom du lycée.', 'error'); return;
   }
   if (lyceeOui && filiereSelect === '__autre__' && !filiere) {
-    showAlert('Veuillez préciser votre filière.', 'error'); 
-    return;
+    showAlert('Veuillez préciser votre filière.', 'error'); return;
   }
   if (!conditions) {
-    showAlert('Vous devez accepter les conditions d\'adhésion.', 'error'); 
-    return;
+    showAlert('Vous devez accepter les conditions d\'adhésion.', 'error'); return;
   }
 
   submitting = true;
@@ -866,10 +795,10 @@ async function handleSubmit(e) {
   try {
     var result = await window.Auth.register(email, password, {
       nom: nom,
-      prenom: prenom, 
-      telephone: tel, 
-      ville: ville, 
-      motivation: motivation, 
+      prenom: prenom,
+      telephone: tel,
+      ville: ville,
+      motivation: motivation,
       newsletter: newsletter,
       metadata: {
         lycee_technique: lyceeOui,
@@ -884,7 +813,7 @@ async function handleSubmit(e) {
         ? 'Cette adresse email est déjà utilisée.'
         : ('Erreur : ' + (result.error || 'Inscription échouée'));
       showAlert(errMsg, 'error');
-      submitting = false; 
+      submitting = false;
       btn.disabled = false;
       btn.innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer ma demande';
       return;
@@ -905,20 +834,25 @@ async function handleSubmit(e) {
       }
     }
 
-    // ✅ VIDER COMPLÈTEMENT LE FORMULAIRE APRÈS ENVOI RÉUSSI
+    // ✅ Vider le formulaire
     resetForm();
 
-    showAlert('✅ Demande envoyée avec succès ! Redirection vers la connexion…', 'success');
-    setTimeout(function () { 
-      window.location.href = 'login.html'; 
-    }, 2800);
+    showAlert('✅ Demande envoyée avec succès ! Déconnexion en cours…', 'success');
+
+    // ✅ Déconnexion COMPLÈTE avant redirection
+    await fullLogout();
+
+    // ✅ Redirection propre vers login après un court délai
+    setTimeout(function () {
+      window.location.replace('login.html');
+    }, 2000);
 
   } catch (err) {
     console.error('[Adhesion] Erreur :', err);
     var msg = err.message || 'Une erreur est survenue. Veuillez réessayer.';
     if (msg === 'email_exists') msg = 'Cette adresse email est déjà utilisée.';
     showAlert('Erreur : ' + msg, 'error');
-    submitting = false; 
+    submitting = false;
     btn.disabled = false;
     btn.innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer ma demande';
   }
