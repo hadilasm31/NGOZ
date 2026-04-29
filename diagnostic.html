@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diagnostic</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+</head>
+<body>
+    <h1>Diagnostic de connexion</h1>
+    <div id="result"></div>
+    
+    <script>
+        async function runDiagnostic() {
+            const result = document.getElementById('result');
+            result.innerHTML = 'Exécution du diagnostic...';
+            
+            try {
+                // 1. Vérifier si supabase est accessible
+                result.innerHTML += '<br>✅ Supabase configuré';
+                
+                // 2. Tenter de se connecter
+                const email = 'hadilasmakadji31@gmail.com';
+                const password = prompt('Entrez le mot de passe pour ' + email);
+                
+                if (!password) {
+                    result.innerHTML += '<br>❌ Mot de passe non fourni';
+                    return;
+                }
+                
+                const { data, error } = await window.supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+                
+                if (error) {
+                    result.innerHTML += `<br>❌ Erreur auth: ${error.message}`;
+                    return;
+                }
+                
+                result.innerHTML += '<br>✅ Auth réussi';
+                
+                // 3. Récupérer les infos utilisateur
+                const { data: userData, error: userError } = await window.supabase
+                    .from('users')
+                    .select('*')
+                    .eq('id', data.user.id)
+                    .single();
+                
+                if (userError) {
+                    result.innerHTML += `<br>❌ Erreur récupération profil: ${userError.message}`;
+                    
+                    // Vérifier si la table existe
+                    const { error: tableError } = await window.supabase
+                        .from('users')
+                        .select('count')
+                        .limit(1);
+                    
+                    if (tableError) {
+                        result.innerHTML += `<br>❌ Problème table users: ${tableError.message}`;
+                    }
+                } else {
+                    result.innerHTML += '<br>✅ Profil trouvé';
+                    result.innerHTML += `<br>Rôle: ${userData.role}`;
+                    result.innerHTML += `<br>Statut: ${userData.status}`;
+                    
+                    if (userData.role === 'admin' || userData.role === 'super_admin') {
+                        result.innerHTML += '<br>✅ Vous êtes admin, redirection...';
+                        setTimeout(() => {
+                            window.location.href = 'admin/dashboard.html';
+                        }, 2000);
+                    } else {
+                        result.innerHTML += '<br>⚠️ Vous n\'êtes pas admin';
+                    }
+                }
+                
+            } catch (error) {
+                result.innerHTML += `<br>❌ Erreur: ${error.message}`;
+            }
+        }
+        
+        runDiagnostic();
+    </script>
+</body>
+</html>

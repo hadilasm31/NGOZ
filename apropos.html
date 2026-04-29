@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>À propos - Ngozistes du Royaume</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="icon" type="image/png" href="images/favicon.ico">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2196F3;--secondary:#2196f3;--dark:#010101;--light:#f4f4f4;--danger:#f44336;--text:#555;--radius:8px;--shadow:0 2px 8px rgba(0,0,0,.1);--tr:all .2s ease;--fb-bg:#f0f2f5}
+body{font-family:'Segoe UI',sans-serif;line-height:1.5;color:var(--text);padding-top:80px;overflow-x:hidden;background:var(--fb-bg)}
+.container{max-width:1200px;margin:0 auto;padding:0 15px}
+.header{position:fixed;top:0;left:0;width:100%;background:white;z-index:1000;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:.5rem 5%;max-width:1400px;margin:0 auto;height:80px}
+.logo{display:flex;align-items:center;gap:10px}.logo img{height:50px;width:auto}.logo span{font-size:1.5rem;font-weight:bold}
+.logo-ngozistes{color:#ff0000}.logo-royaume{color:#000}
+.nav-menu{display:flex;list-style:none;gap:30px;align-items:center}
+.nav-menu a{text-decoration:none;color:var(--dark);font-weight:500;transition:var(--tr);position:relative}
+.nav-menu a:hover,.nav-menu a.active{color:var(--primary)}
+.nav-menu a.active::after{content:'';position:absolute;bottom:-5px;left:0;width:100%;height:2px;background:var(--primary)}
+.user-profile{display:flex;align-items:center;gap:10px;cursor:pointer;padding:5px 15px;border-radius:50px;background:var(--light);transition:var(--tr)}.user-profile:hover{background:#e0e0e0}
+.nav-avatar{width:35px;height:35px;border-radius:50%;object-fit:cover;border:2px solid var(--primary)}
+.user-name{font-weight:500;color:var(--dark)}
+.user-dropdown{position:fixed;background:white;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.2);min-width:250px;z-index:2000}
+.user-dropdown-header{display:flex;align-items:center;gap:15px;padding:15px;border-bottom:1px solid #eee}
+.user-dropdown-header img{width:50px;height:50px;border-radius:50%;object-fit:cover;border:3px solid var(--primary)}
+.user-dropdown-info{display:flex;flex-direction:column}
+.user-dropdown-info span{font-weight:600;color:var(--dark)}
+.user-dropdown-info small{color:var(--text);font-size:.8rem}
+.user-dropdown-menu{padding:10px 0}
+.user-dropdown-menu a{display:flex;align-items:center;gap:12px;padding:12px 20px;color:var(--text);text-decoration:none;transition:var(--tr)}
+.user-dropdown-menu a:hover{background:var(--light);color:var(--primary)}
+.dropdown-divider{height:1px;background:#eee;margin:8px 0}
+.btn-login{background:var(--secondary);color:white!important;padding:10px 20px;border-radius:50px;display:flex;align-items:center;gap:5px}
+.btn-adhesion{background:var(--primary);color:white!important;padding:10px 20px;border-radius:50px}
+.hamburger{display:none;flex-direction:column;cursor:pointer;background:none;border:none;padding:4px}
+.hamburger span{width:25px;height:3px;background:var(--dark);margin:2px 0;transition:var(--tr);display:block}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.page-header{background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;padding:90px 0 50px;text-align:center;margin-bottom:30px}
+.page-header h1{font-size:2.5rem;margin-bottom:10px}
+.page-header p{font-size:1rem;max-width:500px;margin:0 auto;opacity:.95}
+.section{padding:50px 0}
+.section.bg-white{background:white}
+.section.bg-light{background:var(--light)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.about-content h2{color:var(--dark);margin-bottom:14px;font-size:1.8rem;text-align:left}
+.about-content h2::after{display:none}
+.about-content p{margin-bottom:12px;line-height:1.7}
+.about-img-wrap{background:#e8e8e8;border-radius:var(--radius);overflow:hidden;min-height:200px;display:flex;align-items:center;justify-content:center}
+.about-img-wrap img{width:100%;height:auto;display:block;border-radius:var(--radius);box-shadow:var(--shadow)}
+.about-img-wrap img.hidden{display:none}
+.about-img-placeholder{color:#bbb;font-size:3rem;display:none}
+.about-img-placeholder.show{display:block}
+.tl-items{max-width:800px;margin:0 auto}
+.tl-item{display:flex;gap:28px;margin-bottom:28px;position:relative}
+.tl-item::before{content:'';position:absolute;left:90px;top:0;bottom:-28px;width:2px;background:var(--primary)}
+.tl-item:last-child::before{display:none}
+.tl-item.hidden{display:none}
+.tl-year{min-width:100px;font-size:1.2rem;font-weight:bold;color:var(--primary);position:relative}
+.tl-year::after{content:'';position:absolute;right:-13px;top:8px;width:14px;height:14px;background:var(--primary);border-radius:50%}
+.tl-text{flex:1;background:white;padding:14px 18px;border-radius:var(--radius);box-shadow:var(--shadow)}
+.tl-text h3{color:var(--dark);margin-bottom:6px;font-size:1.05rem}
+.tl-text p{font-size:.88rem}
+.show-more-wrap{display:flex;justify-content:center;margin-top:18px}
+.show-more-btn{display:flex;align-items:center;gap:7px;padding:9px 22px;background:white;border:1px solid #ddd;border-radius:30px;color:var(--primary);font-weight:600;font-size:.9rem;cursor:pointer;transition:var(--tr);box-shadow:var(--shadow)}
+.show-more-btn:hover{border-color:var(--primary)}
+.plus-count{background:var(--primary);color:white;border-radius:20px;padding:2px 9px;font-weight:bold;font-size:.82rem}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.more-team{display:none;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:18px}
+.more-team.show{display:grid}
+.team-card{background:white;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);transition:var(--tr);border:1px solid rgba(0,0,0,.05)}
+.team-card:hover{transform:translateY(-4px);box-shadow:0 10px 22px rgba(0,0,0,.14)}
+.mem-img{width:100%;height:260px;overflow:hidden;cursor:pointer;background:#e8e8e8;display:flex;align-items:center;justify-content:center}
+.mem-img img{width:100%;height:100%;object-fit:contain;padding:8px;transition:transform .3s}
+.team-card:hover .mem-img img{transform:scale(1.02)}
+.mem-info{padding:14px;text-align:center}
+.mem-info h3{color:var(--dark);font-size:1.05rem;margin-bottom:4px}
+.mem-role{color:var(--primary);font-weight:500;font-size:.82rem;margin-bottom:7px;text-transform:uppercase;letter-spacing:.5px}
+.mem-bio{color:var(--text);font-size:.78rem;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:8px}
+.mem-social{display:flex;justify-content:center;gap:14px;padding-top:8px;border-top:1px solid #eee}
+.mem-social a{color:var(--text);transition:var(--tr)}
+.mem-social a:hover{color:var(--primary)}
+.values-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+.val-card{background:white;border-radius:10px;padding:22px 18px;text-align:center;box-shadow:var(--shadow);transition:var(--tr);aspect-ratio:1/1;display:flex;flex-direction:column;justify-content:center}
+.val-card:hover{transform:translateY(-3px)}
+.val-card i{font-size:2.2rem;color:var(--primary);margin-bottom:10px}
+.val-card h3{color:var(--dark);font-size:1.05rem;margin-bottom:7px}
+.val-card p{font-size:.83rem;line-height:1.4}
+.reglement-card{background:white;border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.reglement-header{background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;padding:18px 22px;display:flex;align-items:center;gap:12px}
+.reglement-header i{font-size:1.5rem}
+.reglement-header h3{font-size:1.1rem;font-weight:700}
+.reglement-body{padding:22px}
+.reglement-body p{font-size:.9rem;line-height:1.7;color:var(--text);white-space:pre-wrap}
+.reglement-empty{text-align:center;padding:40px;color:#aaa;font-style:italic}
+.reglement-actions{margin-top:16px;display:flex;gap:12px;flex-wrap:wrap}
+.doc-download-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:var(--secondary);color:white;text-decoration:none;border-radius:8px;font-size:.88rem;font-weight:600;transition:all .2s}
+.doc-download-btn:hover{background:#d21938;transform:translateY(-2px)}
+.doc-download-btn.green{background:var(--primary)}.doc-download-btn.green:hover{background:#45a049}
+.img-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:9999;padding-top:50px;overflow:auto}
+.img-modal.show{display:block}
+.img-modal img{margin:auto;display:block;max-width:90%;max-height:78vh;object-fit:contain;border-radius:8px}
+.img-caption{margin:14px auto;text-align:center;color:white;padding:10px}
+.modal-close-btn{position:absolute;top:14px;right:32px;color:#f1f1f1;font-size:38px;cursor:pointer;background:none;border:none;transition:var(--tr)}
+.modal-close-btn:hover{color:var(--primary)}
+.modal-nav{cursor:pointer;position:absolute;top:50%;transform:translateY(-50%);padding:14px;color:white;font-size:28px;background:rgba(0,0,0,.5);border-radius:50%;width:54px;height:54px;display:flex;align-items:center;justify-content:center;z-index:10001;border:none;transition:var(--tr)}
+.modal-nav:hover{background:var(--primary)}
+.modal-prev{left:18px}.modal-next{right:18px}
+.footer{background:var(--dark);color:white;padding:40px 0 20px;margin-top:40px}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:28px;margin-bottom:28px}
+.footer-ngozistes{color:#ff0000}.footer-royaume{color:#fff}
+.footer-contact h4,.footer-social h4{margin-bottom:12px;color:var(--primary)}
+.footer-contact p{margin-bottom:8px;font-size:.9rem}
+.footer-contact i{margin-right:8px;color:var(--primary)}
+.footer-contact a{color:white;text-decoration:none}.footer-contact a:hover{color:var(--primary)}
+.social-icons{display:flex;gap:14px}.social-icons a{color:white;font-size:1.2rem;transition:var(--tr)}.social-icons a:hover{color:var(--primary)}
+.footer-bottom{text-align:center;padding-top:16px;border-top:1px solid #444;font-size:.8rem}
+.footer-bottom a{color:white;text-decoration:none;margin-left:14px}.footer-bottom a:hover{color:var(--primary)}
+.loading{text-align:center;padding:40px;color:var(--text)}
+.loading::after{content:'';display:inline-block;width:18px;height:18px;margin-left:8px;border:2px solid var(--primary);border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.no-data{text-align:center;padding:40px;color:var(--text);font-style:italic}
+.error-t{text-align:center;padding:40px;color:var(--danger)}
+h2{text-align:center;font-size:2rem;color:var(--dark);margin-bottom:30px;position:relative}
+h2::after{content:'';display:block;width:60px;height:4px;background:var(--primary);margin:10px auto 0;border-radius:2px}
+@media(max-width:768px){body{padding-top:70px}.navbar{height:70px}.hamburger{display:flex}.nav-menu{position:fixed;top:70px;left:-100%;width:100%;height:calc(100vh - 70px);background:white;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:50px;transition:left .3s;z-index:999}.nav-menu.active{left:0}.nav-menu li{margin:12px 0}.user-profile{padding:5px}.user-name{display:none}.page-header{padding:80px 0 40px}.page-header h1{font-size:2rem}.about-grid{grid-template-columns:1fr;gap:24px}.tl-item{flex-direction:column;gap:8px;margin-left:20px}.tl-item::before{left:-8px}.tl-year::after{left:-23px;right:auto}.tl-year{min-width:auto}.team-grid,.more-team{grid-template-columns:repeat(2,1fr);gap:14px}.mem-img{height:190px}}
+@media(max-width:480px){body{padding-top:60px}.navbar{height:60px}.nav-menu{top:60px}.team-grid,.more-team{grid-template-columns:repeat(2,1fr)}.mem-img{height:160px}}
+</style>
+</head>
+<body>
+<div id="main-navbar"></div>
+
+<section class="page-header">
+  <div class="container">
+    <h1>À propos de nous</h1>
+    <p>Découvrez l'histoire des Ngozistes du Royaume, nos valeurs et notre équipe</p>
+  </div>
+</section>
+
+<section class="section bg-white">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-content">
+        <h2>Notre histoire</h2>
+        <div id="history-text"><div class="loading">Chargement</div></div>
+      </div>
+      <div class="about-img-wrap" id="history-img-wrap">
+        <img id="history-img" src="images/about/history.jpg" alt="Histoire" loading="lazy">
+        <i class="fas fa-image about-img-placeholder" id="history-placeholder"></i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section bg-light">
+  <div class="container">
+    <h2>Notre évolution</h2>
+    <div class="tl-items" id="timeline-container"><div class="loading">Chargement</div></div>
+    <div class="show-more-wrap" id="tl-more-wrap" style="display:none;">
+      <button class="show-more-btn" id="tl-toggle" type="button" aria-expanded="false">
+        <i class="fas fa-chevron-down"></i> Voir <span class="plus-count" id="tl-count">+0</span> étapes
+      </button>
+    </div>
+  </div>
+</section>
+
+<section class="section bg-white">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-img-wrap" id="org-img-wrap">
+        <img id="org-img" src="images/about/organization.jpg" alt="Organisation" loading="lazy">
+        <i class="fas fa-sitemap about-img-placeholder" id="org-placeholder"></i>
+      </div>
+      <div class="about-content">
+        <h2>Notre organisation</h2>
+        <div id="organization-text"><div class="loading">Chargement</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RÈGLEMENT INTÉRIEUR -->
+<section class="section bg-light">
+  <div class="container">
+    <h2>Règlement intérieur</h2>
+    <div id="reglement-container"><div class="loading">Chargement</div></div>
+  </div>
+</section>
+
+<section class="section bg-light">
+  <div class="container">
+    <h2>L'équipe de coordination</h2>
+    <div id="team-container"><div class="loading">Chargement</div></div>
+  </div>
+</section>
+
+<section class="section bg-white">
+  <div class="container">
+    <h2>Nos valeurs</h2>
+    <div id="values-container"><div class="loading">Chargement</div></div>
+  </div>
+</section>
+
+<div id="main-footer"></div>
+
+<div id="imgModal" class="img-modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <button class="modal-close-btn" id="modal-close">&times;</button>
+  <button class="modal-nav modal-prev" id="modal-prev">&#10094;</button>
+  <button class="modal-nav modal-next" id="modal-next">&#10095;</button>
+  <img id="modal-img" src="" alt="">
+  <div class="img-caption" id="modal-caption"></div>
+</div>
+
+<script src="components.js"></script>
+<script>
+'use strict';
+
+// =====================================================
+// DÉFINITION DES FONCTIONS MANQUANTES
+// =====================================================
+if (!window.escapeHtml) {
+    window.escapeHtml = function(s) {
+        if (s == null) return '';
+        var div = document.createElement('div');
+        div.textContent = String(s);
+        return div.innerHTML;
+    };
+}
+
+if (!window.truncateText) {
+    window.truncateText = function(t, max) {
+        if (!t) return '';
+        return t.length > max ? t.slice(0, max) + '…' : t;
+    };
+}
+
+if (!window.imgOnError) {
+    window.imgOnError = function(img) {
+        if (!img.dataset.errHandled) {
+            img.dataset.errHandled = '1';
+            img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect width="400" height="300" fill="%23e0e0e0"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%23999" font-size="18"%3EImage indisponible%3C/text%3E%3C/svg%3E';
+        }
+    };
+}
+
+if (!window.avatarOnError) {
+    window.avatarOnError = function(img) {
+        if (!img.dataset.errHandled) {
+            img.dataset.errHandled = '1';
+            img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Ccircle cx="40" cy="40" r="40" fill="%23e0e0e0"/%3E%3Ccircle cx="40" cy="32" r="14" fill="%239e9e9e"/%3E%3Cpath d="M8 74c0-18 14-30 32-30s32 12 32 30" fill="%239e9e9e"/%3E%3C/svg%3E';
+        }
+    };
+}
+
+if (!window.getCategoryLabel) {
+    window.getCategoryLabel = function(cat) {
+        var labels = {
+            environnement: 'Environnement', social: 'Social',
+            culture: 'Culture', education: 'Éducation',
+            general: 'Général', autre: 'Autre'
+        };
+        return labels[cat] || (cat || 'Général');
+    };
+}
+
+if (!window.formatDate) {
+    window.formatDate = function(iso, opts) {
+        if (!iso) return '';
+        return new Date(iso).toLocaleDateString('fr-FR', opts || { day: 'numeric', month: 'short', year: 'numeric' });
+    };
+}
+
+// =====================================================
+// VARIABLES GLOBALES
+// =====================================================
+var teamData = [];
+var curImgIdx = 0;
+var tlExpanded = false;
+
+function safeImg(src) {
+    return (src && src.trim() && src !== 'null' && src !== 'undefined') ? src : null;
+}
+
+function withTO(p, ms) {
+    return Promise.race([p, new Promise(function(_, r) {
+        setTimeout(function() { r(new Error('timeout')); }, ms || 8000);
+    })]);
+}
+
+function initAboutImg(imgId, placeholderId) {
+    var img = document.getElementById(imgId);
+    var ph = document.getElementById(placeholderId);
+    if (!img) return;
+    img.addEventListener('error', function() {
+        img.style.display = 'none';
+        if (ph) ph.classList.add('show');
+    });
+    img.addEventListener('load', function() {
+        if (img.naturalWidth === 0) {
+            img.style.display = 'none';
+            if (ph) ph.classList.add('show');
+        }
+    });
+}
+
+// =====================================================
+// INITIALISATION
+// =====================================================
+document.addEventListener('DOMContentLoaded', async function() {
+    initAboutImg('history-img', 'history-placeholder');
+    initAboutImg('org-img', 'org-placeholder');
+    initModal();
+    initTlToggle();
+    await Promise.allSettled([
+        loadHistory(),
+        loadOrganization(),
+        loadTimeline(),
+        loadTeam(),
+        loadValues(),
+        loadReglement()
+    ]);
+});
+
+// =====================================================
+// MODAL IMAGE
+// =====================================================
+function initModal() {
+    var modal = document.getElementById('imgModal');
+    var img = document.getElementById('modal-img');
+    var cap = document.getElementById('modal-caption');
+    
+    function upd() {
+        var m = teamData[curImgIdx];
+        if (!m) return;
+        var src = safeImg(m.photo) || window.FALLBACK_AVATAR || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Ccircle cx="40" cy="40" r="40" fill="%23e0e0e0"/%3E%3C/svg%3E';
+        img.src = src;
+        img.alt = (m.prenom || '') + ' ' + (m.nom || '');
+        cap.textContent = (m.prenom || '') + ' ' + (m.nom || '') + ' — ' + (m.role || '');
+    }
+    
+    window.openTeamModal = function(i) {
+        curImgIdx = i;
+        upd();
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    };
+    
+    function closeModal() {
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+    
+    document.getElementById('modal-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) closeModal();
+    });
+    
+    document.getElementById('modal-prev').addEventListener('click', function(e) {
+        e.stopPropagation();
+        curImgIdx = (curImgIdx - 1 + teamData.length) % teamData.length;
+        upd();
+    });
+    
+    document.getElementById('modal-next').addEventListener('click', function(e) {
+        e.stopPropagation();
+        curImgIdx = (curImgIdx + 1) % teamData.length;
+        upd();
+    });
+    
+    document.addEventListener('keydown', function(e) {
+        if (!modal.classList.contains('show')) return;
+        if (e.key === 'Escape') closeModal();
+        if (e.key === 'ArrowLeft') document.getElementById('modal-prev').click();
+        if (e.key === 'ArrowRight') document.getElementById('modal-next').click();
+    });
+}
+
+function initTlToggle() {
+    var btn = document.getElementById('tl-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function() {
+        tlExpanded = !tlExpanded;
+        document.querySelectorAll('.tl-hidden').forEach(function(el) {
+            el.classList.toggle('hidden', !tlExpanded);
+        });
+        btn.setAttribute('aria-expanded', String(tlExpanded));
+        var count = document.querySelectorAll('.tl-hidden').length;
+        btn.innerHTML = tlExpanded ? 
+            '<i class="fas fa-chevron-up"></i> Voir moins' : 
+            '<i class="fas fa-chevron-down"></i> Voir <span class="plus-count">+' + count + '</span> étapes';
+    });
+}
+
+// =====================================================
+// CHARGEMENT DES DONNÉES
+// =====================================================
+async function loadHistory() {
+    var el = document.getElementById('history-text');
+    try {
+        var r = await withTO(window.supabase.from('content_pages').select('content,photo').eq('page', 'apropos').eq('section', 'history').maybeSingle());
+        if (r.data && r.data.content) {
+            el.innerHTML = '<p>' + window.escapeHtml(r.data.content) + '</p>';
+        } else {
+            el.innerHTML = "<p>Les Ngozistes du Royaume sont nés d'une vision commune : rassembler les forces vives de la communauté pour construire un avenir meilleur.</p>";
+        }
+        if (r.data && r.data.photo && r.data.photo.trim()) {
+            var hImg = document.getElementById('history-img');
+            if (hImg) {
+                hImg.src = r.data.photo;
+                hImg.style.display = 'block';
+            }
+            var ph = document.getElementById('history-placeholder');
+            if (ph) ph.classList.remove('show');
+        }
+    } catch(e) {
+        console.error('loadHistory error:', e);
+        el.innerHTML = '<p class="error-t">Erreur de chargement de l\'histoire.</p>';
+    }
+}
+
+async function loadOrganization() {
+    var el = document.getElementById('organization-text');
+    try {
+        var r = await withTO(window.supabase.from('content_pages').select('content,photo').eq('page', 'apropos').eq('section', 'organization').maybeSingle());
+        if (r.data && r.data.content) {
+            el.innerHTML = '<p>' + window.escapeHtml(r.data.content) + '</p>';
+        } else {
+            el.innerHTML = '<p>Notre organisation repose sur une structure participative où chaque membre a voix au chapitre.</p>';
+        }
+        if (r.data && r.data.photo && r.data.photo.trim()) {
+            var oImg = document.getElementById('org-img');
+            if (oImg) {
+                oImg.src = r.data.photo;
+                oImg.style.display = 'block';
+            }
+            var ph2 = document.getElementById('org-placeholder');
+            if (ph2) ph2.classList.remove('show');
+        }
+    } catch(e) {
+        console.error('loadOrganization error:', e);
+        el.innerHTML = '<p class="error-t">Erreur de chargement de l\'organisation.</p>';
+    }
+}
+
+async function loadTimeline() {
+    var container = document.getElementById('timeline-container');
+    try {
+        var r = await withTO(window.supabase.from('content_pages').select('content').eq('page', 'apropos').eq('section', 'timeline').maybeSingle());
+        var tl = [];
+        if (r.data && r.data.content) {
+            try {
+                var p = JSON.parse(r.data.content);
+                if (Array.isArray(p)) tl = p;
+            } catch(_) {}
+        }
+        if (!tl.length) {
+            tl = [
+                {year: '2020', title: 'Fondation', description: 'Création des Ngozistes du Royaume'},
+                {year: '2021', title: 'Premières actions', description: 'Premières actions solidaires'},
+                {year: '2022', title: 'Expansion', description: 'Extension du réseau'},
+                {year: '2023', title: 'Reconnaissance', description: "Reconnaissance de l'impact social"},
+                {year: '2024', title: 'Nouveaux projets', description: 'Nouveaux programmes'},
+                {year: '2025', title: 'Objectifs futurs', description: 'Planification des actions futures'}
+            ];
+        }
+        var initial = tl.slice(0, 4);
+        var rest = tl.slice(4);
+        container.innerHTML = initial.map(function(t) { return tlHtml(t, false); }).join('') + 
+                             rest.map(function(t) { return tlHtml(t, true); }).join('');
+        if (rest.length) {
+            document.getElementById('tl-count').textContent = '+' + rest.length;
+            document.getElementById('tl-more-wrap').style.display = 'flex';
+        }
+    } catch(e) {
+        console.error('loadTimeline error:', e);
+        container.innerHTML = '<p class="error-t">Erreur de chargement de la chronologie.</p>';
+    }
+}
+
+function tlHtml(t, hidden) {
+    return '<div class="tl-item' + (hidden ? ' tl-hidden hidden' : '') + '">' +
+        '<div class="tl-year">' + window.escapeHtml(t.year || '') + '</div>' +
+        '<div class="tl-text">' +
+        '<h3>' + window.escapeHtml(t.title || '') + '</h3>' +
+        '<p>' + window.escapeHtml(t.description || '') + '</p>' +
+        '</div></div>';
+}
+
+async function loadTeam() {
+    var container = document.getElementById('team-container');
+    try {
+        var r = await withTO(window.supabase.from('team').select('*').order('display_order', {ascending: true}));
+        if (r.error) throw r.error;
+        teamData = r.data || [];
+        if (!teamData.length) {
+            container.innerHTML = '<p class="no-data">Aucun membre disponible</p>';
+            return;
+        }
+        var perPage = 6;
+        var initial = teamData.slice(0, perPage);
+        var rest = teamData.slice(perPage);
+        var html = '<div class="team-grid">' + initial.map(function(m, i) { return teamHtml(m, i); }).join('') + '</div>';
+        if (rest.length) {
+            var c = rest.length;
+            html += '<div class="show-more-wrap"><button class="show-more-btn" id="team-more-btn" type="button">' +
+                    '<i class="fas fa-chevron-down"></i> Voir <span class="plus-count">+' + c + '</span></button></div>' +
+                    '<div id="team-more" class="more-team">' + rest.map(function(m, i) { return teamHtml(m, perPage + i); }).join('') + '</div>';
+        }
+        container.innerHTML = html;
+        if (rest.length) {
+            var btn = document.getElementById('team-more-btn');
+            var moreDiv = document.getElementById('team-more');
+            var cnt = rest.length;
+            btn.addEventListener('click', function() {
+                var open = moreDiv.classList.toggle('show');
+                btn.innerHTML = open ? 
+                    '<i class="fas fa-chevron-up"></i> Voir moins' : 
+                    '<i class="fas fa-chevron-down"></i> Voir <span class="plus-count">+' + cnt + '</span>';
+            });
+        }
+    } catch(e) {
+        console.error('loadTeam error:', e);
+        container.innerHTML = '<p class="error-t">Erreur de chargement de l\'équipe.</p>';
+    }
+}
+
+function teamHtml(m, idx) {
+    var photoSrc = safeImg(m.photo) || window.FALLBACK_AVATAR || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Ccircle cx="40" cy="40" r="40" fill="%23e0e0e0"/%3E%3C/svg%3E';
+    var prenom = window.escapeHtml(m.prenom || '');
+    var nom = window.escapeHtml(m.nom || '');
+    var role = window.escapeHtml(m.role || '');
+    var bio = window.escapeHtml(window.truncateText(m.bio || '', 80));
+    var sl = m.social_links || {};
+    return '<article class="team-card">' +
+        '<div class="mem-img" role="button" tabindex="0" aria-label="Photo de ' + prenom + ' ' + nom + '" onclick="openTeamModal(' + idx + ')" onkeydown="if(event.key===\'Enter\')openTeamModal(' + idx + ')">' +
+        '<img src="' + window.escapeHtml(photoSrc) + '" alt="' + prenom + ' ' + nom + '" loading="lazy" onerror="window.avatarOnError(this)">' +
+        '</div>' +
+        '<div class="mem-info">' +
+        '<h3>' + prenom + ' ' + nom + '</h3>' +
+        '<p class="mem-role">' + role + '</p>' +
+        '<p class="mem-bio">' + bio + '</p>' +
+        '<div class="mem-social">' +
+        (sl.facebook ? '<a href="' + window.escapeHtml(sl.facebook) + '" target="_blank" rel="noopener"><i class="fab fa-facebook"></i></a>' : '') +
+        (sl.linkedin ? '<a href="' + window.escapeHtml(sl.linkedin) + '" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i></a>' : '') +
+        '</div></div></article>';
+}
+
+async function loadValues() {
+    var el = document.getElementById('values-container');
+    var defaults = [
+        {icon: 'fa-hand-holding-heart', title: 'Solidarité', description: "Entraide et soutien mutuel"},
+        {icon: 'fa-users', title: 'Unité', description: "Rassembler les forces vives"},
+        {icon: 'fa-handshake', title: 'Entraide', description: "Partager compétences et ressources"},
+        {icon: 'fa-chart-line', title: 'Développement', description: "Construire un avenir meilleur"}
+    ];
+    try {
+        var r = await withTO(window.supabase.from('content_pages').select('content').eq('page', 'apropos').eq('section', 'values').maybeSingle());
+        var vals = defaults;
+        if (r.data && r.data.content) {
+            try {
+                var p = JSON.parse(r.data.content);
+                if (Array.isArray(p) && p.length) vals = p;
+            } catch(_) {}
+        }
+        el.innerHTML = '<div class="values-grid">' + vals.map(function(v) {
+            return '<div class="val-card">' +
+                '<i class="fas ' + window.escapeHtml(v.icon || 'fa-star') + '" aria-hidden="true"></i>' +
+                '<h3>' + window.escapeHtml(v.title || '') + '</h3>' +
+                '<p>' + window.escapeHtml(v.description || '') + '</p>' +
+                '</div>';
+        }).join('') + '</div>';
+    } catch(e) {
+        console.error('loadValues error:', e);
+        el.innerHTML = '<p class="error-t">Erreur de chargement des valeurs.</p>';
+    }
+}
+
+// CHARGEMENT DU RÈGLEMENT INTÉRIEUR DEPUIS LA TABLE `documents`
+async function loadReglement() {
+    var container = document.getElementById('reglement-container');
+    try {
+        var r = await withTO(window.supabase.from('documents').select('*').eq('type', 'reglement_interieur').order('updated_at', {ascending: false}).limit(1).maybeSingle());
+        
+        if (!r.data || (!r.data.content && !r.data.file_url)) {
+            container.innerHTML = '<div class="reglement-card"><div class="reglement-body">' +
+                '<p class="reglement-empty"><i class="fas fa-file-alt" style="font-size:2rem;display:block;margin-bottom:10px;opacity:.3;"></i>' +
+                'Le règlement intérieur n\'est pas encore disponible.<br>Contactez l\'administration pour plus d\'informations.</p>' +
+                '</div></div>';
+            return;
+        }
+        
+        var html = '<div class="reglement-card">' +
+            '<div class="reglement-header"><i class="fas fa-gavel"></i><div>' +
+            '<h3>Règlement intérieur</h3>' +
+            (r.data.updated_at ? '<div style="font-size:.78rem;opacity:.85;">Mis à jour le ' + new Date(r.data.updated_at).toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'}) + '</div>' : '') +
+            '</div></div>' +
+            '<div class="reglement-body">';
+        
+        if (r.data.content) {
+            html += '<p>' + window.escapeHtml(r.data.content) + '</p>';
+        }
+        
+        if (r.data.file_url) {
+            var isPdf = r.data.file_url.includes('pdf') || r.data.file_url.startsWith('data:application/pdf');
+            html += '<div class="reglement-actions">';
+            if (isPdf) {
+                html += '<a href="' + window.escapeHtml(r.data.file_url) + '" target="_blank" class="doc-download-btn"><i class="fas fa-file-pdf"></i> Ouvrir le PDF</a>';
+            } else {
+                html += '<a href="' + window.escapeHtml(r.data.file_url) + '" target="_blank" class="doc-download-btn"><i class="fas fa-file-download"></i> Télécharger le document</a>';
+            }
+            html += '</div>';
+        }
+        
+        html += '</div></div>';
+        container.innerHTML = html;
+        
+    } catch(e) {
+        console.error('Erreur chargement règlement:', e);
+        container.innerHTML = '<div class="reglement-card"><div class="reglement-body"><p class="error-t">Erreur de chargement du règlement intérieur.</p></div></div>';
+    }
+}
+</script>
+</body>
+</html>

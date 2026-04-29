@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Hors ligne - Ngozistes du Royaume</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#4CAF50,#2196F3);min-height:100vh;display:flex;align-items:center;justify-content:center;color:white;text-align:center;padding:20px}
+.card{background:rgba(255,255,255,.15);backdrop-filter:blur(10px);border-radius:20px;padding:50px 40px;max-width:500px;width:100%}
+.icon{font-size:4rem;margin-bottom:20px;opacity:.9}
+h1{font-size:2rem;margin-bottom:15px}
+p{font-size:1.1rem;opacity:.9;margin-bottom:30px;line-height:1.6}
+.btn{display:inline-block;padding:14px 35px;background:white;color:#4CAF50;text-decoration:none;border-radius:50px;font-weight:bold;font-size:1rem;transition:all .3s;border:none;cursor:pointer}
+.btn:hover{transform:translateY(-3px);box-shadow:0 10px 20px rgba(0,0,0,.2)}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="icon"><i class="fas fa-wifi"></i></div>
+  <h1>Vous êtes hors ligne</h1>
+  <p>Vérifiez votre connexion internet et réessayez.<br>Les pages déjà visitées sont disponibles en cache.</p>
+  <button class="btn" onclick="window.location.reload()">
+    <i class="fas fa-redo"></i> Réessayer
+  </button>
+</div>
+<script>window.addEventListener('online', function(){ window.location.href='/'; });</script>
+</body>
+</html>

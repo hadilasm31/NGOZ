@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Adhésion - Ngozistes du Royaume</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="icon" type="image/png" href="images/favicon.ico">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2196f3;--secondary:#2196F3;--danger:#f44336;--dark:#010101;--light:#f4f4f4;--text:#666;--radius:8px;--shadow:0 5px 15px rgba(0,0,0,.1);--tr:all .3s ease}
+body{font-family:'Segoe UI',sans-serif;padding-top:80px;line-height:1.6;color:var(--text);overflow-x:hidden}
+.container{max-width:1200px;margin:0 auto;padding:0 20px}
+.header{position:fixed;top:0;left:0;width:100%;background:white;z-index:1000;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:.5rem 5%;max-width:1400px;margin:0 auto;height:80px}
+.logo{display:flex;align-items:center;gap:10px}.logo img{height:50px;width:auto}.logo span{font-size:1.5rem;font-weight:bold}
+.logo-ngozistes{color:#ff0000}.logo-royaume{color:#000}
+.nav-menu{display:flex;list-style:none;gap:30px;align-items:center}
+.nav-menu a{text-decoration:none;color:var(--dark);font-weight:500;transition:var(--tr)}
+.nav-menu a:hover,.nav-menu a.active{color:var(--primary)}
+.btn-login{background:var(--secondary);color:white!important;padding:10px 20px;border-radius:50px;display:flex;align-items:center;gap:5px}
+.btn-adhesion{background:var(--primary);color:white!important;padding:10px 20px;border-radius:50px}
+.user-profile{display:flex;align-items:center;gap:10px;cursor:pointer;padding:5px 15px;border-radius:50px;background:var(--light)}
+.nav-avatar{width:35px;height:35px;border-radius:50%;object-fit:cover;border:2px solid var(--primary)}
+.user-name{font-weight:500;color:var(--dark)}
+.user-dropdown{position:fixed;background:white;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.2);min-width:250px;z-index:2000}
+.user-dropdown-header{display:flex;align-items:center;gap:15px;padding:15px;border-bottom:1px solid #eee}
+.user-dropdown-header img{width:50px;height:50px;border-radius:50%;object-fit:cover;border:3px solid var(--primary)}
+.user-dropdown-info{display:flex;flex-direction:column}
+.user-dropdown-info span{font-weight:600;color:var(--dark)}
+.user-dropdown-info small{color:var(--text);font-size:.8rem}
+.user-dropdown-menu{padding:10px 0}
+.user-dropdown-menu a{display:flex;align-items:center;gap:12px;padding:12px 20px;color:var(--text);text-decoration:none;transition:var(--tr)}
+.user-dropdown-menu a:hover{background:var(--light);color:var(--primary)}
+.dropdown-divider{height:1px;background:#eee;margin:8px 0}
+.hamburger{display:none;flex-direction:column;cursor:pointer;background:none;border:none;padding:4px}
+.hamburger span{width:25px;height:3px;background:var(--dark);margin:2px 0;transition:var(--tr);display:block}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.adhesion-section{padding:40px 0 60px;min-height:calc(100vh - 80px);background:linear-gradient(135deg,#2196f3,#1976D2);display:flex;align-items:center}
+.adhesion-container{position:relative;z-index:2;max-width:720px;margin:0 auto;background:rgba(255,255,255,.97);padding:40px;border-radius:24px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.adhesion-container h1{text-align:center;color:var(--dark);margin-bottom:8px;font-size:2.2rem}
+.subtitle{text-align:center;color:var(--text);margin-bottom:28px;font-weight:500}
+.alert{padding:14px 20px;border-radius:50px;margin-bottom:18px;display:none;font-weight:500;text-align:center}
+.alert.error{background:#ffebee;color:#c62828;border:1px solid #ffcdd2}
+.alert.success{background:#e8f5e9;color:#2e7d32;border:1px solid #c8e6c9}
+.alert.info{background:#e3f2fd;color:#1565c0;border:1px solid #bbdefb}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;margin-bottom:5px;font-weight:500;color:var(--dark)}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:12px 15px;background:white;border:1px solid #ddd;border-radius:10px;font-size:1rem;color:var(--dark);transition:var(--tr);font-family:inherit}
+.form-group select{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:38px}
+.form-group textarea{resize:vertical;min-height:90px}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(33,150,243,.1)}
+.form-group input.error-field,.form-group select.error-field{border-color:var(--danger)}
+.form-text{color:var(--text);font-size:.82rem;margin-top:4px;display:block}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* Champ "Autre" dynamique */
+.other-field{display:none;margin-top:8px}
+.other-field.show{display:block}
+.other-field input{width:100%;padding:10px 14px;border:1px solid var(--primary);border-radius:8px;font-size:.95rem;color:var(--dark);font-family:inherit;background:#f0f9ff}
+.other-field input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(33,150,243,.1)}
+
+/* Champ "Autre filière" */
+.filiere-other-field{display:none;margin-top:8px}
+.filiere-other-field.show{display:block}
+.filiere-other-field input{width:100%;padding:10px 14px;border:1px solid var(--primary);border-radius:8px;font-size:.95rem;color:var(--dark);font-family:inherit;background:#f0f9ff}
+.filiere-other-field input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(33,150,243,.1)}
+
+.photo-wrap{display:flex;align-items:center;gap:18px;margin-top:8px}
+.photo-preview{width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--primary);background:#f0f0f0;display:none}
+.photo-preview.visible{display:block}
+.file-input-wrap{position:relative;flex:1}
+.file-input-wrap input[type="file"]{position:absolute;opacity:0;width:100%;height:100%;cursor:pointer;top:0;left:0}
+.file-label{display:flex;align-items:center;gap:8px;padding:12px 18px;background:var(--light);border:2px dashed #ddd;border-radius:10px;cursor:pointer;transition:var(--tr);color:var(--text)}
+.file-label:hover{background:#e3f2fd;border-color:var(--primary);color:var(--primary)}
+.pwd-wrap{position:relative;display:flex;align-items:center}
+.pwd-wrap input{padding-right:44px}
+.toggle-pwd{position:absolute;right:12px;background:none;border:none;cursor:pointer;color:var(--text);font-size:1.1rem}
+.toggle-pwd:hover{color:var(--primary)}
+.strength-bar{display:flex;gap:4px;margin:5px 0}
+.seg{height:4px;flex:1;background:#ddd;border-radius:2px;transition:background .3s}
+.seg.weak{background:var(--danger)}.seg.medium{background:#ff9800}.seg.strong{background:var(--primary)}
+.match-msg{font-size:.82rem;margin-top:4px;display:flex;align-items:center;gap:4px}
+.ok{color:var(--primary)}.ko{color:var(--danger)}
+.radio-group{display:flex;gap:24px;margin-top:5px}
+.radio-opt{display:flex;align-items:center;gap:7px}
+.radio-opt input[type="radio"]{width:18px;height:18px;accent-color:var(--primary)}
+.lycee-box{background:var(--light);padding:18px;border-radius:10px;margin-bottom:18px;display:none;border:2px solid var(--primary)}
+.lycee-box.visible{display:block}
+.lycee-box h3{color:var(--dark);margin-bottom:14px;font-size:1rem}
+.check-group{display:flex;align-items:center;gap:9px}
+.check-group input[type="checkbox"]{width:18px;height:18px;accent-color:var(--primary)}
+.btn-submit{width:100%;padding:14px;background:var(--primary);color:white;border:none;border-radius:10px;font-size:1.1rem;font-weight:bold;cursor:pointer;transition:var(--tr);margin-top:14px}
+.btn-submit:hover{background:#1976D2;transform:translateY(-2px);box-shadow:0 8px 16px rgba(33,150,243,.3)}
+.btn-submit:disabled{background:#ccc;cursor:not-allowed;transform:none;box-shadow:none}
+.status-note{margin-top:18px;padding:14px;background:var(--light);border-radius:10px;text-align:center;font-size:.9rem;color:var(--text)}
+.progress-wrap{margin-bottom:18px}
+.progress-bar{height:6px;background:#ddd;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary));border-radius:3px;transition:width .4s ease;width:0%}
+.progress-label{font-size:.78rem;color:var(--text);text-align:right;margin-top:4px}
+.hp{position:absolute;left:-9999px;opacity:0;pointer-events:none}
+.upload-progress{width:100%;height:4px;background:#ddd;border-radius:2px;margin-top:6px;display:none;overflow:hidden}
+.upload-progress-fill{height:100%;background:var(--primary);border-radius:2px;width:0%;transition:width .3s}
+
+/* MODAL CONDITIONS */
+.modal-conditions{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:4000;align-items:center;justify-content:center}
+.modal-conditions.active{display:flex}
+.modal-conditions-content{background:white;max-width:650px;width:92%;border-radius:16px;padding:30px;max-height:85vh;overflow-y:auto;position:relative;margin:auto}
+.modal-conditions-close{position:absolute;top:15px;right:15px;width:32px;height:32px;background:rgba(0,0,0,.07);border:none;border-radius:50%;font-size:20px;cursor:pointer;color:var(--text);display:flex;align-items:center;justify-content:center;transition:all .2s}
+.modal-conditions-close:hover{background:var(--danger);color:white}
+.modal-conditions-title{font-size:1.4rem;font-weight:700;color:var(--dark);margin-bottom:20px;border-bottom:2px solid var(--primary);padding-bottom:12px}
+.modal-conditions-body p{font-size:.92rem;line-height:1.65;color:var(--text);margin-bottom:14px;white-space:pre-wrap}
+.modal-conditions-footer{margin-top:22px;padding-top:16px;border-top:1px solid #eee;display:flex;justify-content:flex-end}
+.modal-conditions-footer .btn-close-conditions{padding:10px 25px;background:var(--primary);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600}
+.footer{background:var(--dark);color:white;padding:40px 0 20px}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:28px;margin-bottom:28px}
+.footer-ngozistes{color:#ff0000}.footer-royaume{color:#fff}
+.footer-contact h4,.footer-social h4{margin-bottom:12px;color:var(--primary)}
+.footer-contact p{margin-bottom:8px;font-size:.9rem}.footer-contact i{margin-right:8px;color:var(--primary)}
+.footer-contact a{color:white;text-decoration:none}.footer-contact a:hover{color:var(--primary)}
+.social-icons{display:flex;gap:14px}.social-icons a{color:white;font-size:1.2rem;transition:var(--tr)}.social-icons a:hover{color:var(--primary)}
+.footer-bottom{text-align:center;padding-top:16px;border-top:1px solid #444;font-size:.8rem}
+@media(max-width:768px){
+  body{padding-top:70px}.navbar{height:70px}.hamburger{display:flex}
+  .nav-menu{position:fixed;top:70px;left:-100%;width:100%;height:calc(100vh - 70px);background:white;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:50px;transition:left .3s;z-index:999}
+  .nav-menu.active{left:0}.nav-menu li{margin:12px 0}
+  .adhesion-container{margin:0 15px;padding:28px 18px}
+  .form-row{grid-template-columns:1fr}
+  .photo-wrap{flex-direction:column;text-align:center}
+  .radio-group{flex-direction:column;gap:10px}
+}
+@media(max-width:480px){body{padding-top:60px}.navbar{height:60px}.nav-menu{top:60px;height:calc(100vh - 60px)}}
+</style>
+</head>
+<body>
+<div id="main-navbar"></div>
+
+<section class="adhesion-section">
+  <div class="adhesion-container">
+    <h1>Devenir membre</h1>
+    <p class="subtitle">Rejoignez le collectif Ngozistes du Royaume</p>
+
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="progress-label" id="progress-label">0% complété</div>
+    </div>
+
+    <div class="alert" id="alert-msg" role="alert" aria-live="polite"></div>
+
+    <form id="adhesion-form" novalidate>
+      <div class="hp" aria-hidden="true">
+        <input type="text" id="hp_website" name="hp_website" tabindex="-1" autocomplete="off">
+      </div>
+
+      <!-- Nom / Prénom -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nom">Nom *</label>
+          <input type="text" id="nom" required maxlength="100" placeholder="Votre nom" autocomplete="family-name">
+        </div>
+        <div class="form-group">
+          <label for="prenom">Prénom *</label>
+          <input type="text" id="prenom" required maxlength="100" placeholder="Votre prénom" autocomplete="given-name">
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email *</label>
+        <input type="email" id="email" required maxlength="200" placeholder="exemple@email.com" autocomplete="email">
+      </div>
+
+      <!-- Téléphone -->
+      <div class="form-group">
+        <label for="telephone">Téléphone *</label>
+        <input type="tel" id="telephone" required placeholder="06 12 34 56 78" maxlength="20">
+        <small class="form-text" id="tel-hint"></small>
+      </div>
+
+      <!-- Ville — SELECT avec "Autre" -->
+      <div class="form-group">
+        <label for="ville">Ville de résidence *</label>
+        <select id="ville" required>
+          <option value="">— Sélectionnez votre ville —</option>
+        </select>
+        <div class="other-field" id="ville-other-wrap">
+          <input type="text" id="ville-other" maxlength="100" placeholder="Précisez votre ville…">
+        </div>
+        <small class="form-text" id="ville-hint"></small>
+      </div>
+
+      <!-- Mot de passe -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="password">Mot de passe * <small>(8 car. min.)</small></label>
+          <div class="pwd-wrap">
+            <input type="password" id="password" required minlength="8" placeholder="********" autocomplete="new-password">
+            <button type="button" class="toggle-pwd" aria-label="Afficher"><i class="fas fa-eye"></i></button>
+          </div>
+          <div class="strength-bar">
+            <div class="seg" id="s1"></div><div class="seg" id="s2"></div>
+            <div class="seg" id="s3"></div><div class="seg" id="s4"></div>
+          </div>
+          <small class="form-text" id="strength-txt">Entrez un mot de passe</small>
+        </div>
+        <div class="form-group">
+          <label for="confirm">Confirmer *</label>
+          <div class="pwd-wrap">
+            <input type="password" id="confirm" required minlength="8" placeholder="********" autocomplete="new-password">
+            <button type="button" class="toggle-pwd" aria-label="Afficher"><i class="fas fa-eye"></i></button>
+          </div>
+          <div class="match-msg" id="match-msg" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <!-- Motivation -->
+      <div class="form-group">
+        <label for="motivation">Motivation *</label>
+        <textarea id="motivation" required maxlength="2000" placeholder="Pourquoi souhaitez-vous rejoindre le collectif ?"></textarea>
+      </div>
+
+      <!-- Photo de profil -->
+      <div class="form-group">
+        <label>Photo de profil <small>(optionnel)</small></label>
+        <div class="photo-wrap">
+          <img src="" alt="Aperçu" class="photo-preview" id="photo-preview">
+          <div class="file-input-wrap">
+            <input type="file" id="photo-file" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp">
+            <div class="file-label">
+              <i class="fas fa-upload"></i>
+              <span id="file-label-txt">Choisir une photo</span>
+            </div>
+          </div>
+        </div>
+        <div class="upload-progress" id="upload-progress">
+          <div class="upload-progress-fill" id="upload-progress-fill"></div>
+        </div>
+        <small class="form-text">JPG, PNG, GIF ou WEBP. Max 5 Mo.</small>
+      </div>
+
+      <!-- Lycée technique — OUI/NON -->
+      <div class="form-group">
+        <label>Avez-vous fréquenté un lycée technique ? *</label>
+        <div class="radio-group">
+          <div class="radio-opt">
+            <input type="radio" id="lycee-oui" name="lycee" value="oui" required>
+            <label for="lycee-oui">Oui</label>
+          </div>
+          <div class="radio-opt">
+            <input type="radio" id="lycee-non" name="lycee" value="non" required>
+            <label for="lycee-non">Non</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Infos lycée -->
+      <div id="lycee-box" class="lycee-box" aria-hidden="true">
+        <h3><i class="fas fa-school"></i> Informations sur votre parcours technique</h3>
+
+        <!-- Nom du lycée — SELECT avec "Autre" -->
+        <div class="form-group">
+          <label for="nom-lycee">Nom du lycée</label>
+          <select id="nom-lycee">
+            <option value="">— Sélectionnez votre lycée —</option>
+          </select>
+          <div class="other-field" id="lycee-other-wrap">
+            <input type="text" id="lycee-other" maxlength="200" placeholder="Précisez le nom du lycée…">
+          </div>
+        </div>
+
+        <!-- Filière — SELECT avec "Autre" -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="filiere">Filière</label>
+            <select id="filiere">
+              <option value="">— Sélectionnez votre filière —</option>
+              <option value="Génie mécanique, option Productique Mécanique (F1)">Génie mécanique, option Productique Mécanique (F1)</option>
+              <option value="Génie Mécanique, option Structures Métalliques (F1C)">Génie Mécanique, option Structures Métalliques (F1C)</option>
+              <option value="Génie Mécanique, option Productique Bois (F1D)">Génie Mécanique, option Productique Bois (F1D)</option>
+              <option value="Génie électronique (F2)">Génie électronique (F2)</option>
+              <option value="Génie Electrique, option Electrotechnique (F3)">Génie Electrique, option Electrotechnique (F3)</option>
+              <option value="Génie civil (F4)">Génie civil (F4)</option>
+              <option value="Génie mécanique, option Maintenance Industrielle (MI)">Génie mécanique, option Maintenance Industrielle (MI)</option>
+              <option value="Sciences de l'ingénieur (SI)">Sciences de l'ingénieur (SI)</option>
+              <option value="Génie Civil, option Architecture et Construction (AC)">Génie Civil, option Architecture et Construction (AC)</option>
+              <option value="Génie Energétique, option Energie Renouvelable (ER)">Génie Energétique, option Energie Renouvelable (ER)</option>
+              <option value="Sciences Physiques et Chimies de Laboratoires (SPCL)">Sciences Physiques et Chimies de Laboratoires (SPCL)</option>
+              <option value="Biotechnologie (Bio T'ech)">Biotechnologie (Bio T'ech)</option>
+              <option value="Biochimie et Génie Biologique (BGB)">Biochimie et Génie Biologique (BGB)</option>
+              <option value="Chimie de Laboratoire et Procédés Industriels (CLPI)">Chimie de Laboratoire et Procédés Industriels (CLPI)</option>
+              <option value="Electricité Industrielle (EI)">Electricité Industrielle (EI)</option>
+              <option value="Contrôle Qualité Agroalimentaire (CQA)">Contrôle Qualité Agroalimentaire (CQA)</option>
+              <option value="Maintenance des Véhicules Automobiles, option Véhicules Particulières (MVA-VP)">Maintenance des Véhicules Automobiles, option Véhicules Particulières (MVA-VP)</option>
+              <option value="Menuiserie Industrielle (Men I)">Menuiserie Industrielle (Men I)</option>
+              <option value="Sciage Déroulage (SD)">Sciage Déroulage (SD)</option>
+              <option value="Constructif Bois et Habitat (CBH)">Constructif Bois et Habitat (CBH)</option>
+              <option value="Maintenance des Equipements Industriels (MEI)">Maintenance des Equipements Industriels (MEI)</option>
+              <option value="Maintenance des Véhicules Automobiles, option Véhicules Industriels (MVA-VI)">Maintenance des Véhicules Automobiles, option Véhicules Industriels (MVA-VI)</option>
+              <option value="Technicien en Chaudronnerie Industrielle (TCI)">Technicien en Chaudronnerie Industrielle (TCI)</option>
+              <option value="Technicien en Installation des Systèmes Énergétiques et Climatiques (TISEC)">Technicien en Installation des Systèmes Énergétiques et Climatiques (TISEC)</option>
+              <option value="Technicien en études du Bâtiment, option Organisation et Réalisation du Gros Œuvre (ORGO)">Technicien en études du Bâtiment, option Organisation et Réalisation du Gros Œuvre (ORGO)</option>
+              <option value="Maintenance des Équipements Hospitaliers (MEH)">Maintenance des Équipements Hospitaliers (MEH)</option>
+              <option value="Constructeur d'ouvrages du Bâtiment en Aluminium, Verre et Matériaux de Synthèse (COBAVM)">Constructeur d'ouvrages du Bâtiment en Aluminium, Verre et Matériaux de Synthèse (COBAVM)</option>
+              <option value="Technicien en Chaussée et Ouvrages d'Arts (TCOA)">Technicien en Chaussée et Ouvrages d'Arts (TCOA)</option>
+              <option value="Technicien Géomètre-Topographe (TGT)">Technicien Géomètre-Topographe (TGT)</option>
+              <option value="Maintenance Informatique (M.inf)">Maintenance Informatique (M.inf)</option>
+              <option value="Technicien Informatique et internet industriel (TIII)">Technicien Informatique et internet industriel (TIII)</option>
+              <option value="Développeur Multimédia ou plateforme Web (DMW)">Développeur Multimédia ou plateforme Web (DMW)</option>
+              <option value="Maintenance Véhicule Automobile, option Véhicule Transport Routier (VTR)">Maintenance Véhicule Automobile, option Véhicule Transport Routier (VTR)</option>
+              <option value="Production Végétale (PV)">Production Végétale (PV)</option>
+              <option value="Production Animale (PA)">Production Animale (PA)</option>
+              <option value="Machinisme Agricole (MA)">Machinisme Agricole (MA)</option>
+              <option value="Conduite et Gestion des Exploitations Agricoles (CGEA)">Conduite et Gestion des Exploitations Agricoles (CGEA)</option>
+              <option value="Ouvrages Métalliques (OM)">Ouvrages Métalliques (OM)</option>
+              <option value="Installations Sanitaires (IS)">Installations Sanitaires (IS)</option>
+              <option value="Equipements Motorisés (EM)">Equipements Motorisés (EM)</option>
+              <option value="Ebénisterie Agencement (EA)">Ebénisterie Agencement (EA)</option>
+              <option value="Dessin et Construction Bâtiment (DCB)">Dessin et Construction Bâtiment (DCB)</option>
+              <option value="Electricité Bâtiment (EB)">Electricité Bâtiment (EB)</option>
+              <option value="Menuiserie Charpenterie (MC)">Menuiserie Charpenterie (MC)</option>
+              <option value="Réalisation d'Ouvrages Chaudronnés (ROC)">Réalisation d'Ouvrages Chaudronnés (ROC)</option>
+              <option value="Action et Communication Administrative (ACA)">Action et Communication Administrative (ACA)</option>
+              <option value="Action et Communication Commerciale (ACC)">Action et Communication Commerciale (ACC)</option>
+              <option value="Comptabilité et Gestion (CG)">Comptabilité et Gestion (CG)</option>
+              <option value="Comptabilité Marketing et Finances d'Entreprise (CMFE)">Comptabilité Marketing et Finances d'Entreprise (CMFE)</option>
+              <option value="Technique de Gestion Administrative (TGA)">Technique de Gestion Administrative (TGA)</option>
+              <option value="Technique de Comptabilité et de Gestion (TCG)">Technique de Comptabilité et de Gestion (TCG)</option>
+              <option value="Communication Administrative et Bureautique (CAB)">Communication Administrative et Bureautique (CAB)</option>
+              <option value="Comptabilité Gestion et Informatique (CGI)">Comptabilité Gestion et Informatique (CGI)</option>
+              <option value="Gestion Commerciale et Informatique (GCI)">Gestion Commerciale et Informatique (GCI)</option>
+              <option value="Secrétariat Bureautique (SB)">Secrétariat Bureautique (SB)</option>
+              <option value="__autre__">Autre filière…</option>
+            </select>
+            <!-- Champ libre si "Autre" sélectionné -->
+            <div class="filiere-other-field" id="filiere-other-wrap">
+              <input type="text" id="filiere-other" maxlength="200" placeholder="Précisez votre filière…">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="annee">Année de départ</label>
+            <select id="annee"><option value="">— Sélectionner —</option></select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conditions -->
+      <div class="form-group">
+        <div class="check-group">
+          <input type="checkbox" id="conditions" required>
+          <label for="conditions">J'accepte les <a href="#" id="conditions-link" style="color:var(--primary)">conditions d'adhésion</a> *</label>
+        </div>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="form-group">
+        <div class="check-group">
+          <input type="checkbox" id="newsletter">
+          <label for="newsletter">Je souhaite recevoir la newsletter</label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submit-btn">
+        <i class="fas fa-paper-plane"></i> Envoyer ma demande
+      </button>
+      <div class="status-note">
+        <i class="fas fa-info-circle"></i> Votre demande sera examinée par un administrateur avant validation.
+      </div>
+    </form>
+  </div>
+</section>
+
+<div id="main-footer"></div>
+
+<!-- MODAL CONDITIONS -->
+<div class="modal-conditions" id="conditionsModal" role="dialog" aria-modal="true">
+  <div class="modal-conditions-content">
+    <button class="modal-conditions-close" id="modalConditionsClose" aria-label="Fermer">&times;</button>
+    <div class="modal-conditions-title">
+      <i class="fas fa-file-contract" style="color:var(--primary);margin-right:8px;"></i>
+      Conditions d'adhésion
+    </div>
+    <div class="modal-conditions-body" id="conditionsModalBody">
+      <div>Chargement…</div>
+    </div>
+    <div class="modal-conditions-footer">
+      <button class="btn-close-conditions" id="closeConditionsBtn">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<script src="components.js"></script>
+<script>
+'use strict';
+
+var VILLES_MAROC = [
+  'Agadir','Aït Melloul','Al Hoceïma','Azrou','Béni Mellal','Berkane',
+  'Berrechid','Casablanca','Dakhla','El Jadida','El Kelaa des Sraghna',
+  'Errachidia','Essaouira','Fès','Fnideq','Guelmim','Ifrane','Kénitra',
+  'Khouribga','Ksar El Kébir','Laâyoune','Larache','Marrakech','Meknès',
+  'Mohammedia','Nador','Ouarzazate','Oujda','Rabat','Safi','Salé',
+  'Settat','Sidi Ifni','Sidi Kacem','Tanger','Taroudant','Taza',
+  'Tétouan','Tiznit','Youssoufia','Zagora'
+];
+
+var LYCEES_TECHNIQUES = [
+  'Lycée Technique National Omar BONGO',
+  'Lycée Technologique de Léconi',
+  'Lycée Technique de Fougamou',
+  'Lycée Technique Alexandre BIANGUE',
+  'Lycée Technique Jean Fidèle OTANDO',
+  'Lycée Technique Bernard OBIANG',
+  'Lycée Scientifique et Technologique Paul-KOUYA',
+  'Lycée Technique Fulbert BONGOTHA',
+  'Lycée Technique de Libreville',
+  'Lycée technique de Bikélé',
+  'Lycée technique Agricole de LEBAMBA',
+  'Lycée Technique de Ntoum',
+  'Lycée Technique Agathe OBENDZE',
+  'Lycée Technique NYONDA MAKITA'
+];
+
+var PAGE_LOAD = Date.now();
+var submitting = false;
+
+document.addEventListener('DOMContentLoaded', function () {
+  fillYears();
+  fillVilles();
+  fillLycees();
+  initPwdToggles();
+  initPwdStrength();
+  initLyceeToggle();
+  initPhotoUpload();
+  initTelHint();
+  initProgress();
+  initVilleOther();
+  initLyceeOther();
+  initFiliereOther();
+  initConditionsModal();
+  document.getElementById('adhesion-form').addEventListener('submit', handleSubmit);
+});
+
+// ── Années ────────────────────────────────────────────────────────
+function fillYears() {
+  var sel = document.getElementById('annee');
+  var yr = new Date().getFullYear();
+  for (var y = yr; y >= 1970; y--) {
+    var opt = document.createElement('option');
+    opt.value = y; opt.textContent = y;
+    sel.appendChild(opt);
+  }
+}
+
+// ── Villes ────────────────────────────────────────────────────────
+async function fillVilles() {
+  var sel = document.getElementById('ville');
+  var villes = VILLES_MAROC.slice();
+  if (window.supabase) {
+    try {
+      var res = await window.supabase.from('maroc_cities').select('city_name').order('city_name');
+      if (!res.error && res.data && res.data.length > 0) {
+        villes = res.data.map(function(c) { return c.city_name; });
+      }
+    } catch (_) {}
+  }
+  while (sel.options.length > 1) sel.remove(1);
+  villes.forEach(function(v) {
+    var opt = document.createElement('option');
+    opt.value = v; opt.textContent = v;
+    sel.appendChild(opt);
+  });
+  var autre = document.createElement('option');
+  autre.value = '__autre__'; autre.textContent = 'Autre…';
+  sel.appendChild(autre);
+}
+
+// ── Lycées ────────────────────────────────────────────────────────
+async function fillLycees() {
+  var sel = document.getElementById('nom-lycee');
+  var lycees = LYCEES_TECHNIQUES.slice();
+  if (window.supabase) {
+    try {
+      var res = await window.supabase.from('maroc_lycees_techniques').select('nom_lycee').order('nom_lycee');
+      if (!res.error && res.data && res.data.length > 0) {
+        lycees = res.data.map(function(l) { return l.nom_lycee; });
+      }
+    } catch (_) {}
+  }
+  while (sel.options.length > 1) sel.remove(1);
+  lycees.forEach(function(l) {
+    var opt = document.createElement('option');
+    opt.value = l; opt.textContent = l;
+    sel.appendChild(opt);
+  });
+  var autre = document.createElement('option');
+  autre.value = '__autre__'; autre.textContent = 'Autre lycée…';
+  sel.appendChild(autre);
+}
+
+// ── Gestion "Autre" ville ─────────────────────────────────────────
+function initVilleOther() {
+  var sel = document.getElementById('ville');
+  var wrap = document.getElementById('ville-other-wrap');
+  var inp = document.getElementById('ville-other');
+  sel.addEventListener('change', function () {
+    if (sel.value === '__autre__') { wrap.classList.add('show'); inp.focus(); }
+    else { wrap.classList.remove('show'); inp.value = ''; }
+  });
+}
+
+// ── Gestion "Autre" lycée ─────────────────────────────────────────
+function initLyceeOther() {
+  var sel = document.getElementById('nom-lycee');
+  var wrap = document.getElementById('lycee-other-wrap');
+  var inp = document.getElementById('lycee-other');
+  sel.addEventListener('change', function () {
+    if (sel.value === '__autre__') { wrap.classList.add('show'); inp.focus(); }
+    else { wrap.classList.remove('show'); inp.value = ''; }
+  });
+}
+
+// ── Gestion "Autre" filière ───────────────────────────────────────
+function initFiliereOther() {
+  var sel = document.getElementById('filiere');
+  var wrap = document.getElementById('filiere-other-wrap');
+  var inp = document.getElementById('filiere-other');
+  sel.addEventListener('change', function () {
+    if (sel.value === '__autre__') { wrap.classList.add('show'); inp.focus(); }
+    else { wrap.classList.remove('show'); inp.value = ''; }
+  });
+}
+
+// ── Toggles mot de passe ──────────────────────────────────────────
+function initPwdToggles() {
+  document.querySelectorAll('.toggle-pwd').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var inp = this.previousElementSibling;
+      var icon = this.querySelector('i');
+      if (!inp) return;
+      if (inp.type === 'password') { inp.type = 'text'; icon.className = 'fas fa-eye-slash'; }
+      else { inp.type = 'password'; icon.className = 'fas fa-eye'; }
+    });
+  });
+}
+
+// ── Force du mot de passe ─────────────────────────────────────────
+function initPwdStrength() {
+  document.getElementById('password').addEventListener('input', checkStrength);
+  document.getElementById('confirm').addEventListener('input', checkMatch);
+}
+function checkStrength() {
+  var v = document.getElementById('password').value;
+  var segs = ['s1','s2','s3','s4'].map(function(id){ return document.getElementById(id); });
+  var txt = document.getElementById('strength-txt');
+  segs.forEach(function(s){ s.className = 'seg'; });
+  if (!v) { txt.textContent = 'Entrez un mot de passe'; return; }
+  var score = 0;
+  if (v.length >= 8) score++;
+  if (v.length >= 12) score++;
+  if (/[A-Z]/.test(v) && /[a-z]/.test(v)) score++;
+  if (/\d/.test(v)) score++;
+  if (/[^a-zA-Z0-9]/.test(v)) score++;
+  var level = score <= 2 ? 'weak' : score <= 3 ? 'medium' : 'strong';
+  for (var i = 0; i < Math.min(score, 4); i++) segs[i].classList.add(level);
+  txt.textContent = { weak:'Faible', medium:'Moyen', strong:'Fort' }[level];
+  checkMatch();
+}
+function checkMatch() {
+  var p = document.getElementById('password').value;
+  var c = document.getElementById('confirm').value;
+  var el = document.getElementById('match-msg');
+  if (!c) { el.innerHTML = ''; return; }
+  if (p === c) el.innerHTML = '<i class="fas fa-check-circle ok"></i><span class="ok">Correspondent</span>';
+  else el.innerHTML = '<i class="fas fa-times-circle ko"></i><span class="ko">Ne correspondent pas</span>';
+}
+
+// ── Toggle section lycée ──────────────────────────────────────────
+function initLyceeToggle() {
+  var oui = document.getElementById('lycee-oui');
+  var non = document.getElementById('lycee-non');
+  var box = document.getElementById('lycee-box');
+  function toggle() {
+    var show = oui.checked;
+    box.classList.toggle('visible', show);
+    box.setAttribute('aria-hidden', String(!show));
+  }
+  oui.addEventListener('change', toggle);
+  non.addEventListener('change', toggle);
+}
+
+// ── Upload photo ──────────────────────────────────────────────────
+function initPhotoUpload() {
+  document.getElementById('photo-file').addEventListener('change', function (e) {
+    var file = e.target.files[0];
+    var prev = document.getElementById('photo-preview');
+    var lbl = document.getElementById('file-label-txt');
+    if (!file) { prev.classList.remove('visible'); lbl.textContent = 'Choisir une photo'; return; }
+    var check = window.validateImageFile ? window.validateImageFile(file, 5) : {ok:file.size<=5*1024*1024,msg:'Image trop grande'};
+    if (!check.ok) { showAlert(check.msg, 'error'); e.target.value = ''; prev.classList.remove('visible'); return; }
+    var reader = new FileReader();
+    reader.onload = function (ev) { prev.src = ev.target.result; prev.classList.add('visible'); lbl.textContent = file.name; };
+    reader.readAsDataURL(file);
+  });
+}
+
+// ── Hint téléphone ────────────────────────────────────────────────
+function initTelHint() {
+  var tel = document.getElementById('telephone');
+  var hint = document.getElementById('tel-hint');
+  tel.addEventListener('input', function () {
+    var v = tel.value.trim();
+    if (!v) { hint.textContent = ''; return; }
+    if (/^[\+]?[\d\s\-\(\)]{8,20}$/.test(v)) { hint.textContent = '✓ Format valide'; hint.style.color = '#4CAF50'; }
+    else { hint.textContent = 'Format invalide'; hint.style.color = '#f44336'; }
+  });
+}
+
+// ── Barre de progression ──────────────────────────────────────────
+function initProgress() {
+  var fields = ['nom','prenom','email','telephone','ville','password','confirm','motivation'];
+  var fill = document.getElementById('progress-fill');
+  var label = document.getElementById('progress-label');
+  function update() {
+    var filled = fields.filter(function(id){
+      var el = document.getElementById(id);
+      if (!el) return false;
+      if (el.tagName === 'SELECT') return el.value && el.value !== '' && el.value !== '__autre__';
+      return el.value.trim().length > 0;
+    }).length;
+    var pct = Math.round((filled / fields.length) * 100);
+    fill.style.width = pct + '%';
+    label.textContent = pct + '% complété';
+  }
+  fields.forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', update);
+  });
+}
+
+// ── Alert ─────────────────────────────────────────────────────────
+function showAlert(msg, type) {
+  var el = document.getElementById('alert-msg');
+  el.textContent = msg;
+  el.className = 'alert ' + type;
+  el.style.display = 'block';
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ── Modal conditions ──────────────────────────────────────────────
+function initConditionsModal() {
+  var link = document.getElementById('conditions-link');
+  var modal = document.getElementById('conditionsModal');
+  var closeBtn = document.getElementById('modalConditionsClose');
+  var closeFooter = document.getElementById('closeConditionsBtn');
+  function closeModal() { modal.classList.remove('active'); document.body.style.overflow = ''; }
+  link.addEventListener('click', function(e) { e.preventDefault(); loadAndShowConditionsModal(); });
+  closeBtn.addEventListener('click', closeModal);
+  closeFooter.addEventListener('click', closeModal);
+  modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
+}
+async function loadAndShowConditionsModal() {
+  var modalBody = document.getElementById('conditionsModalBody');
+  var modal = document.getElementById('conditionsModal');
+  modalBody.innerHTML = '<div>Chargement des conditions…</div>';
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  try {
+    var r = await window.supabase.from('documents').select('*').eq('type','conditions_adhesion').order('updated_at',{ascending:false}).limit(1).maybeSingle();
+    if (!r.data || (!r.data.content && !r.data.file_url)) {
+      modalBody.innerHTML = '<div style="text-align:center;padding:30px;"><i class="fas fa-file-alt" style="font-size:2.5rem;display:block;margin-bottom:15px;opacity:.3;"></i>Les conditions d\'adhésion ne sont pas encore disponibles.<br>Veuillez contacter l\'administration.</div>';
+      return;
+    }
+    var doc = r.data; var html = '';
+    if (doc.content) html += '<div style="white-space:pre-wrap;font-size:.92rem;line-height:1.65;color:var(--text);">' + window.escapeHtml(doc.content) + '</div>';
+    if (doc.file_url) {
+      html += '<div style="margin-top:20px;padding:15px;background:#f8f9fa;border-radius:10px;text-align:center;">'
+        + '<p style="margin-bottom:12px;font-weight:500;"><i class="fas fa-file-download" style="margin-right:8px;"></i>Version PDF officielle :</p>'
+        + '<a href="' + window.escapeHtml(doc.file_url) + '" target="_blank" style="background:var(--secondary);display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:8px;color:white;text-decoration:none;"><i class="fas fa-file-pdf"></i> Ouvrir le document</a>'
+        + '</div>';
+    }
+    if (doc.updated_at) {
+      html += '<div style="margin-top:20px;font-size:.75rem;color:#aaa;text-align:right;">Dernière mise à jour : ' + new Date(doc.updated_at).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}) + '</div>';
+    }
+    modalBody.innerHTML = html;
+  } catch (err) {
+    modalBody.innerHTML = '<div style="text-align:center;padding:30px;color:var(--danger);">Erreur lors du chargement. Veuillez réessayer.</div>';
+  }
+}
+
+// ── Soumission ────────────────────────────────────────────────────
+async function handleSubmit(e) {
+  e.preventDefault();
+  if (document.getElementById('hp_website').value !== '') return;
+  if (Date.now() - PAGE_LOAD < 3000) { showAlert('Veuillez prendre le temps de remplir le formulaire.', 'error'); return; }
+  if (submitting) return;
+
+  var nom        = document.getElementById('nom').value.trim();
+  var prenom     = document.getElementById('prenom').value.trim();
+  var email      = document.getElementById('email').value.trim().toLowerCase();
+  var tel        = document.getElementById('telephone').value.trim();
+  var motivation = document.getElementById('motivation').value.trim();
+  var password   = document.getElementById('password').value;
+  var confirm    = document.getElementById('confirm').value;
+  var photoFile  = document.getElementById('photo-file').files[0];
+  var newsletter = document.getElementById('newsletter').checked;
+  var conditions = document.getElementById('conditions').checked;
+  var lyceeOui   = document.getElementById('lycee-oui').checked;
+
+  // Ville
+  var villeSelect = document.getElementById('ville').value;
+  var ville = villeSelect === '__autre__'
+    ? document.getElementById('ville-other').value.trim()
+    : villeSelect;
+
+  // Lycée
+  var lyceeSelect = document.getElementById('nom-lycee').value;
+  var nomLycee = lyceeSelect === '__autre__'
+    ? document.getElementById('lycee-other').value.trim()
+    : lyceeSelect;
+
+  // Filière — récupère la valeur du SELECT, ou le champ libre si "Autre"
+  var filiereSelect = document.getElementById('filiere').value;
+  var filiere = filiereSelect === '__autre__'
+    ? document.getElementById('filiere-other').value.trim()
+    : filiereSelect;
+
+  var annee = document.getElementById('annee').value;
+
+  // ── Validations ──
+  if (!nom || !prenom || !email || !tel || !ville || !motivation) {
+    showAlert('Veuillez remplir tous les champs obligatoires (*).', 'error'); return;
+  }
+  if (villeSelect === '__autre__' && !ville) {
+    showAlert('Veuillez préciser votre ville.', 'error'); return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showAlert('Adresse email invalide.', 'error'); return;
+  }
+  if (!/^[\+]?[\d\s\-\(\)]{8,20}$/.test(tel)) {
+    showAlert('Numéro de téléphone invalide.', 'error'); return;
+  }
+  if (password.length < 8) {
+    showAlert('Le mot de passe doit contenir au moins 8 caractères.', 'error'); return;
+  }
+  if (password !== confirm) {
+    showAlert('Les mots de passe ne correspondent pas.', 'error'); return;
+  }
+  if (!document.getElementById('lycee-oui').checked && !document.getElementById('lycee-non').checked) {
+    showAlert('Indiquez si vous avez fréquenté un lycée technique.', 'error'); return;
+  }
+  if (lyceeOui && lyceeSelect === '__autre__' && !nomLycee) {
+    showAlert('Veuillez préciser le nom du lycée.', 'error'); return;
+  }
+  if (lyceeOui && filiereSelect === '__autre__' && !filiere) {
+    showAlert('Veuillez préciser votre filière.', 'error'); return;
+  }
+  if (!conditions) {
+    showAlert('Vous devez accepter les conditions d\'adhésion.', 'error'); return;
+  }
+
+  submitting = true;
+  var btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours…';
+  document.getElementById('alert-msg').style.display = 'none';
+
+  try {
+    var result = await window.Auth.register(email, password, {
+      nom, prenom, telephone: tel, ville, motivation, newsletter,
+      metadata: {
+        lycee_technique: lyceeOui,
+        nom_lycee:    lyceeOui ? (nomLycee || null) : null,
+        filiere:      lyceeOui ? (filiere  || null) : null,
+        annee_depart: lyceeOui && annee ? parseInt(annee, 10) : null
+      }
+    });
+
+    if (!result.success) {
+      var errMsg = result.error === 'email_exists'
+        ? 'Cette adresse email est déjà utilisée.'
+        : ('Erreur : ' + (result.error || 'Inscription échouée'));
+      showAlert(errMsg, 'error');
+      submitting = false; btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer ma demande';
+      return;
+    }
+
+    // Upload photo
+    if (photoFile && result.user_id) {
+      try {
+        document.getElementById('upload-progress').style.display = 'block';
+        document.getElementById('upload-progress-fill').style.width = '50%';
+        var photoUrl = await window.uploadImage(photoFile, window.STORAGE_BUCKETS.avatars, 'profiles');
+        document.getElementById('upload-progress-fill').style.width = '100%';
+        await window.supabase.from('users').update({ photo: photoUrl, photo_url: photoUrl }).eq('id', result.user_id);
+        setTimeout(function() { document.getElementById('upload-progress').style.display = 'none'; }, 600);
+      } catch (uploadErr) {
+        console.warn('[Adhesion] Photo upload failed:', uploadErr.message);
+        document.getElementById('upload-progress').style.display = 'none';
+      }
+    }
+
+    document.getElementById('adhesion-form').style.opacity = '.5';
+    document.getElementById('adhesion-form').style.pointerEvents = 'none';
+    showAlert('✅ Demande envoyée avec succès ! Redirection vers la connexion…', 'success');
+    setTimeout(function () { window.location.href = 'login.html'; }, 2800);
+
+  } catch (err) {
+    console.error('[Adhesion] Erreur :', err);
+    var msg = err.message || 'Une erreur est survenue. Veuillez réessayer.';
+    if (msg === 'email_exists') msg = 'Cette adresse email est déjà utilisée.';
+    showAlert('Erreur : ' + msg, 'error');
+    submitting = false; btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer ma demande';
+  }
+}
+</script>
+</body>
+</html>
