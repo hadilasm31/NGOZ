@@ -51,6 +51,11 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;color:var(--text);over
 .user-mini img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid var(--primary)}
 .user-mini span{font-weight:500;color:var(--dark);font-size:.88rem}
 
+/* ── INDICATEUR TEMPS RÉEL ── */
+.realtime-indicator{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;color:#888;margin-left:10px;}
+.realtime-dot{width:7px;height:7px;border-radius:50%;background:#4CAF50;animation:pulse-dot 2s infinite;}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+
 /* ── PANELS ── */
 .panel{display:none}.panel.active{display:block}
 .card{background:white;border-radius:10px;padding:22px;box-shadow:var(--shadow);margin-bottom:22px}
@@ -93,10 +98,16 @@ tr:hover td{background:#fafafa}
 .fb-ok{padding:10px;background:#e8f5e9;color:#2e7d32;border-radius:6px;margin-top:10px;font-size:.88rem}
 .fb-err{padding:10px;background:#ffebee;color:#c62828;border-radius:6px;margin-top:10px;font-size:.88rem}
 
+/* Style pour le bouton d'affichage du mot de passe */
+.password-wrapper{position:relative;display:flex;align-items:center;gap:8px}
+.password-wrapper input{flex:1;padding-right:45px}
+.toggle-password{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#888;font-size:1rem;padding:0 5px;z-index:2}
+.toggle-password:hover{color:var(--primary)}
+
 /* ── PHOTO PROFIL ── */
 .photo-prev{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--primary);display:block;margin:0 auto 10px}
 
-/* ── EVENTS ── */
+/* ── EVENTS GRID ── */
 .events-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
 .more-events-wrap{display:none;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
 .more-events-wrap.show{display:grid}
@@ -106,7 +117,6 @@ tr:hover td{background:#fafafa}
 .ev-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
 .ev-card:hover .ev-img-wrap img{transform:scale(1.04)}
 .ev-badge{position:absolute;top:8px;right:8px;background:var(--primary);color:white;padding:3px 9px;border-radius:20px;font-size:.68rem;font-weight:600;z-index:2}
-.ev-badge.past{background:#9e9e9e}
 .ev-body{padding:11px;display:flex;flex-direction:column;flex:1}
 .ev-date-row{display:flex;align-items:center;gap:4px;color:var(--primary);font-size:.73rem;font-weight:500;margin-bottom:5px}
 .ev-title{color:var(--dark);font-size:.92rem;font-weight:600;margin-bottom:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3}
@@ -153,7 +163,7 @@ tr:hover td{background:#fafafa}
 .toggle-sw input:checked+.tog-slider::before{transform:translateX(20px)}
 
 /* ── BUREAU CHAT ── */
-#panel-bureau-chat.active{display:flex;flex-direction:column;height:calc(100vh - 130px)}
+/* ── #panel-bureau-chat.active{display:flex;flex-direction:column;height:calc(100vh - 130px)}
 .bg-split{display:grid;grid-template-columns:300px 1fr;gap:16px;flex:1;min-height:0}
 .bg-sidebar-col{background:white;border-radius:10px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;height:100%}
 .bg-sb-head{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;background:#f8f0ff;border-bottom:1px solid #f0e6ff;flex-shrink:0}
@@ -226,8 +236,7 @@ tr:hover td{background:#fafafa}
 .bg-ctx-item.danger:hover{background:rgba(244,67,54,.2)}
 .bg-row.flash .bg-bub{animation:msg-flash .6s ease}
 @keyframes msg-flash{0%,100%{filter:brightness(1)}30%{filter:brightness(1.5) saturate(1.4)}}
-.btn-bg-back-mob{display:none;background:none;border:none;color:#9c27b0;font-size:1rem;cursor:pointer;padding:6px 8px;border-radius:50%}
-
+.btn-bg-back-mob{display:none;background:none;border:none;color:#9c27b0;font-size:1rem;cursor:pointer;padding:6px 8px;border-radius:50%}── */
 /* ── OVERLAY SIDEBAR ── */
 .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0);z-index:199;transition:background .32s}
 .sb-overlay.show{display:block;background:rgba(0,0,0,.45)}
@@ -285,7 +294,7 @@ tr:hover td{background:#fafafa}
       <span class="sb-badge-msg" id="msg-badge"></span>
     </button>
     <button class="sb-item" id="btn-bureau-chat" style="display:none;" data-panel="bureau-chat">
-      <i class="fas fa-comments"></i> Groupes bureau
+      
       <span style="background:#9c27b0;color:white;border-radius:20px;padding:1px 7px;font-size:.68rem;margin-left:4px;display:none;" id="sb-badge-bureau"></span>
     </button>
     <div class="sb-section">Paramètres</div>
@@ -302,7 +311,13 @@ tr:hover td{background:#fafafa}
 
 <main class="main">
   <div class="topbar">
-    <h1 id="panel-title">Accueil</h1>
+    <h1 id="panel-title">
+      Accueil
+      <span class="realtime-indicator" title="Données en temps réel (rafraîchissement automatique)">
+        <span class="realtime-dot"></span>
+        <span style="font-size:.7rem;color:#aaa;font-weight:400;">en direct</span>
+      </span>
+    </h1>
     <div style="display:flex;align-items:center;gap:8px;">
       <button id="tb-notif-btn" title="Notifications"
               onclick="window.Notif&&window.Notif.openPanel()"
@@ -367,14 +382,42 @@ tr:hover td{background:#fafafa}
         <h3 style="font-size:.95rem;color:var(--dark);margin-bottom:14px;">
           <i class="fas fa-lock" style="color:var(--primary);margin-right:7px;"></i>Changer le mot de passe
         </h3>
-        <div class="fg"><label>Mot de passe actuel</label>
-          <input type="password" id="pwd-old" placeholder="••••••••" autocomplete="current-password"></div>
-        <div class="form-row">
-          <div class="fg"><label>Nouveau mot de passe</label>
-            <input type="password" id="pwd-new" placeholder="••••••••" autocomplete="new-password"></div>
-          <div class="fg"><label>Confirmer</label>
-            <input type="password" id="pwd-new2" placeholder="••••••••" autocomplete="new-password"></div>
+        
+        <!-- Mot de passe actuel avec affichage -->
+        <div class="fg">
+          <label>Mot de passe actuel</label>
+          <div class="password-wrapper">
+            <input type="password" id="pwd-old" placeholder="••••••••" autocomplete="current-password">
+            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('pwd-old', this)">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
         </div>
+        
+        <div class="form-row">
+          <!-- Nouveau mot de passe avec affichage -->
+          <div class="fg">
+            <label>Nouveau mot de passe</label>
+            <div class="password-wrapper">
+              <input type="password" id="pwd-new" placeholder="••••••••" autocomplete="new-password">
+              <button type="button" class="toggle-password" onclick="togglePasswordVisibility('pwd-new', this)">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Confirmation avec affichage -->
+          <div class="fg">
+            <label>Confirmer</label>
+            <div class="password-wrapper">
+              <input type="password" id="pwd-new2" placeholder="••••••••" autocomplete="new-password">
+              <button type="button" class="toggle-password" onclick="togglePasswordVisibility('pwd-new2', this)">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        
         <div id="pwd-fb"></div>
         <button class="btn-blue" onclick="submitPasswordChange()">
           <i class="fas fa-key"></i> Modifier le mot de passe
@@ -386,7 +429,10 @@ tr:hover td{background:#fafafa}
   <!-- ── ÉVÉNEMENTS ── -->
   <div class="panel" id="panel-events">
     <div class="card">
-      <h2><i class="fas fa-calendar-alt" style="color:var(--primary)"></i> Événements à venir</h2>
+      <h2>
+        <i class="fas fa-calendar-alt" style="color:var(--primary)"></i> Événements à venir
+        <span style="font-size:.72rem;color:#aaa;font-weight:400;margin-left:8px;">• Mis à jour automatiquement</span>
+      </h2>
       <div id="events-grid" class="events-grid"></div>
       <div id="more-events-wrap" class="more-events-wrap"></div>
       <div class="show-more-wrap" id="show-more-wrap" style="display:none;">
@@ -533,7 +579,6 @@ tr:hover td{background:#fafafa}
 
 </main>
 
-<!-- Menu contextuel bureau -->
 <div class="bg-ctx-menu" id="bg-ctx-menu" style="display:none;"></div>
 
 <!-- Modal inscription événement -->
@@ -557,6 +602,20 @@ tr:hover td{background:#fafafa}
 <script>
 'use strict';
 
+// Fonction pour afficher/masquer le mot de passe
+window.togglePasswordVisibility = function(inputId, button) {
+  var input = document.getElementById(inputId);
+  if (input.type === 'password') {
+    input.type = 'text';
+    button.querySelector('i').classList.remove('fa-eye');
+    button.querySelector('i').classList.add('fa-eye-slash');
+  } else {
+    input.type = 'password';
+    button.querySelector('i').classList.remove('fa-eye-slash');
+    button.querySelector('i').classList.add('fa-eye');
+  }
+};
+
 var currentUser    = null;
 var inboxMessages  = [];
 var sentMessages   = [];
@@ -572,7 +631,7 @@ window._bgLastMsgId   = null;
 window._bgPollingTimer= null;
 window._bgReplyTo     = null;
 
-// ── Variables pour "Voir plus" événements ──
+// ── Variables événements ──
 var _eventsAllData  = [];
 var _eventsMyRegIds = new Set();
 
@@ -614,6 +673,37 @@ document.addEventListener('DOMContentLoaded', async function () {
   ]);
   bgStartPolling();
 
+  // ══════════════════════════════════════════
+  // TEMPS RÉEL — Enregistrer les rafraîchissements
+  // toutes les 5 secondes via RealtimeSync
+  // ══════════════════════════════════════════
+  if (window.RealtimeSync) {
+    // Rafraîchir les événements
+    window.RealtimeSync.register('membre-events', async function () {
+      // Seulement si le panel events est actif ou l'overview est actif
+      var activePanel = document.querySelector('.panel.active');
+      if (!activePanel) return;
+      var panelId = activePanel.id;
+      if (panelId === 'panel-events') {
+        await loadEvents();
+      } else if (panelId === 'panel-overview') {
+        await loadOverview();
+      } else if (panelId === 'panel-announcements') {
+        await loadAnnouncements();
+      } else if (panelId === 'panel-messages') {
+        await loadMessages();
+      }
+    });
+
+    // Rafraîchir le badge de notifications
+    window.RealtimeSync.register('membre-badge', async function () {
+      if (window.Notif && window.Notif.refreshBadge) {
+        window.Notif.refreshBadge();
+      }
+    });
+  }
+
+  // Badge de notifications toutes les 5s
   setInterval(function () {
     var g  = document.getElementById('notif-badge-global');
     var tb = document.getElementById('tb-badge');
@@ -648,7 +738,8 @@ function initPanels() {
       document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('active'); });
       var p = document.getElementById('panel-' + id);
       if (p) p.classList.add('active');
-      document.getElementById('panel-title').textContent = PANEL_TITLES[id] || id;
+      document.getElementById('panel-title').innerHTML = (PANEL_TITLES[id] || id)
+        + '<span class="realtime-indicator" title="Données en temps réel"><span class="realtime-dot"></span><span style="font-size:.7rem;color:#aaa;font-weight:400;">en direct</span></span>';
       if (window._closeSidebar) window._closeSidebar();
       if (id === 'bureau-chat') { loadBGList(); initBGInput(); }
     });
@@ -708,8 +799,10 @@ window.memberSelectSound = function (name) {
 // ═══════════════════════════════
 async function loadOverview() {
   try {
+    // Utiliser la date actuelle pour filtrer uniquement les événements à venir
+    var now = new Date().toISOString();
     var results = await Promise.allSettled([
-      window.supabase.from('events').select('*',{count:'exact',head:true}).eq('status','published').gte('date',new Date().toISOString()),
+      window.supabase.from('events').select('*',{count:'exact',head:true}).eq('status','published').gte('date', now),
       window.supabase.from('event_registrations').select('*',{count:'exact',head:true}).eq('user_id',currentUser.id),
       window.supabase.from('messages').select('*',{count:'exact',head:true}).eq('receiver_id',currentUser.id).eq('is_read',false),
       window.supabase.from('announcements').select('*',{count:'exact',head:true}).in('visibility',['public','members'])
@@ -727,14 +820,19 @@ async function loadOverview() {
   } catch(e) { console.error(e); }
 
   try {
-    var evR = await window.supabase.from('events').select('id,title,date,location').eq('status','published').gte('date',new Date().toISOString()).order('date',{ascending:true}).limit(4);
+    // Événements futurs uniquement
+    var now2 = new Date().toISOString();
+    var evR = await window.supabase.from('events').select('id,title,date,location')
+      .eq('status','published')
+      .gte('date', now2)
+      .order('date',{ascending:true}).limit(4);
     var evEl = document.getElementById('ov-events-list');
     evEl.innerHTML = (evR.data||[]).length ? (evR.data||[]).map(function (ev) {
       var d = new Date(ev.date).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});
       return '<div style="padding:10px 0;border-bottom:1px solid #f0f0f0;">' +
         '<div style="font-weight:600;color:var(--dark);font-size:.88rem;">' + escH(ev.title||'') + '</div>' +
         '<div style="font-size:.76rem;color:var(--text);margin-top:3px;"><i class="fas fa-calendar" style="color:var(--primary);margin-right:4px;"></i>' + d + '</div></div>';
-    }).join('') : '<p style="text-align:center;font-style:italic;color:var(--text);font-size:.84rem;">Aucun événement</p>';
+    }).join('') : '<p style="text-align:center;font-style:italic;color:var(--text);font-size:.84rem;">Aucun événement à venir</p>';
   } catch(e) {}
 
   try {
@@ -838,17 +936,30 @@ window.submitPasswordChange = async function () {
 };
 
 // ═══════════════════════════════
-// ÉVÉNEMENTS  (grille 4 col + "Voir plus" comme evenements.html)
+// ÉVÉNEMENTS — UNIQUEMENT LES ÉVÉNEMENTS À VENIR (date >= maintenant)
 // ═══════════════════════════════
 async function loadEvents() {
   var grid = document.getElementById('events-grid');
-  grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--text);">Chargement…</div>';
+  if (!grid) return;
+
+  // Ne pas réinitialiser si on est en train de remplir pour la première fois
+  var isFirstLoad = grid.innerHTML === '';
+  if (isFirstLoad) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--text);">Chargement…</div>';
+  }
+
   document.getElementById('more-events-wrap').innerHTML = '';
   document.getElementById('more-events-wrap').classList.remove('show');
   document.getElementById('show-more-wrap').style.display = 'none';
 
   try {
-    var r    = await window.supabase.from('events').select('*').eq('status','published').order('date',{ascending:true});
+    // ✅ FILTRE CLÉ : date >= maintenant (événements futurs et en cours uniquement)
+    var now = new Date().toISOString();
+    var r    = await window.supabase.from('events').select('*')
+      .eq('status','published')
+      .gte('date', now)          // ← UNIQUEMENT les événements dont la date n'est pas passée
+      .order('date',{ascending:true});
+
     var regR = await window.supabase.from('event_registrations').select('event_id').eq('user_id',currentUser.id);
     _eventsMyRegIds = new Set((regR.data||[]).map(function (r2) { return r2.event_id; }));
     _eventsAllData  = r.data || [];
@@ -867,7 +978,7 @@ function renderEventsGrid(events) {
   var plusCnt = document.getElementById('plus-count');
 
   if (!events || !events.length) {
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;font-style:italic;color:var(--text);padding:30px;">Aucun événement à venir</div>';
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;font-style:italic;color:var(--text);padding:30px;">Aucun événement à venir pour le moment</div>';
     moreDiv.innerHTML = ''; moreDiv.classList.remove('show');
     smWrap.style.display = 'none';
     return;
@@ -897,7 +1008,6 @@ function renderEventsGrid(events) {
 
 function evCardHtml(ev) {
   var d       = new Date(ev.date);
-  var isPast  = d < new Date();
   var img     = escH(ev.image || window.FALLBACK_IMG);
   var title   = escH(ev.title || '');
   var loc     = escH(truncT(ev.location || '—', 18));
@@ -916,7 +1026,7 @@ function evCardHtml(ev) {
   return '<div class="ev-card">'
     + '<div class="ev-img-wrap">'
     + '<img src="' + img + '" alt="' + title + '" loading="lazy" onerror="window.imgOnError(this)">'
-    + '<span class="ev-badge' + (isPast?' past':'') + '">' + (isPast?'Passé':'À venir') + '</span>'
+    + '<span class="ev-badge">À venir</span>'
     + '</div>'
     + '<div class="ev-body">'
     + '<div class="ev-date-row"><i class="fas fa-calendar-alt"></i>' + dateStr + '</div>'
@@ -941,8 +1051,8 @@ async function loadMyRegs() {
       return '<tr><td>' + escH(ev.title||'—') + '</td><td>' + d + '</td>' +
         '<td style="text-align:center;">' + (reg.guests||0) + '</td><td>' + regD + '</td>' +
         '<td><button class="btn-action danger" onclick="cancelReg(\'' + ev.id + '\')"><i class="fas fa-times"></i> Annuler</button></td></tr>';
-    }).join('') : '<tr class="empty-row"><td colspan="5">Aucune inscription</td></tr>';
-  } catch(e) { if(tb) tb.innerHTML = '<tr class="error-row"><td colspan="5">Erreur</td></tr>'; }
+    }).join('') : '<tr class="empty-row"><td colspan="5">Aucune inscription</tr>';
+  } catch(e) { if(tb) tb.innerHTML = '<tr class="error-row"><td colspan="5">Erreur</tr>'; }
 }
 
 window.openRegModal = function (evId, evTitle) {
@@ -1543,6 +1653,7 @@ function showFbEl(el,msg,type) { if(!el)return; el.className=type==='ok'?'fb-ok'
 window.addEventListener('beforeunload', function () {
   if (window._bgPollingTimer) clearInterval(window._bgPollingTimer);
   if (window._bgRealtime)     window.supabase.removeChannel(window._bgRealtime);
+  if (window.RealtimeSync)    window.RealtimeSync.stop();
 });
 </script>
 </body>
