@@ -904,38 +904,107 @@ function renderMembersTable(membres){
     }).join('')
     :'<tr><td colspan="8" class="sm-empty">Aucun membre correspondant</td></tr>';
 }
+
+// ═══════════════ GRAPHIQUES — LABELS COMPLETS AU SURVOL ═══════════════
 function renderCharts(membres){
   var PALETTE=['#4CAF50','#2196F3','#FF9800','#9C27B0','#F44336','#00BCD4','#8BC34A','#3F51B5','#FF5722','#009688','#795548','#607D8B','#E91E63','#CDDC39','#FFC107','#673AB7'];
+
+  // Graphique VILLE — noms complets passés, Chart.js les tronquera sur l'axe via callback
   var vc={};membres.forEach(function(m){var v=m.ville||'Non renseignée';vc[v]=(vc[v]||0)+1;});
   var vs=Object.entries(vc).sort(function(a,b){return b[1]-a[1];}).slice(0,10);
   buildChart('chart-ville','pie',vs.map(function(e){return e[0];}),vs.map(function(e){return e[1];}),PALETTE);
+
+  // Graphique LYCÉE — noms complets (plus de truncT)
   var lc={};membres.filter(function(m){return m.metadata?.nom_lycee;}).forEach(function(m){var l=m.metadata.nom_lycee;lc[l]=(lc[l]||0)+1;});
   var ls=Object.entries(lc).sort(function(a,b){return b[1]-a[1];}).slice(0,8);
-  buildChart('chart-lycee','bar',ls.map(function(e){return truncT(e[0],22);}),ls.map(function(e){return e[1];}),PALETTE,true);
+  buildChart('chart-lycee','bar',ls.map(function(e){return e[0];}),ls.map(function(e){return e[1];}),PALETTE,true);
+
+  // Graphique OUI/NON lycée
   var avecLyc=membres.filter(function(m){return m.metadata?.lycee_technique===true||m.metadata?.lycee_technique==='true';}).length;
   buildChart('chart-has-lycee','doughnut',['Avec lycée technique','Sans lycée technique'],[avecLyc,membres.length-avecLyc],['#4CAF50','#9e9e9e']);
+
+  // Graphique FILIÈRE — noms complets (plus de truncT)
   var fc={};membres.filter(function(m){return m.metadata?.filiere;}).forEach(function(m){var f=m.metadata.filiere;fc[f]=(fc[f]||0)+1;});
   var fs=Object.entries(fc).sort(function(a,b){return b[1]-a[1];}).slice(0,10);
-  buildChart('chart-filiere','bar',fs.map(function(e){return truncT(e[0],18);}),fs.map(function(e){return e[1];}),PALETTE);
+  buildChart('chart-filiere','bar',fs.map(function(e){return e[0];}),fs.map(function(e){return e[1];}),PALETTE);
 }
+
 function buildChart(canvasId,type,labels,data,colors,horizontal){
   var canvas=document.getElementById(canvasId);if(!canvas)return;
   if(_smCharts[canvasId]){_smCharts[canvasId].destroy();delete _smCharts[canvasId];}
   var bgColors=labels.map(function(_,i){return colors[i%colors.length];});
   var isBar=type==='bar';
+  var maxTickLen=18; // Longueur max des étiquettes affichées sur l'axe
+
   _smCharts[canvasId]=new window.Chart(canvas,{
     type:type,
-    data:{labels:labels.length?labels:['Aucune donnée'],datasets:[{data:data.length?data:[1],backgroundColor:bgColors,borderColor:isBar?bgColors:'white',borderWidth:isBar?0:2,borderRadius:isBar?5:0}]},
-    options:{responsive:true,maintainAspectRatio:false,indexAxis:(horizontal&&isBar)?'y':'x',
-      plugins:{legend:{display:!isBar,position:'bottom',labels:{font:{size:11},boxWidth:12}},
-        tooltip:{callbacks:{label:function(ctx){
-          if(isBar)return' '+ctx.parsed[(horizontal&&isBar)?'x':'y']+' membre(s)';
-          var tot=ctx.dataset.data.reduce(function(a,b){return a+b;},0);
-          return' '+ctx.label+' : '+ctx.parsed+' ('+(tot?((ctx.parsed/tot)*100).toFixed(1)+'%':'0%')+')';
-        }}}},
-      scales:isBar?{x:{ticks:{font:{size:11}},grid:{display:false}},y:{ticks:{font:{size:11}},beginAtZero:true,grid:{color:'#f0f0f0'}}}:{}}
+    data:{
+      labels:labels.length?labels:['Aucune donnée'],
+      datasets:[{
+        data:data.length?data:[1],
+        backgroundColor:bgColors,
+        borderColor:isBar?bgColors:'white',
+        borderWidth:isBar?0:2,
+        borderRadius:isBar?5:0
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      indexAxis:(horizontal&&isBar)?'y':'x',
+      plugins:{
+        legend:{
+          display:!isBar,
+          position:'bottom',
+          labels:{font:{size:11},boxWidth:12}
+        },
+        tooltip:{
+          callbacks:{
+            // Titre du tooltip = nom complet (jamais tronqué)
+            title:function(items){
+              return items[0].label;
+            },
+            label:function(ctx){
+              if(isBar){
+                return ' '+ctx.parsed[(horizontal&&isBar)?'x':'y']+' membre(s)';
+              }
+              var tot=ctx.dataset.data.reduce(function(a,b){return a+b;},0);
+              return ' '+ctx.parsed+' membre(s) ('+(tot?((ctx.parsed/tot)*100).toFixed(1)+'%':'0%')+')';
+            }
+          }
+        }
+      },
+      scales:isBar?{
+        x:{
+          ticks:{
+            font:{size:11},
+            // Tronquer les étiquettes de l'axe X pour les barres verticales
+            callback:function(val,index){
+              var lbl=this.getLabelForValue(index);
+              if(!lbl)return '';
+              return lbl.length>maxTickLen?lbl.slice(0,maxTickLen)+'…':lbl;
+            }
+          },
+          grid:{display:false}
+        },
+        y:{
+          ticks:{
+            font:{size:11},
+            // Tronquer les étiquettes de l'axe Y pour les barres horizontales
+            callback:function(val,index){
+              var lbl=this.getLabelForValue(index);
+              if(!lbl)return '';
+              return lbl.length>maxTickLen?lbl.slice(0,maxTickLen)+'…':lbl;
+            }
+          },
+          beginAtZero:true,
+          grid:{color:'#f0f0f0'}
+        }
+      }:{}
+    }
   });
 }
+
 window.resetStatsFilters=function(){
   ['sm-filter-ville','sm-filter-lycee','sm-filter-filiere'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   var se=document.getElementById('sm-filter-search');if(se)se.value='';
@@ -1139,7 +1208,6 @@ async function loadOverview(){
 async function loadMembers(){
   var tb=document.getElementById('members-tbody');
   try{
-    // Super admin voit TOUS les membres (member + admin + super_admin)
     var query=window.supabase.from('users').select('*').order('created_at',{ascending:false});
     if(currentUser.role!=='super_admin'){
       query=query.in('role',['member','admin']);
@@ -1182,10 +1250,8 @@ function memberRow(u){
     +'</div></td></tr>';
 }
 
-// ─── EXPORT COMPLET MEMBRES ───
 window.exportMembersCSV=function(){
   if(!membersCache.length){window.showToast('Aucun membre à exporter','warning');return;}
-  // Normaliser les données avant export
   var members=membersCache.map(function(u){
     var md=u.metadata||{};
     return {
@@ -1215,7 +1281,6 @@ window.exportMembersCSV=function(){
   }
 };
 
-// ─── MODIFIER RÔLE / STATUT (SUPER ADMIN) ───
 window.editMemberRoleStatus=async function(id){
   var u=membersCache.find(function(m){return m.id===id;});
   if(!u){window.showToast('Membre introuvable','error');return;}
@@ -1259,7 +1324,6 @@ window.saveMemberRoleStatus=async function(id){
     }).eq('id',id);
     if(r.error)throw r.error;
     showFbEl(fb,'✅ Mis à jour avec succès !','ok');
-    // Notification au membre
     try{
       await window.supabase.from('notifications').insert([{
         user_id:id,title:'Mise à jour de votre compte',
