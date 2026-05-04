@@ -237,6 +237,54 @@ tr:hover td{background:#fafafa}
 .role-status-form{background:#f8f9fa;border:1px solid #eee;border-radius:8px;padding:14px;margin-bottom:14px}
 .role-status-form h4{font-size:.88rem;font-weight:600;color:var(--dark);margin-bottom:12px;display:flex;align-items:center;gap:6px}
 
+/* Tableaux scrollables avec hauteur max — 10 lignes visibles (~560px) */
+.table-scroll-wrap{overflow-y:auto;overflow-x:auto;max-height:560px;border-radius:0 0 8px 8px}
+.table-scroll-wrap::-webkit-scrollbar{width:6px;height:6px}
+.table-scroll-wrap::-webkit-scrollbar-track{background:#f5f5f5;border-radius:3px}
+.table-scroll-wrap::-webkit-scrollbar-thumb{background:#ddd;border-radius:3px}
+.table-scroll-wrap::-webkit-scrollbar-thumb:hover{background:#bbb}
+.table-scroll-wrap table thead th{position:sticky;top:0;z-index:2;background:var(--light);box-shadow:0 1px 0 #eee}
+
+/* Stats membres — liste scrollable */
+.sm-members-scroll{overflow-y:auto;max-height:380px;border-radius:0 0 8px 8px}
+.sm-members-scroll::-webkit-scrollbar{width:6px}
+.sm-members-scroll::-webkit-scrollbar-track{background:#f5f5f5;border-radius:3px}
+.sm-members-scroll::-webkit-scrollbar-thumb{background:#ddd;border-radius:3px}
+.sm-members-scroll::-webkit-scrollbar-thumb:hover{background:#bbb}
+.sm-members-scroll table thead th{position:sticky;top:0;z-index:2;background:var(--light);box-shadow:0 1px 0 #eee}
+
+/* Stats — ville & lycée scrollables */
+.sm-small-scroll{overflow-y:auto;max-height:280px}
+.sm-small-scroll::-webkit-scrollbar{width:5px}
+.sm-small-scroll::-webkit-scrollbar-track{background:#f5f5f5}
+.sm-small-scroll::-webkit-scrollbar-thumb{background:#ddd;border-radius:3px}
+.sm-small-scroll::-webkit-scrollbar-thumb:hover{background:#bbb}
+.sm-small-scroll table thead th{position:sticky;top:0;z-index:2;background:var(--light);box-shadow:0 1px 0 #eee}
+
+/* Bureau — cartes membres */
+.bureau-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:4px}
+.bureau-card{background:white;border-radius:10px;border:1px solid #eee;padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06);position:relative;transition:box-shadow .2s}
+.bureau-card:hover{box-shadow:0 3px 12px rgba(0,0,0,.1)}
+.bureau-card img{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid #9c27b0}
+.bureau-card .bc-name{font-weight:600;color:var(--dark);font-size:.9rem;line-height:1.2}
+.bureau-card .bc-role{font-size:.75rem;color:#9c27b0;font-weight:500}
+.bureau-card .bc-city{font-size:.73rem;color:var(--text)}
+.bureau-card .bc-remove{position:absolute;top:8px;right:8px;background:none;border:none;color:#ddd;cursor:pointer;font-size:.8rem;padding:4px;border-radius:50%;transition:var(--tr)}
+.bureau-card .bc-remove:hover{background:#ffebee;color:var(--danger)}
+
+/* Modal pour ajouter au bureau */
+.bureau-add-list{max-height:360px;overflow-y:auto;border:1px solid #eee;border-radius:8px}
+.bureau-add-list::-webkit-scrollbar{width:6px}
+.bureau-add-list::-webkit-scrollbar-thumb{background:#ddd;border-radius:3px}
+.bureau-add-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid #f5f5f5;cursor:pointer;transition:background .15s}
+.bureau-add-item:last-child{border-bottom:none}
+.bureau-add-item:hover{background:#f9f9f9}
+.bureau-add-item img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #eee;flex-shrink:0}
+.bureau-add-item .bai-name{font-size:.88rem;font-weight:500;color:var(--dark)}
+.bureau-add-item .bai-sub{font-size:.75rem;color:var(--text)}
+.bureau-add-item .bai-btn{margin-left:auto;padding:5px 12px;background:#f3e5f5;color:#9c27b0;border:none;border-radius:5px;font-size:.75rem;font-weight:600;cursor:pointer;flex-shrink:0;transition:var(--tr)}
+.bureau-add-item .bai-btn:hover{background:#9c27b0;color:white}
+
 @media(max-width:900px){.stats-row{grid-template-columns:repeat(3,1fr)}.settings-grid{grid-template-columns:1fr}.sm-charts-row{grid-template-columns:1fr}}
 @media(max-width:768px){
   .sidebar{transform:translateX(-110%)}.sidebar.open{transform:translateX(0)}
@@ -340,40 +388,42 @@ tr:hover td{background:#fafafa}
           <button class="btn-primary" style="font-size:.82rem;padding:7px 14px;" onclick="exportMembersCSV()"><i class="fas fa-download"></i> Export CSV</button>
         </div>
       </div>
-      <table id="members-table">
-        <thead>
-          <tr>
-            <th>Photo</th><th>Nom</th><th>Email</th><th>Ville</th><th>Téléphone</th><th>Rôle</th><th>Bureau</th><th>Statut</th><th>Lycée</th><th>Date</th><th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="members-tbody"></tbody>
-      </table>
+      <div class="table-scroll-wrap">
+        <table id="members-table">
+          <thead>
+            <tr>
+              <th>Photo</th><th>Nom</th><th>Email</th><th>Ville</th><th>Téléphone</th><th>Rôle</th><th>Bureau</th><th>Statut</th><th>Lycée</th><th>Date</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="members-tbody"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
   <!-- EN ATTENTE -->
-  <div class="panel" id="panel-pending"><div class="table-card"><div class="table-head"><h2>Demandes en attente</h2></div><table><thead><tr><th>Nom</th><th>Email</th><th>Ville</th><th>Motivation</th><th>Date</th><th>Actions</th></tr></thead><tbody id="pending-tbody"></tbody></table></div></div>
+  <div class="panel" id="panel-pending"><div class="table-card"><div class="table-head"><h2>Demandes en attente</h2></div><div class="table-scroll-wrap"><table><thead><tr><th>Nom</th><th>Email</th><th>Ville</th><th>Motivation</th><th>Date</th><th>Actions</th></tr></thead><tbody id="pending-tbody"></tbody></table></div></div></div>
 
   <!-- ÉVÉNEMENTS -->
-  <div class="panel" id="panel-events"><div class="table-card"><div class="table-head"><h2>Événements</h2><button class="btn-primary" onclick="openModal('event',null)"><i class="fas fa-plus"></i> Nouveau</button></div><table><thead><tr><th>Image</th><th>Titre</th><th>Date</th><th>Lieu</th><th>Inscrits</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="events-tbody"></tbody></table></div></div>
+  <div class="panel" id="panel-events"><div class="table-card"><div class="table-head"><h2>Événements</h2><button class="btn-primary" onclick="openModal('event',null)"><i class="fas fa-plus"></i> Nouveau</button></div><div class="table-scroll-wrap"><table><thead><tr><th>Image</th><th>Titre</th><th>Date</th><th>Lieu</th><th>Inscrits</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="events-tbody"></tbody></table></div></div></div>
 
   <!-- ACTIVITÉS -->
-  <div class="panel" id="panel-activities"><div class="table-card"><div class="table-head"><h2>Activités</h2><button class="btn-primary" onclick="openModal('activity',null)"><i class="fas fa-plus"></i> Nouvelle</button></div><table><thead><tr><th>Image</th><th>Titre</th><th>Date</th><th>Catégorie</th><th>Lieu</th><th>Actions</th></tr></thead><tbody id="activities-tbody"></tbody></table></div></div>
+  <div class="panel" id="panel-activities"><div class="table-card"><div class="table-head"><h2>Activités</h2><button class="btn-primary" onclick="openModal('activity',null)"><i class="fas fa-plus"></i> Nouvelle</button></div><div class="table-scroll-wrap"><table><thead><tr><th>Image</th><th>Titre</th><th>Date</th><th>Catégorie</th><th>Lieu</th><th>Actions</th></tr></thead><tbody id="activities-tbody"></tbody></table></div></div></div>
 
   <!-- GALERIE -->
   <div class="panel" id="panel-gallery"><div class="table-card"><div class="table-head"><h2>Galerie</h2><button class="btn-primary" onclick="openModal('gallery',null)"><i class="fas fa-plus"></i> Ajouter</button></div><div class="gal-grid" id="gallery-grid"></div></div></div>
 
   <!-- ÉQUIPE -->
-  <div class="panel" id="panel-team"><div class="table-card"><div class="table-head"><h2>Équipe</h2><button class="btn-primary" onclick="openModal('team',null)"><i class="fas fa-plus"></i> Ajouter</button></div><table><thead><tr><th>Photo</th><th>Nom</th><th>Rôle</th><th>Bio</th><th>Ordre</th><th>Actions</th></tr></thead><tbody id="team-tbody"></tbody></table></div></div>
+  <div class="panel" id="panel-team"><div class="table-card"><div class="table-head"><h2>Équipe</h2><button class="btn-primary" onclick="openModal('team',null)"><i class="fas fa-plus"></i> Ajouter</button></div><div class="table-scroll-wrap"><table><thead><tr><th>Photo</th><th>Nom</th><th>Rôle</th><th>Bio</th><th>Ordre</th><th>Actions</th></tr></thead><tbody id="team-tbody"></tbody></table></div></div></div>
 
   <!-- ANNONCES -->
-  <div class="panel" id="panel-announcements"><div class="table-card"><div class="table-head"><h2>Annonces</h2><button class="btn-primary" onclick="openModal('announcement',null)"><i class="fas fa-plus"></i> Créer</button></div><table><thead><tr><th>Titre</th><th>Type</th><th>Visibilité</th><th>Date</th><th>Actions</th></tr></thead><tbody id="announcements-tbody"></tbody></table></div></div>
+  <div class="panel" id="panel-announcements"><div class="table-card"><div class="table-head"><h2>Annonces</h2><button class="btn-primary" onclick="openModal('announcement',null)"><i class="fas fa-plus"></i> Créer</button></div><div class="table-scroll-wrap"><table><thead><tr><th>Titre</th><th>Type</th><th>Visibilité</th><th>Date</th><th>Actions</th></tr></thead><tbody id="announcements-tbody"></tbody></table></div></div></div>
 
   <!-- COMPTES RENDUS -->
-  <div class="panel" id="panel-reports"><div class="table-card"><div class="table-head"><h2>Comptes rendus</h2><button class="btn-primary" onclick="openModal('report',null)"><i class="fas fa-plus"></i> Nouveau</button></div><table><thead><tr><th>Titre</th><th>Activité</th><th>Date</th><th>Médias</th><th>Actions</th></tr></thead><tbody id="reports-tbody"></tbody></table></div></div>
+  <div class="panel" id="panel-reports"><div class="table-card"><div class="table-head"><h2>Comptes rendus</h2><button class="btn-primary" onclick="openModal('report',null)"><i class="fas fa-plus"></i> Nouveau</button></div><div class="table-scroll-wrap"><table><thead><tr><th>Titre</th><th>Activité</th><th>Date</th><th>Médias</th><th>Actions</th></tr></thead><tbody id="reports-tbody"></tbody></table></div></div></div>
 
   <!-- INSCRIPTIONS -->
-  <div class="panel" id="panel-registrations"><div class="table-card"><div class="table-head"><h2>Inscriptions</h2><select id="reg-event-filter" onchange="filterRegistrations()" style="padding:8px 14px;border:1px solid #ddd;border-radius:20px;font-size:.85rem;min-width:220px;"><option value="all">— Tous les événements —</option></select></div><table><thead><tr><th>Membre</th><th>Email</th><th>Événement</th><th>Date</th><th>Accompag.</th><th>Message</th><th>Inscrit le</th><th>Actions</th></tr></thead><tbody id="reg-tbody"></tbody></table><div id="reg-summary" style="margin-top:14px;padding:12px 16px;background:var(--light);border-radius:8px;font-size:.88rem;display:none;"></div></div></div>
+  <div class="panel" id="panel-registrations"><div class="table-card"><div class="table-head"><h2>Inscriptions</h2><select id="reg-event-filter" onchange="filterRegistrations()" style="padding:8px 14px;border:1px solid #ddd;border-radius:20px;font-size:.85rem;min-width:220px;"><option value="all">— Tous les événements —</option></select></div><div class="table-scroll-wrap"><table><thead><tr><th>Membre</th><th>Email</th><th>Événement</th><th>Date</th><th>Accompag.</th><th>Message</th><th>Inscrit le</th><th>Actions</th></tr></thead><tbody id="reg-tbody"></tbody></table></div><div id="reg-summary" style="margin-top:14px;padding:12px 16px;background:var(--light);border-radius:8px;font-size:.88rem;display:none;"></div></div></div>
 
   <!-- MESSAGES -->
   <div class="panel" id="panel-messages">
@@ -473,12 +523,12 @@ tr:hover td{background:#fafafa}
       <div class="sm-chart-card"><h3><i class="fas fa-chart-column"></i> Répartition par filière</h3><div class="chart-canvas-wrap"><canvas id="chart-filiere"></canvas></div></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;">
-      <div class="sm-table-card"><h3><i class="fas fa-city"></i> Membres par ville</h3><table class="sm-table"><thead><tr><th>Ville</th><th>Membres</th><th>%</th><th></th></tr></thead><tbody id="tbl-ville-body"></tbody></table></div>
-      <div class="sm-table-card"><h3><i class="fas fa-school"></i> Membres par lycée</h3><table class="sm-table"><thead><tr><th>Lycée</th><th>Membres</th><th>%</th><th></th></tr></thead><tbody id="tbl-lycee-body"></tbody></table></div>
+      <div class="sm-table-card"><h3><i class="fas fa-city"></i> Membres par ville</h3><div class="sm-small-scroll"><table class="sm-table"><thead><tr><th>Ville</th><th>Membres</th><th>%</th><th></th></tr></thead><tbody id="tbl-ville-body"></tbody></table></div></div>
+      <div class="sm-table-card"><h3><i class="fas fa-school"></i> Membres par lycée</h3><div class="sm-small-scroll"><table class="sm-table"><thead><tr><th>Lycée</th><th>Membres</th><th>%</th><th></th></tr></thead><tbody id="tbl-lycee-body"></tbody></table></div></div>
     </div>
     <div class="sm-table-card">
       <h3><i class="fas fa-users"></i> Liste des membres <span id="sm-count-lbl" style="color:var(--primary);font-weight:700;"></span></h3>
-      <div style="overflow-x:auto;">
+      <div class="sm-members-scroll">
         <table class="sm-table"><thead><tr><th>Photo</th><th>Nom</th><th>Email</th><th>Ville</th><th>Lycée tech.</th><th>Nom lycée</th><th>Filière</th><th>Année</th></tr></thead><tbody id="tbl-members-stats-body"></tbody></table>
       </div>
     </div>
@@ -523,7 +573,18 @@ tr:hover td{background:#fafafa}
   </div>
 
   <!-- MEMBRES BUREAU -->
-  <div class="panel" id="panel-bureau-members"><div class="table-card"><div class="table-head"><h2><i class="fas fa-user-shield" style="color:#9c27b0;margin-right:7px;"></i>Membres du bureau</h2></div><table><thead><tr><th>Photo</th><th>Nom</th><th>Email</th><th>Ville</th><th>Statut bureau</th><th>Actions</th></tr></thead><tbody id="bureau-tbody"></tbody></table></div></div>
+  <div class="panel" id="panel-bureau-members">
+    <div class="table-card">
+      <div class="table-head">
+        <h2><i class="fas fa-user-shield" style="color:#9c27b0;margin-right:7px;"></i>Membres du bureau <span id="bureau-count-badge" style="background:#9c27b0;color:white;border-radius:20px;padding:2px 9px;font-size:.72rem;margin-left:6px;"></span></h2>
+        <button class="btn-primary" style="background:#9c27b0;" onclick="openAddBureauModal()"><i class="fas fa-user-plus"></i> Ajouter un membre</button>
+      </div>
+      <div id="bureau-grid-wrap">
+        <div class="bureau-grid" id="bureau-grid"></div>
+        <div id="bureau-empty" style="display:none;padding:40px;text-align:center;color:var(--text);font-style:italic;">Aucun membre dans le bureau</div>
+      </div>
+    </div>
+  </div>
 
 </main>
 
@@ -1328,7 +1389,7 @@ window.broadcastAccessRules = async function () {
 async function loadOverview() {
   try {
     var r = await Promise.all([
-      window.supabase.from('users').select('*', { count: 'exact', head: true }).eq('role', 'member').eq('status', 'active'),
+      window.supabase.from('users').select('*', { count: 'exact', head: true }).eq('status', 'active'),
       window.supabase.from('users').select('*', { count: 'exact', head: true }).eq('role', 'pending'),
       window.supabase.from('events').select('*', { count: 'exact', head: true }),
       window.supabase.from('activities').select('*', { count: 'exact', head: true }),
@@ -1887,23 +1948,112 @@ window.sendNewMessage = async function () {
 
 // ═══════════════ MEMBRES BUREAU ═══════════════
 async function loadBureauMembers() {
-  var tb = document.getElementById('bureau-tbody'); if (!tb) return;
+  var grid = document.getElementById('bureau-grid');
+  var emptyEl = document.getElementById('bureau-empty');
+  if (!grid) return;
   try {
-    var r = await window.supabase.from('users').select('*').in('role', ['member', 'admin']).eq('status', 'active').order('prenom');
+    // Charger uniquement les membres du bureau
+    var r = await window.supabase.from('users').select('id,prenom,nom,email,photo,ville,role,metadata').in('role', ['member', 'admin']).eq('status', 'active').eq('is_bureau', true).order('prenom');
     if (r.error) throw r.error;
-    var html = (r.data || []).length ? (r.data || []).map(function (u) {
-      var photo = window.escapeHtml(u.photo || window.FALLBACK_AVATAR); var isBureau = !!u.is_bureau;
-      return '<tr><td><img src="' + photo + '" class="user-avatar" alt="" onerror="window.avatarOnError(this)"></td>'
-        + '<td>' + window.escapeHtml((u.prenom || '') + ' ' + (u.nom || '')) + '</td>'
-        + '<td style="font-size:.82rem;">' + window.escapeHtml(u.email || '') + '</td>'
-        + '<td>' + window.escapeHtml(u.ville || '—') + '</td>'
-        + '<td><span class="badge ' + (isBureau ? 'badge-purple' : 'badge-grey') + '">' + (isBureau ? '✓ Bureau' : 'Membre') + '</span></td>'
-        + '<td><button class="btn-action ' + (isBureau ? 'reject' : 'approve') + '" onclick="toggleBureau(\'' + u.id + '\',' + !isBureau + ')" style="' + (isBureau ? '' : 'background:#f3e5f5;color:#9c27b0;') + '">'
-        + '<i class="fas ' + (isBureau ? 'fa-user-minus' : 'fa-user-shield') + '"></i> ' + (isBureau ? 'Retirer' : 'Ajouter') + '</button></td></tr>';
-    }).join('') : '<tr class="empty-row"><td colspan="6">Aucun membre actif</td></tr>';
-    silentUpdate(tb, html);
-  } catch (e) { silentUpdate(tb, '<tr class="error-row"><td colspan="6">Erreur</td></tr>'); }
+    var bureauMembers = r.data || [];
+
+    // Badge compteur
+    var badge = document.getElementById('bureau-count-badge');
+    if (badge) badge.textContent = bureauMembers.length;
+
+    if (!bureauMembers.length) {
+      silentUpdate(grid, '');
+      if (emptyEl) emptyEl.style.display = 'block';
+      return;
+    }
+    if (emptyEl) emptyEl.style.display = 'none';
+
+    var html = bureauMembers.map(function (u) {
+      var photo = escH(u.photo || window.FALLBACK_AVATAR);
+      var md = u.metadata || {};
+      var roleLabel = { super_admin: 'Super Admin', admin: 'Administrateur', member: 'Membre' }[u.role] || u.role;
+      var bureauRole = md.bureau_role || roleLabel;
+      return '<div class="bureau-card">'
+        + '<button class="bc-remove" onclick="removeBureauMember(\'' + u.id + '\',\'' + escH((u.prenom || '') + ' ' + (u.nom || '')) + '\')" title="Retirer du bureau"><i class="fas fa-times"></i></button>'
+        + '<img src="' + photo + '" alt="" onerror="window.avatarOnError(this)">'
+        + '<div class="bc-name">' + escH((u.prenom || '') + ' ' + (u.nom || '')) + '</div>'
+        + '<div class="bc-role"><i class="fas fa-star" style="font-size:.6rem;margin-right:3px;"></i>' + escH(bureauRole) + '</div>'
+        + '<div class="bc-city"><i class="fas fa-map-marker-alt" style="font-size:.65rem;margin-right:3px;color:#aaa;"></i>' + escH(u.ville || '—') + '</div>'
+        + '</div>';
+    }).join('');
+    silentUpdate(grid, html);
+  } catch (e) {
+    silentUpdate(grid, '<p style="color:var(--danger);padding:20px;">Erreur : ' + escH(e.message) + '</p>');
+  }
 }
+
+window.removeBureauMember = async function (userId, name) {
+  if (!confirm('Retirer ' + name + ' du bureau ?')) return;
+  try {
+    var r = await window.supabase.from('users').update({ is_bureau: false, updated_at: new Date().toISOString() }).eq('id', userId);
+    if (r.error) throw r.error;
+    window.showToast(name + ' retiré(e) du bureau', 'success');
+    loadBureauMembers(); loadMembers();
+    try { await window.supabase.from('notifications').insert([{ user_id: userId, title: 'Changement de statut bureau', message: 'Vous avez été retiré(e) du bureau.', type: 'bureau', is_read: false, created_at: new Date().toISOString() }]); } catch (_) {}
+  } catch (e) { window.showToast('Erreur : ' + e.message, 'error'); }
+};
+
+window.openAddBureauModal = async function () {
+  document.getElementById('modal-content').innerHTML = '<h2 class="modal-title"><i class="fas fa-user-plus" style="color:#9c27b0;margin-right:8px;"></i>Ajouter un membre au bureau</h2>'
+    + '<div style="margin-bottom:12px;"><input type="text" id="bureau-search-input" placeholder="Rechercher par nom ou ville…" style="width:100%;padding:9px 14px;border:1px solid #ddd;border-radius:20px;font-size:.85rem;font-family:inherit;outline:none;" oninput="filterBureauAddList(this.value)"></div>'
+    + '<div class="bureau-add-list" id="bureau-add-list"><div style="padding:30px;text-align:center;color:var(--text);">Chargement…</div></div>';
+  openModalEl();
+  try {
+    var r = await window.supabase.from('users').select('id,prenom,nom,email,photo,ville,is_bureau').in('role', ['member', 'admin']).eq('status', 'active').order('prenom');
+    window._bureauAddCache = r.data || [];
+    renderBureauAddList(window._bureauAddCache);
+  } catch (e) {
+    document.getElementById('bureau-add-list').innerHTML = '<div style="padding:20px;color:var(--danger);">Erreur : ' + escH(e.message) + '</div>';
+  }
+};
+
+function renderBureauAddList(members) {
+  var el = document.getElementById('bureau-add-list'); if (!el) return;
+  if (!members.length) { el.innerHTML = '<div style="padding:30px;text-align:center;color:var(--text);font-style:italic;">Aucun membre trouvé</div>'; return; }
+  el.innerHTML = members.map(function (u) {
+    var photo = escH(u.photo || window.FALLBACK_AVATAR);
+    var isBureau = !!u.is_bureau;
+    return '<div class="bureau-add-item">'
+      + '<img src="' + photo + '" alt="" onerror="window.avatarOnError(this)">'
+      + '<div><div class="bai-name">' + escH((u.prenom || '') + ' ' + (u.nom || '')) + '</div>'
+      + '<div class="bai-sub">' + escH(u.ville || '—') + '</div></div>'
+      + (isBureau
+        ? '<span style="margin-left:auto;padding:4px 10px;background:#f3e5f5;color:#9c27b0;border-radius:5px;font-size:.72rem;font-weight:600;">✓ Bureau</span>'
+        : '<button class="bai-btn" onclick="addToBureau(\'' + u.id + '\',\'' + escH((u.prenom || '') + ' ' + (u.nom || '')) + '\')"><i class="fas fa-plus"></i> Ajouter</button>')
+      + '</div>';
+  }).join('');
+}
+
+window.filterBureauAddList = function (q) {
+  if (!window._bureauAddCache) return;
+  var s = q.toLowerCase();
+  var filtered = s ? window._bureauAddCache.filter(function (u) {
+    return ((u.prenom || '') + ' ' + (u.nom || '') + ' ' + (u.ville || '')).toLowerCase().includes(s);
+  }) : window._bureauAddCache;
+  renderBureauAddList(filtered);
+};
+
+window.addToBureau = async function (userId, name) {
+  try {
+    var r = await window.supabase.from('users').update({ is_bureau: true, updated_at: new Date().toISOString() }).eq('id', userId);
+    if (r.error) throw r.error;
+    // Mettre à jour visuellement dans la liste sans fermer le modal
+    if (window._bureauAddCache) {
+      var u = window._bureauAddCache.find(function (m) { return m.id === userId; });
+      if (u) u.is_bureau = true;
+      renderBureauAddList(window._bureauAddCache);
+    }
+    window.showToast(name + ' ajouté(e) au bureau', 'success');
+    loadBureauMembers(); loadMembers();
+    try { await window.supabase.from('notifications').insert([{ user_id: userId, title: '🎉 Vous faites partie du bureau !', message: 'Vous avez été ajouté(e) aux membres du bureau.', type: 'bureau', is_read: false, created_at: new Date().toISOString() }]); } catch (_) {}
+  } catch (e) { window.showToast('Erreur : ' + e.message, 'error'); }
+};
+
 window.toggleBureau = async function (userId, makeBureau) {
   if (!confirm(makeBureau ? 'Ajouter ce membre au bureau ?' : 'Retirer ce membre du bureau ?')) return;
   try {
