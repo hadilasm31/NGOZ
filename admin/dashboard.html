@@ -27,6 +27,15 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;color:var(--text);over
 .top-nav-ham.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
 @media(max-width:768px){.top-nav-ham{display:flex}}
 
+/* AUTO-REFRESH INDICATOR */
+.refresh-indicator{display:flex;align-items:center;gap:6px;font-size:.75rem;color:#888;padding:4px 10px;border-radius:20px;background:#f5f5f5;border:1px solid #eee;cursor:pointer;transition:var(--tr);white-space:nowrap;user-select:none}
+.refresh-indicator:hover{background:#eee}
+.refresh-indicator.paused{background:#fff8e1;border-color:#ffd54f;color:#f57f17}
+.refresh-dot{width:7px;height:7px;border-radius:50%;background:#4caf50;flex-shrink:0;transition:var(--tr)}
+.refresh-dot.paused{background:#ff9800}
+.refresh-dot.active{animation:pulse-dot 1.5s ease-in-out infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(0.8)}}
+
 /* SIDEBAR */
 .sidebar{position:fixed;top:52px;left:0;width:var(--sidebar);height:calc(100vh - 52px);background:#fdfdfd;display:flex;flex-direction:column;z-index:200;transition:transform .32s cubic-bezier(.4,0,.2,1);overflow-y:auto}
 .sb-logo{padding:18px;border-bottom:1px solid #d9cfc0;display:flex;align-items:center;gap:10px}
@@ -218,7 +227,7 @@ tr:hover td{background:#fafafa}
 .sm-chart-card{background:white;border-radius:10px;padding:18px;box-shadow:var(--shadow)}
 .sm-chart-card h3{font-size:.9rem;color:var(--dark);font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:7px}
 .sm-chart-card h3 i{color:var(--primary)}
-.chart-canvas-wrap{position:relative;height:240px}
+.chart-canvas-wrap{position:relative;height:260px}
 .sm-table-card{background:white;border-radius:10px;padding:18px;box-shadow:var(--shadow);margin-bottom:18px;overflow-x:auto}
 .sm-table-card h3{font-size:.9rem;color:var(--dark);font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:7px}
 .sm-table-card h3 i{color:var(--primary)}
@@ -317,7 +326,12 @@ tr:hover td{background:#fafafa}
 <main class="main">
   <div class="topbar">
     <h1 id="panel-title">Vue générale</h1>
-    <div style="display:flex;align-items:center;gap:8px;">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <!-- Auto-refresh indicator -->
+      <div class="refresh-indicator" id="refresh-indicator" onclick="toggleAutoRefresh()" title="Cliquer pour activer/désactiver le rafraîchissement automatique">
+        <div class="refresh-dot active" id="refresh-dot"></div>
+        <span id="refresh-label">À jour</span>
+      </div>
       <button title="Notifications" onclick="switchToPanel('notifications')" style="background:none;border:none;cursor:pointer;font-size:1.2rem;padding:5px 7px;border-radius:50%;position:relative;">🔔<span id="tb-badge" style="position:absolute;top:-3px;right:-3px;background:#f44336;color:white;border-radius:50%;width:16px;height:16px;font-size:.6rem;font-weight:700;display:none;align-items:center;justify-content:center;border:2px solid white;"></span></button>
       <button id="tb-silence-btn" title="Mode silence" onclick="toggleAdminSilence()" style="background:none;border:none;cursor:pointer;font-size:.95rem;padding:5px 7px;border-radius:50%;color:#888;"><i class="fas fa-volume-up"></i></button>
       <div class="user-mini">
@@ -548,6 +562,207 @@ var _smAllMembers=[];
 var _smCharts={};
 var _smFiltersInited=false;
 
+// ═══════════════ AUTO-REFRESH SYSTEM ═══════════════
+var _autoRefresh={
+  enabled: true,
+  interval: 3000,          // 3 secondes
+  timer: null,
+  lastUpdate: null,
+  labelTimer: null,
+  isRefreshing: false,     // verrou anti-chevauchement
+  currentPanel: 'overview'
+};
+
+function startAutoRefresh(){
+  stopAutoRefresh();
+  _autoRefresh.enabled=true;
+  _autoRefresh.timer=setInterval(autoRefreshTick, _autoRefresh.interval);
+  _autoRefresh.labelTimer=setInterval(updateRefreshLabel, 1000);
+  updateRefreshUI();
+}
+
+function stopAutoRefresh(){
+  if(_autoRefresh.timer){clearInterval(_autoRefresh.timer);_autoRefresh.timer=null;}
+  if(_autoRefresh.labelTimer){clearInterval(_autoRefresh.labelTimer);_autoRefresh.labelTimer=null;}
+}
+
+function toggleAutoRefresh(){
+  if(_autoRefresh.enabled){
+    _autoRefresh.enabled=false;
+    stopAutoRefresh();
+    updateRefreshUI();
+  } else {
+    startAutoRefresh();
+  }
+}
+window.toggleAutoRefresh=toggleAutoRefresh;
+
+function isModalOpen(){
+  var modal=document.getElementById('modal');
+  return modal&&modal.classList.contains('active');
+}
+
+async function autoRefreshTick(){
+  // Ne pas rafraîchir si modal ouvert ou déjà en cours
+  if(isModalOpen()||_autoRefresh.isRefreshing){return;}
+  _autoRefresh.isRefreshing=true;
+  try{
+    var panel=_autoRefresh.currentPanel;
+    // Toujours mettre à jour les badges & notifications en fond
+    var bgTasks=[
+      updateBadgesBackground(),
+    ];
+    // Rafraîchir uniquement le panel actif (+ overview toujours en arrière-plan pour les stats)
+    var panelTask=refreshPanel(panel);
+    await Promise.allSettled([...bgTasks, panelTask]);
+    _autoRefresh.lastUpdate=Date.now();
+    updateRefreshLabel();
+  }catch(e){
+    console.warn('[AutoRefresh] Erreur :', e.message);
+  }finally{
+    _autoRefresh.isRefreshing=false;
+  }
+}
+
+async function refreshPanel(panel){
+  switch(panel){
+    case 'overview':      return loadOverview();
+    case 'members':       return loadMembersSilent();
+    case 'pending':       return loadPendingSilent();
+    case 'events':        return loadEvents();
+    case 'activities':    return loadActivities();
+    case 'gallery':       return loadGallery();
+    case 'team':          return loadTeam();
+    case 'announcements': return loadAnnouncements();
+    case 'reports':       return loadReports();
+    case 'registrations': return loadRegistrationsSilent();
+    case 'messages':      return loadMessagesSilent();
+    case 'notifications': return loadNotificationsPanel();
+    case 'documents':     return loadDocumentsSilent();
+    case 'stats-membres': return null; // pas de refresh auto pour les stats filtrées
+    case 'bureau-members':return loadBureauMembers();
+    default: return null;
+  }
+}
+
+// Charger membres sans réinitialiser le champ de recherche
+async function loadMembersSilent(){
+  var searchVal=document.getElementById('search-members')?.value||'';
+  await loadMembers();
+  if(searchVal){filterTable('members-table',searchVal);}
+}
+
+// Charger pending sans réinitialiser la vue
+async function loadPendingSilent(){return loadPending();}
+
+// Charger inscriptions sans réinitialiser le filtre événement
+async function loadRegistrationsSilent(){
+  var filterVal=document.getElementById('reg-event-filter')?.value||'all';
+  await loadRegistrations();
+  if(filterVal!=='all'){
+    var sel=document.getElementById('reg-event-filter');if(sel)sel.value=filterVal;
+    filterRegistrations();
+  }
+}
+
+// Charger messages sans perdre le message ouvert
+async function loadMessagesSilent(){
+  var savedMsgId=openMessageId;
+  await loadMessages();
+  // Rétablir le message ouvert si présent
+  if(savedMsgId){
+    var msgEl=document.querySelector('.msg-item[data-msgid="'+savedMsgId+'"]');
+    if(msgEl)msgEl.classList.add('active');
+  }
+}
+
+// Charger documents sans perdre les champs texte en cours de saisie
+async function loadDocumentsSilent(){
+  try{
+    var r=await window.supabase.from('documents').select('*').in('type',['reglement_interieur','conditions_adhesion']);
+    (r.data||[]).forEach(function(doc){
+      _smDocData[doc.type]=doc;
+      var prefix=doc.type==='reglement_interieur'?'ri':'ca';
+      renderDocPreview(prefix,doc);
+      // Ne pas écraser le contenu si l'utilisateur est en train de l'éditer
+      var contentEl=document.getElementById(prefix+'-content');
+      if(contentEl&&doc.content&&!contentEl.dataset.editing){contentEl.value=doc.content;}
+    });
+  }catch(e){}
+}
+
+// Mettre à jour les badges en fond (notifications, messages non lus)
+async function updateBadgesBackground(){
+  try{
+    // Notifications non lues
+    var nr=await window.supabase.from('notifications').select('id',{count:'exact',head:true}).eq('user_id',currentUser.id).eq('is_read',false);
+    var unreadNotifs=nr.count||0;
+    var badge=document.getElementById('sb-notif-badge');
+    if(badge){badge.textContent=unreadNotifs;badge.style.display=unreadNotifs>0?'inline-block':'none';}
+    var tb=document.getElementById('tb-badge');
+    if(tb){tb.textContent=unreadNotifs>99?'99+':String(unreadNotifs);tb.style.display=unreadNotifs>0?'flex':'none';}
+
+    // Messages non lus
+    var mr=await window.supabase.from('messages').select('id',{count:'exact',head:true}).eq('receiver_id',currentUser.id).eq('is_read',false);
+    var unreadMsgs=mr.count||0;
+    var mb=document.getElementById('msg-badge');if(mb){mb.textContent=unreadMsgs;mb.style.display=unreadMsgs>0?'inline-block':'none';}
+
+    // Pending badge
+    var pr=await window.supabase.from('users').select('id',{count:'exact',head:true}).eq('role','pending');
+    var pendingCount=pr.count||0;
+    var pb=document.getElementById('pending-badge');if(pb){pb.textContent=pendingCount;pb.style.display=pendingCount>0?'inline-block':'none';}
+  }catch(_){}
+}
+
+function updateRefreshLabel(){
+  var lbl=document.getElementById('refresh-label');if(!lbl)return;
+  if(!_autoRefresh.enabled){lbl.textContent='En pause';return;}
+  if(!_autoRefresh.lastUpdate){lbl.textContent='Chargement…';return;}
+  var sec=Math.round((Date.now()-_autoRefresh.lastUpdate)/1000);
+  lbl.textContent=sec<=1?'À jour':'il y a '+sec+'s';
+}
+
+function updateRefreshUI(){
+  var ind=document.getElementById('refresh-indicator');
+  var dot=document.getElementById('refresh-dot');
+  var lbl=document.getElementById('refresh-label');
+  if(!ind||!dot||!lbl)return;
+  if(_autoRefresh.enabled){
+    ind.classList.remove('paused');
+    dot.classList.remove('paused');
+    dot.classList.add('active');
+    ind.title='Rafraîchissement auto actif — Cliquer pour mettre en pause';
+  } else {
+    ind.classList.add('paused');
+    dot.classList.add('paused');
+    dot.classList.remove('active');
+    lbl.textContent='En pause';
+    ind.title='Rafraîchissement en pause — Cliquer pour reprendre';
+  }
+}
+
+// Surveiller l'ouverture/fermeture du modal pour pause/reprise auto
+var _modalObserver=null;
+function watchModal(){
+  var modal=document.getElementById('modal');if(!modal)return;
+  _modalObserver=new MutationObserver(function(muts){
+    muts.forEach(function(m){
+      if(m.type==='attributes'&&m.attributeName==='class'){
+        var isOpen=modal.classList.contains('active');
+        var dot=document.getElementById('refresh-dot');
+        if(isOpen){
+          if(dot){dot.classList.remove('active');dot.classList.add('paused');}
+        } else {
+          if(_autoRefresh.enabled&&dot){dot.classList.add('active');dot.classList.remove('paused');}
+        }
+      }
+    });
+  });
+  _modalObserver.observe(modal,{attributes:true});
+}
+
+// ═══════════════
+
 var PANEL_TITLES={
   overview:'Vue générale',members:'Membres',pending:'Demandes en attente',
   events:'Événements',activities:'Activités',gallery:'Galerie',team:'Équipe',
@@ -562,7 +777,7 @@ var PANEL_TITLES={
 document.addEventListener('DOMContentLoaded', async function(){
   currentUser=window.Auth?window.Auth.getCurrentUser():null;
   if(!currentUser||!window.Auth.isAdmin()){window.location.href='../login.html';return;}
-  initSidebar();initModal();initPanels();renderHeader();initAdminNotifPrefs();updateAdminSilenceUI();initContentPhotoUploads();initDocDragDrop();
+  initSidebar();initModal();initPanels();renderHeader();initAdminNotifPrefs();updateAdminSilenceUI();initContentPhotoUploads();initDocDragDrop();watchModal();
   if(currentUser.role==='super_admin'){
     ['sa-section','btn-access-control','btn-bureau-members'].forEach(function(id){
       var el=document.getElementById(id);if(el)el.style.display=el.tagName==='BUTTON'?'flex':'block';
@@ -577,11 +792,16 @@ document.addEventListener('DOMContentLoaded', async function(){
     loadNotificationsPanel()
   ]);
   loadNotifRecipients();
-  setInterval(function(){
-    var g=document.getElementById('notif-badge-global');var tb=document.getElementById('tb-badge');if(!tb)return;
-    var cnt=g&&g.style.display!=='none'?parseInt(g.textContent,10)||0:0;
-    if(cnt>0){tb.textContent=cnt>99?'99+':String(cnt);tb.style.display='flex';}else tb.style.display='none';
-  },3000);
+  _autoRefresh.lastUpdate=Date.now();
+  startAutoRefresh();
+
+  // Écouter focus input des documents pour ne pas écraser le texte en cours de saisie
+  ['ri-content','ca-content'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(!el)return;
+    el.addEventListener('focus',function(){el.dataset.editing='1';});
+    el.addEventListener('blur',function(){delete el.dataset.editing;});
+  });
 });
 
 function loadChartJS(){
@@ -614,6 +834,7 @@ function initPanels(){
   });
 }
 function switchToPanel(id){
+  _autoRefresh.currentPanel=id;
   document.querySelectorAll('.sb-item').forEach(function(b){b.classList.remove('active');});
   var sb2=document.querySelector('.sb-item[data-panel="'+id+'"]');if(sb2)sb2.classList.add('active');
   document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
@@ -905,36 +1126,198 @@ function renderMembersTable(membres){
     :'<tr><td colspan="8" class="sm-empty">Aucun membre correspondant</td></tr>';
 }
 
-// ═══════════════ GRAPHIQUES — LABELS COMPLETS AU SURVOL ═══════════════
+// ═══════════════ GRAPHIQUES — GRADUATION CORRECTE + NOM COMPLET AU SURVOL ═══════════════
 function renderCharts(membres){
   var PALETTE=['#4CAF50','#2196F3','#FF9800','#9C27B0','#F44336','#00BCD4','#8BC34A','#3F51B5','#FF5722','#009688','#795548','#607D8B','#E91E63','#CDDC39','#FFC107','#673AB7'];
 
-  // Graphique VILLE — noms complets passés, Chart.js les tronquera sur l'axe via callback
+  // Graphique VILLE — camembert
   var vc={};membres.forEach(function(m){var v=m.ville||'Non renseignée';vc[v]=(vc[v]||0)+1;});
   var vs=Object.entries(vc).sort(function(a,b){return b[1]-a[1];}).slice(0,10);
-  buildChart('chart-ville','pie',vs.map(function(e){return e[0];}),vs.map(function(e){return e[1];}),PALETTE);
+  buildChart('chart-ville','pie',vs.map(function(e){return e[0];}),vs.map(function(e){return e[1];}),PALETTE,false,membres.length);
 
-  // Graphique LYCÉE — noms complets (plus de truncT)
+  // Graphique LYCÉE — barres horizontales
   var lc={};membres.filter(function(m){return m.metadata?.nom_lycee;}).forEach(function(m){var l=m.metadata.nom_lycee;lc[l]=(lc[l]||0)+1;});
   var ls=Object.entries(lc).sort(function(a,b){return b[1]-a[1];}).slice(0,8);
-  buildChart('chart-lycee','bar',ls.map(function(e){return e[0];}),ls.map(function(e){return e[1];}),PALETTE,true);
+  buildChart('chart-lycee','bar',ls.map(function(e){return e[0];}),ls.map(function(e){return e[1];}),PALETTE,true,membres.length);
 
-  // Graphique OUI/NON lycée
+  // Graphique OUI/NON lycée — doughnut
   var avecLyc=membres.filter(function(m){return m.metadata?.lycee_technique===true||m.metadata?.lycee_technique==='true';}).length;
-  buildChart('chart-has-lycee','doughnut',['Avec lycée technique','Sans lycée technique'],[avecLyc,membres.length-avecLyc],['#4CAF50','#9e9e9e']);
+  buildChart('chart-has-lycee','doughnut',['Avec lycée technique','Sans lycée technique'],[avecLyc,membres.length-avecLyc],['#4CAF50','#9e9e9e'],false,membres.length);
 
-  // Graphique FILIÈRE — noms complets (plus de truncT)
+  // Graphique FILIÈRE — barres verticales
   var fc={};membres.filter(function(m){return m.metadata?.filiere;}).forEach(function(m){var f=m.metadata.filiere;fc[f]=(fc[f]||0)+1;});
   var fs=Object.entries(fc).sort(function(a,b){return b[1]-a[1];}).slice(0,10);
-  buildChart('chart-filiere','bar',fs.map(function(e){return e[0];}),fs.map(function(e){return e[1];}),PALETTE);
+  buildChart('chart-filiere','bar',fs.map(function(e){return e[0];}),fs.map(function(e){return e[1];}),PALETTE,false,membres.length);
 }
 
-function buildChart(canvasId,type,labels,data,colors,horizontal){
+/**
+ * buildChart — construit un graphique Chart.js avec :
+ *  - graduation Y entière et correcte (pas de décimales, commence à 0)
+ *  - nom complet visible dans le tooltip (title callback)
+ *  - étiquettes d'axes tronquées si trop longues pour la lisibilité
+ *
+ * @param {string} canvasId
+ * @param {string} type         'pie' | 'doughnut' | 'bar'
+ * @param {string[]} labels     noms complets
+ * @param {number[]} data
+ * @param {string[]} colors
+ * @param {boolean} horizontal  true = barres horizontales
+ * @param {number} totalMembers total pour le % dans tooltip
+ */
+function buildChart(canvasId, type, labels, data, colors, horizontal, totalMembers){
   var canvas=document.getElementById(canvasId);if(!canvas)return;
   if(_smCharts[canvasId]){_smCharts[canvasId].destroy();delete _smCharts[canvasId];}
+
+  var isBar=(type==='bar');
+  var isPie=(type==='pie'||type==='doughnut');
+  var maxTickLen=16; // longueur max pour les étiquettes d'axe (pas pour le tooltip)
+
+  // Couleurs de fond
   var bgColors=labels.map(function(_,i){return colors[i%colors.length];});
-  var isBar=type==='bar';
-  var maxTickLen=18; // Longueur max des étiquettes affichées sur l'axe
+
+  // Calcul du max pour graduation entière propre
+  var maxVal=data.length?Math.max.apply(null,data):1;
+  // On arrondit le max au nombre entier supérieur + petite marge
+  var yMax=Math.ceil(maxVal*1.15)||2;
+  // Nombre de ticks (entre 4 et 8) — on vise des graduations lisibles
+  var suggestedTicks=Math.min(8,Math.max(4,yMax));
+
+  var options={
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{
+      legend:{
+        display:isPie,
+        position:'bottom',
+        labels:{
+          font:{size:11},
+          boxWidth:12,
+          // Tronquer les légendes longues du camembert
+          generateLabels:function(chart){
+            var original=window.Chart.defaults.plugins.legend.labels.generateLabels(chart);
+            original.forEach(function(lbl){
+              if(lbl.text&&lbl.text.length>22)lbl.text=lbl.text.slice(0,22)+'…';
+            });
+            return original;
+          }
+        }
+      },
+      tooltip:{
+        // Affiche TOUJOURS le nom complet dans le tooltip — jamais tronqué
+        callbacks:{
+          title:function(items){
+            // items[0].label contient le nom complet (label d'origine passé à Chart.js)
+            return items[0].label||'';
+          },
+          label:function(ctx){
+            var val=isBar
+              ? (horizontal?ctx.parsed.x:ctx.parsed.y)
+              : ctx.parsed;
+            var tot=totalMembers||ctx.dataset.data.reduce(function(a,b){return a+b;},0)||1;
+            var pct=((val/tot)*100).toFixed(1);
+            return ' '+val+' membre'+(val>1?'s':'')+' ('+pct+'%)';
+          }
+        }
+      }
+    }
+  };
+
+  // Axes pour les barres
+  if(isBar){
+    var xAxis={
+      ticks:{
+        font:{size:11},
+        maxRotation:horizontal?0:35,
+        minRotation:0,
+        // Tronquer les étiquettes longues sur l'axe catégorie uniquement
+        callback:function(val,index){
+          var lbl=this.getLabelForValue(index);
+          if(!lbl)return'';
+          return lbl.length>maxTickLen?lbl.slice(0,maxTickLen)+'…':lbl;
+        }
+      },
+      grid:{display:horizontal}
+    };
+    var yAxis={
+      ticks:{
+        font:{size:11},
+        // Graduation entière, pas de décimales
+        callback:function(val){
+          return Number.isInteger(val)?val:'';
+        },
+        // Tronquer pour barres horizontales (axe Y = catégories)
+        ...(horizontal?{
+          callback:function(val,index){
+            var lbl=this.getLabelForValue(index);
+            if(!lbl)return'';
+            return lbl.length>maxTickLen?lbl.slice(0,maxTickLen)+'…':lbl;
+          }
+        }:{})
+      },
+      beginAtZero:true,
+      grid:{color:horizontal?'transparent':'#f0f0f0'}
+    };
+
+    if(horizontal){
+      // Barres horizontales : X = valeurs (entiers), Y = catégories
+      options.indexAxis='y';
+      options.scales={
+        x:{
+          ...yAxis,
+          // Pour l'axe des valeurs (horizontal), on veut des entiers
+          ticks:{
+            font:{size:11},
+            stepSize:1,
+            callback:function(val){return Number.isInteger(val)?val:'';}
+          },
+          beginAtZero:true,
+          max:yMax,
+          grid:{color:'#f0f0f0'}
+        },
+        y:{
+          ...xAxis,
+          ticks:{
+            font:{size:11},
+            callback:function(val,index){
+              var lbl=this.getLabelForValue(index);
+              if(!lbl)return'';
+              return lbl.length>maxTickLen?lbl.slice(0,maxTickLen)+'…':lbl;
+            }
+          },
+          grid:{display:false}
+        }
+      };
+    } else {
+      // Barres verticales : X = catégories, Y = valeurs (entiers)
+      options.scales={
+        x:{
+          ...xAxis,
+          ticks:{
+            font:{size:11},
+            maxRotation:35,
+            minRotation:0,
+            callback:function(val,index){
+              var lbl=this.getLabelForValue(index);
+              if(!lbl)return'';
+              return lbl.length>maxTickLen?lbl.slice(0,maxTickLen)+'…':lbl;
+            }
+          },
+          grid:{display:false}
+        },
+        y:{
+          beginAtZero:true,
+          max:yMax,
+          ticks:{
+            font:{size:11},
+            stepSize:1,
+            // Afficher uniquement les entiers
+            callback:function(val){return Number.isInteger(val)?val:'';}
+          },
+          grid:{color:'#f0f0f0'}
+        }
+      };
+    }
+  }
 
   _smCharts[canvasId]=new window.Chart(canvas,{
     type:type,
@@ -943,65 +1326,13 @@ function buildChart(canvasId,type,labels,data,colors,horizontal){
       datasets:[{
         data:data.length?data:[1],
         backgroundColor:bgColors,
-        borderColor:isBar?bgColors:'white',
+        borderColor:isBar?bgColors.map(function(c){return c;}):isPie?'white':'white',
         borderWidth:isBar?0:2,
-        borderRadius:isBar?5:0
+        borderRadius:isBar?4:0,
+        hoverBorderWidth:isBar?0:2
       }]
     },
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      indexAxis:(horizontal&&isBar)?'y':'x',
-      plugins:{
-        legend:{
-          display:!isBar,
-          position:'bottom',
-          labels:{font:{size:11},boxWidth:12}
-        },
-        tooltip:{
-          callbacks:{
-            // Titre du tooltip = nom complet (jamais tronqué)
-            title:function(items){
-              return items[0].label;
-            },
-            label:function(ctx){
-              if(isBar){
-                return ' '+ctx.parsed[(horizontal&&isBar)?'x':'y']+' membre(s)';
-              }
-              var tot=ctx.dataset.data.reduce(function(a,b){return a+b;},0);
-              return ' '+ctx.parsed+' membre(s) ('+(tot?((ctx.parsed/tot)*100).toFixed(1)+'%':'0%')+')';
-            }
-          }
-        }
-      },
-      scales:isBar?{
-        x:{
-          ticks:{
-            font:{size:11},
-            // Tronquer les étiquettes de l'axe X pour les barres verticales
-            callback:function(val,index){
-              var lbl=this.getLabelForValue(index);
-              if(!lbl)return '';
-              return lbl.length>maxTickLen?lbl.slice(0,maxTickLen)+'…':lbl;
-            }
-          },
-          grid:{display:false}
-        },
-        y:{
-          ticks:{
-            font:{size:11},
-            // Tronquer les étiquettes de l'axe Y pour les barres horizontales
-            callback:function(val,index){
-              var lbl=this.getLabelForValue(index);
-              if(!lbl)return '';
-              return lbl.length>maxTickLen?lbl.slice(0,maxTickLen)+'…':lbl;
-            }
-          },
-          beginAtZero:true,
-          grid:{color:'#f0f0f0'}
-        }
-      }:{}
-    }
+    options:options
   });
 }
 
@@ -1344,6 +1675,7 @@ async function loadPending(){
     var rows=r.data||[];
     var badge=document.getElementById('pending-badge');
     if(rows.length>0&&badge){badge.textContent=rows.length;badge.style.display='inline-block';}
+    else if(badge){badge.style.display='none';}
     tb.innerHTML=rows.length?rows.map(function(u){
       var d=new Date(u.created_at).toLocaleDateString('fr-FR');
       return '<tr>'
