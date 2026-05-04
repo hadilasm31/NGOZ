@@ -9,6 +9,7 @@
 <link rel="icon" type="image/png" href="images/favicon.ico">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
+<script src="ai-chat.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--primary:#2196f3;--secondary:#2196F3;--dark:#010101;--light:#f4f4f4;--danger:#f44336;--text:#666;--radius:8px;--shadow:0 2px 8px rgba(0,0,0,.1);--tr:all .2s ease;--fb-bg:#f0f2f5}
@@ -286,30 +287,63 @@ async function loadValues(){
     }catch(e){document.getElementById('values-container').innerHTML='<div class="sq-grid"><div class="error-msg">Erreur</div></div>';}
 }
 
+// ─── CHIFFRES CLÉS ───
 async function loadStats(){
     try{
-        // Compter TOUS les utilisateurs actifs (membres + admins + super_admins)
         var res=await Promise.all([
             window.supabase.from('users').select('*',{count:'exact',head:true}).eq('status','active'),
             window.supabase.from('events').select('*',{count:'exact',head:true}),
             window.supabase.from('activities').select('*',{count:'exact',head:true}),
-            window.supabase.from('users').select('ville',{count:'exact',head:true}).not('ville','is',null).eq('status','active')
+            window.supabase.from('users').select('ville').eq('status','active').not('ville','is',null)
         ]);
+
+        var totalMembres   = res[0].count || 0;
+        var totalEvents    = res[1].count || 0;
+        var totalActivites = res[2].count || 0;
+
+        var villesRaw    = (res[3].data || []).map(function(u){return (u.ville||'').trim().toLowerCase();}).filter(Boolean);
+        var villesUniques = new Set(villesRaw).size;
+
         var stats=[
-            {val:res[0].count||0,lbl:'Membres'},
-            {val:res[1].count||0,lbl:'Événements'},
-            {val:res[2].count||0,lbl:'Activités'},
-            {val:res[3].count||0,lbl:'Villes'}
+            {val:totalMembres,   lbl:'Membres'},
+            {val:totalEvents,    lbl:'Événements'},
+            {val:totalActivites, lbl:'Activités'},
+            {val:villesUniques,  lbl:'Villes'}
         ];
-        document.getElementById('stats-container').innerHTML=stats.map(function(s){return '<div class="stat-item"><span class="stat-number" data-target="'+s.val+'">0</span><span class="stat-label">'+window.escapeHtml(s.lbl)+'</span></div>';}).join('');
+
+        document.getElementById('stats-container').innerHTML=stats.map(function(s){
+            return '<div class="stat-item">'
+                +'<span class="stat-number" data-target="'+s.val+'">0</span>'
+                +'<span class="stat-label">'+window.escapeHtml(s.lbl)+'</span>'
+                +'</div>';
+        }).join('');
+
         animateCounters();
     }catch(e){document.getElementById('stats-container').innerHTML='<p style="grid-column:1/-1;text-align:center">Erreur</p>';}
 }
 
+// ─── ANIMATION COMPTEURS ───
+// Si val > 10 : anime de 0 à 10 avec le "+" DEVANT (ex: +1, +2 … +10, puis +42)
+// Si val <= 10 : anime normalement jusqu'à la valeur exacte
 function animateCounters(){
     document.querySelectorAll('.stat-number').forEach(function(el){
-        var target=parseInt(el.dataset.target,10)||0,cur=0,dur=1500,step=20,steps=dur/step,inc=target/steps;
-        var t=setInterval(function(){cur+=inc;if(cur>=target){el.textContent=target;clearInterval(t);}else el.textContent=Math.floor(cur);},step);
+        var target=parseInt(el.dataset.target,10)||0;
+        var THRESHOLD=10;
+        var isOver=target>THRESHOLD;
+        var displayTarget=isOver?THRESHOLD:target; // on anime jusqu'à 10 max
+
+        var cur=0,dur=1500,step=20,steps=dur/step,inc=displayTarget/steps;
+        var t=setInterval(function(){
+            cur+=inc;
+            if(cur>=displayTarget){
+                // Fin d'animation : afficher +N (+ DEVANT) ou la valeur exacte
+                el.textContent=isOver?'+'+target:String(target);
+                clearInterval(t);
+            }else{
+                // Pendant l'animation : + DEVANT si dépassement du seuil
+                el.textContent=isOver?'+'+Math.floor(cur):Math.floor(cur);
+            }
+        },step);
     });
 }
 </script>
