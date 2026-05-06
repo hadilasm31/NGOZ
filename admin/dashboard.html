@@ -280,6 +280,42 @@ tr:hover td{background:#fafafa}
 .bureau-add-item .bai-btn:hover{background:#9c27b0;color:white}
 
 @media(max-width:900px){.stats-row{grid-template-columns:repeat(3,1fr)}.settings-grid{grid-template-columns:1fr}.sm-charts-row{grid-template-columns:1fr}}
+
+/* ═══ JOURNAUX ADMIN ═══ */
+.log-filters{background:white;border-radius:10px;padding:16px 20px;box-shadow:var(--shadow);margin-bottom:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.log-filter-group{display:flex;flex-direction:column;gap:4px;min-width:140px}
+.log-filter-group label{font-size:.7rem;font-weight:600;color:var(--text);text-transform:uppercase;letter-spacing:.4px}
+.log-filter-group select,.log-filter-group input{padding:7px 11px;border:1px solid #ddd;border-radius:7px;font-size:.83rem;outline:none;font-family:inherit;transition:border-color .2s}
+.log-filter-group select:focus,.log-filter-group input:focus{border-color:var(--primary)}
+.log-table-wrap{overflow-x:auto;overflow-y:auto;max-height:620px;border-radius:0 0 8px 8px}
+.log-table-wrap table thead th{position:sticky;top:0;z-index:2;background:var(--light);box-shadow:0 1px 0 #eee}
+.log-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.log-table th{background:var(--light);padding:9px 11px;text-align:left;font-weight:600;color:var(--dark);white-space:nowrap;border-bottom:2px solid #eee}
+.log-table td{padding:9px 11px;border-bottom:1px solid #f0f0f0;vertical-align:middle}
+.log-table tr:hover td{background:#fafafa}
+.log-row-recent{background:#fffde7 !important}
+.log-row-recent:hover td{background:#fff9c4 !important}
+.log-row-undone td{opacity:.55}
+.log-action-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:.7rem;font-weight:700;white-space:nowrap}
+.la-create{background:#e8f5e9;color:#2e7d32}.la-update{background:#e3f2fd;color:#1565c0}.la-delete{background:#ffebee;color:#c62828}
+.la-approve{background:#e8f5e9;color:#1b5e20}.la-reject{background:#fce4ec;color:#880e4f}
+.la-send{background:#e8eaf6;color:#283593}.la-upload{background:#f3e5f5;color:#6a1b9a}
+.la-undo{background:#fff3e0;color:#e65100}.la-other{background:#f5f5f5;color:#555}
+.log-undo-btn{padding:4px 10px;background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7;border-radius:5px;font-size:.72rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:all .2s;white-space:nowrap}
+.log-undo-btn:hover{background:#2e7d32;color:white}
+.log-undo-btn.disabled{background:#f5f5f5;color:#aaa;border-color:#eee;cursor:not-allowed}
+.log-undone-tag{font-size:.72rem;color:var(--danger);font-style:italic;white-space:nowrap}
+.log-admin-cell{display:flex;align-items:center;gap:7px;white-space:nowrap}
+.log-admin-cell img{width:28px;height:28px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);flex-shrink:0}
+.log-critical{font-size:.85rem}
+.log-pagination{display:flex;align-items:center;justify-content:space-between;padding:12px 0 0;flex-wrap:wrap;gap:8px}
+.log-pagination .pg-info{font-size:.82rem;color:var(--text)}
+.log-pagination .pg-btns{display:flex;gap:6px}
+.pg-btn{padding:6px 14px;border:1px solid #ddd;background:white;border-radius:6px;font-size:.82rem;cursor:pointer;transition:all .2s;color:var(--dark)}
+.pg-btn:hover{background:var(--primary);color:white;border-color:var(--primary)}
+.pg-btn:disabled{background:#f5f5f5;color:#aaa;cursor:not-allowed}
+.pg-btn.active{background:var(--primary);color:white;border-color:var(--primary)}
+.log-sql-box{background:#1e1e1e;color:#d4d4d4;border-radius:8px;padding:14px;font-family:monospace;font-size:.78rem;line-height:1.6;margin-top:14px;overflow-x:auto;white-space:pre}
 @media(max-width:768px){
   .sidebar{transform:translateX(-110%)}.sidebar.open{transform:translateX(0)}
   .main{margin-left:0;padding:72px 12px 12px}
@@ -337,6 +373,7 @@ tr:hover td{background:#fafafa}
     <div class="sb-section" id="sa-section" style="display:none;">Super Admin</div>
     <button class="sb-item" data-panel="access-control" id="btn-access-control" style="display:none;"><i class="fas fa-shield-alt"></i> Contrôle d'accès</button>
     <button class="sb-item" data-panel="bureau-members" id="btn-bureau-members" style="display:none;"><i class="fas fa-user-shield"></i> Membres bureau</button>
+    <button class="sb-item" data-panel="admin-logs" id="btn-admin-logs" style="display:none;"><i class="fas fa-history"></i> Journaux admin</button>
     <div class="sb-section">Accès rapide</div>
     <button class="sb-item" onclick="window.open('../index.html','_blank')"><i class="fas fa-globe"></i> Voir le site</button>
   </nav>
@@ -355,6 +392,7 @@ tr:hover td{background:#fafafa}
       </div>
       <button title="Notifications" onclick="switchToPanel('notifications')" style="background:none;border:none;cursor:pointer;font-size:1.2rem;padding:5px 7px;border-radius:50%;position:relative;">🔔<span id="tb-badge" style="position:absolute;top:-3px;right:-3px;background:#f44336;color:white;border-radius:50%;width:16px;height:16px;font-size:.6rem;font-weight:700;display:none;align-items:center;justify-content:center;border:2px solid white;"></span></button>
       <button id="tb-silence-btn" title="Mode silence" onclick="toggleAdminSilence()" style="background:none;border:none;cursor:pointer;font-size:.95rem;padding:5px 7px;border-radius:50%;color:#888;"><i class="fas fa-volume-up"></i></button>
+      <button onclick="window.exportAll()" title="Exporter toutes les données en Excel" style="background:var(--primary);color:white;border:none;cursor:pointer;font-size:.78rem;padding:6px 12px;border-radius:6px;font-weight:600;display:flex;align-items:center;gap:5px;"><i class="fas fa-file-excel"></i> Export Excel</button>
       <div class="user-mini">
         <img id="tb-avatar" src="" alt="Avatar" onerror="window.avatarOnError(this)">
         <span id="tb-name">Admin</span>
@@ -545,6 +583,150 @@ tr:hover td{background:#fafafa}
     </div>
   </div>
 
+  <!-- JOURNAUX ADMIN -->
+  <div class="panel" id="panel-admin-logs">
+    <!-- SQL helper box -->
+    <div id="logs-sql-helper" style="display:none;margin-bottom:16px;">
+      <div class="table-card" style="padding:16px;">
+        <h3 style="font-size:.9rem;color:var(--dark);margin-bottom:10px;"><i class="fas fa-database" style="color:var(--primary);margin-right:6px;"></i>Script SQL — Créer la table <code>admin_logs</code></h3>
+        <div class="log-sql-box">CREATE TABLE IF NOT EXISTS admin_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  admin_id UUID REFERENCES users(id) ON DELETE SET NULL,
+  admin_name TEXT NOT NULL,
+  action_type TEXT NOT NULL,
+  table_name TEXT,
+  record_id TEXT,
+  record_data JSONB,
+  details TEXT,
+  ip_address TEXT,
+  user_agent TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  is_reversible BOOLEAN DEFAULT false,
+  reversible_until TIMESTAMPTZ,
+  undone_by UUID REFERENCES users(id) ON DELETE SET NULL,
+  undone_at TIMESTAMPTZ
+);
+CREATE INDEX IF NOT EXISTS idx_admin_logs_created ON admin_logs(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_admin_logs_admin ON admin_logs(admin_id);
+CREATE INDEX IF NOT EXISTS idx_admin_logs_action ON admin_logs(action_type);
+-- Activer RLS et autoriser les admins
+ALTER TABLE admin_logs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "super_admin_all" ON admin_logs FOR ALL USING (true) WITH CHECK (true);</div>
+        <button class="btn-primary" style="margin-top:10px;font-size:.8rem;padding:7px 14px;" onclick="document.getElementById('logs-sql-helper').style.display='none'"><i class="fas fa-times"></i> Fermer</button>
+      </div>
+    </div>
+    <!-- Filtres -->
+    <div class="log-filters">
+      <div class="log-filter-group">
+        <label><i class="fas fa-user-shield"></i> Admin</label>
+        <select id="log-filter-admin"><option value="">Tous les admins</option></select>
+      </div>
+      <div class="log-filter-group">
+        <label><i class="fas fa-bolt"></i> Action</label>
+        <select id="log-filter-action">
+          <option value="">Toutes les actions</option>
+          <option value="user_approve">✅ Approbation membre</option>
+          <option value="user_reject">❌ Rejet membre</option>
+          <option value="user_update">✏️ Modif membre</option>
+          <option value="user_delete">🗑️ Suppression membre</option>
+          <option value="event_create">📅 Créer événement</option>
+          <option value="event_update">📅 Modifier événement</option>
+          <option value="event_delete">📅 Suppr. événement</option>
+          <option value="activity_create">🏃 Créer activité</option>
+          <option value="activity_update">🏃 Modifier activité</option>
+          <option value="activity_delete">🏃 Suppr. activité</option>
+          <option value="announcement_create">📢 Créer annonce</option>
+          <option value="announcement_update">📢 Modifier annonce</option>
+          <option value="announcement_delete">📢 Suppr. annonce</option>
+          <option value="gallery_upload">🖼️ Upload galerie</option>
+          <option value="gallery_delete">🖼️ Suppr. galerie</option>
+          <option value="team_create">👥 Créer équipe</option>
+          <option value="team_update">👥 Modifier équipe</option>
+          <option value="team_delete">👥 Suppr. équipe</option>
+          <option value="report_create">📋 Créer compte rendu</option>
+          <option value="report_update">📋 Modifier compte rendu</option>
+          <option value="report_delete">📋 Suppr. compte rendu</option>
+          <option value="document_upload">📄 Upload document</option>
+          <option value="document_delete">📄 Suppr. document</option>
+          <option value="notification_send">🔔 Notif envoyée</option>
+          <option value="message_send">💬 Message envoyé</option>
+          <option value="registration_cancel">🚫 Annul. inscription</option>
+          <option value="settings_update">⚙️ Paramètres modifiés</option>
+          <option value="content_update">📝 Contenu modifié</option>
+          <option value="access_rule_update">🛡️ Règles accès</option>
+          <option value="bureau_toggle">🏅 Bureau toggle</option>
+          <option value="undo">↩️ Annulation</option>
+        </select>
+      </div>
+      <div class="log-filter-group">
+        <label><i class="fas fa-table"></i> Table</label>
+        <select id="log-filter-table">
+          <option value="">Toutes</option>
+          <option value="users">users</option>
+          <option value="events">events</option>
+          <option value="activities">activities</option>
+          <option value="announcements">announcements</option>
+          <option value="gallery">gallery</option>
+          <option value="team">team</option>
+          <option value="activity_reports">activity_reports</option>
+          <option value="documents">documents</option>
+          <option value="notifications">notifications</option>
+          <option value="messages">messages</option>
+          <option value="settings">settings</option>
+          <option value="content_pages">content_pages</option>
+          <option value="access_rules">access_rules</option>
+        </select>
+      </div>
+      <div class="log-filter-group">
+        <label><i class="fas fa-calendar-alt"></i> Du</label>
+        <input type="date" id="log-filter-from">
+      </div>
+      <div class="log-filter-group">
+        <label><i class="fas fa-calendar-alt"></i> Au</label>
+        <input type="date" id="log-filter-to">
+      </div>
+      <div class="log-filter-group" style="min-width:180px;">
+        <label><i class="fas fa-search"></i> Recherche</label>
+        <input type="text" id="log-filter-search" placeholder="Nom, détail, ID…">
+      </div>
+      <div style="display:flex;gap:6px;align-self:flex-end;flex-wrap:wrap;">
+        <button class="btn-filter" onclick="loadAdminLogs(1)"><i class="fas fa-filter"></i> Filtrer</button>
+        <button class="btn-filter" style="background:#888;" onclick="resetLogFilters()"><i class="fas fa-times"></i> Reset</button>
+        <button class="btn-export" onclick="exportLogsCSV()"><i class="fas fa-download"></i> Export</button>
+        <button class="btn-primary" style="background:#ff9800;font-size:.82rem;padding:7px 12px;" onclick="document.getElementById('logs-sql-helper').style.display='block'"><i class="fas fa-database"></i> SQL</button>
+      </div>
+    </div>
+    <!-- Résumé -->
+    <div id="logs-summary" style="display:none;background:white;border-radius:10px;padding:12px 18px;box-shadow:var(--shadow);margin-bottom:14px;font-size:.85rem;display:flex;align-items:center;gap:16px;flex-wrap:wrap;"></div>
+    <!-- Tableau -->
+    <div class="table-card" style="padding:0;overflow:hidden;">
+      <div style="padding:14px 18px;background:var(--light);border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+        <h2 style="font-size:1rem;color:var(--dark);font-weight:600;margin:0;"><i class="fas fa-history" style="color:var(--primary);margin-right:7px;"></i>Journal des actions <span id="logs-count-badge" style="background:var(--primary);color:white;border-radius:20px;padding:2px 9px;font-size:.72rem;margin-left:6px;display:none;"></span></h2>
+        <div style="display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--text);">
+          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;background:#fffde7;border:1px solid #f9a825;border-radius:2px;"></span> Dernières 24h</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;background:#ffebee;border:1px solid #ef9a9a;border-radius:2px;"></span> Action critique</span>
+        </div>
+      </div>
+      <div class="log-table-wrap">
+        <table class="log-table">
+          <thead>
+            <tr>
+              <th style="width:130px;">Date/Heure</th>
+              <th style="width:150px;">Admin</th>
+              <th style="width:170px;">Action</th>
+              <th style="width:120px;">Table</th>
+              <th>Détails</th>
+              <th style="width:100px;">ID Enreg.</th>
+              <th style="width:130px;">Annulation</th>
+            </tr>
+          </thead>
+          <tbody id="logs-tbody"></tbody>
+        </table>
+      </div>
+      <div class="log-pagination" style="padding:12px 18px;" id="logs-pagination"></div>
+    </div>
+  </div>
+
 </main>
 
 <!-- Modal CRUD -->
@@ -662,6 +844,7 @@ async function refreshPanel(panel) {
     case 'messages':       return loadMessagesSilent();
     case 'notifications':  return loadNotificationsPanel();
     case 'bureau-members': return loadBureauMembers();
+    case 'admin-logs':     return loadAdminLogs(_logState.page);
     default: return null;
   }
 }
@@ -744,7 +927,7 @@ var PANEL_TITLES = {
   messages:'Messages', notifications:'Notifications',
   documents:'Documents officiels', 'stats-membres':'Statistiques membres',
   content:'Contenu pages', settings:'Paramètres site', 'notif-prefs':'Préférences notifications',
-  'access-control':'Contrôle d\'accès', 'bureau-members':'Membres du bureau'
+  'access-control':'Contrôle d\'accès', 'bureau-members':'Membres du bureau', 'admin-logs':'Journaux admin'
 };
 
 // ─── INIT ───
@@ -753,7 +936,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   if (!currentUser || !window.Auth.isAdmin()) { window.location.href = '../login.html'; return; }
   initSidebar(); initModal(); initPanels(); renderHeader(); initAdminNotifPrefs(); updateAdminSilenceUI(); initContentPhotoUploads(); initDocDragDrop();
   if (currentUser.role === 'super_admin') {
-    ['sa-section', 'btn-access-control', 'btn-bureau-members'].forEach(function (id) {
+    ['sa-section', 'btn-access-control', 'btn-bureau-members', 'btn-admin-logs'].forEach(function (id) {
       var el = document.getElementById(id); if (el) el.style.display = el.tagName === 'BUTTON' ? 'flex' : 'block';
     });
     loadAccessRules(); loadBureauMembers();
@@ -809,6 +992,7 @@ function switchToPanel(id) {
   if (id === 'documents' && !Object.keys(_smDocData).length) loadDocuments();
   if (id === 'stats-membres') { if (!_smFiltersInited) { _smFiltersInited = true; initStatsFilters(); } else loadStatsMembers(); }
   if (id === 'notifications') loadNotificationsPanel();
+  if (id === 'admin-logs') { initAdminLogsFilters(); loadAdminLogs(1); }
 }
 window.switchToPanel = switchToPanel;
 
@@ -965,6 +1149,7 @@ window.saveDoc = async function (docType) {
     var prog2 = document.getElementById(prefix + '-progress'); var fill2 = document.getElementById(prefix + '-progress-fill');
     if (fill2) fill2.style.width = '100%';
     setTimeout(function () { if (prog2) prog2.style.display = 'none'; if (fill2) fill2.style.width = '0%'; }, 600);
+    logAdminAction('document_upload', 'documents', docType, null, 'Document "' + docType + '" mis à jour' + (fileName ? ' — fichier : ' + fileName : ''), false);
     showFbEl(fbEl, '✅ Enregistré avec succès !', 'ok');
     window.showToast('Document sauvegardé', 'success');
   } catch (e) { showFbEl(fbEl, '❌ Erreur : ' + e.message, 'err'); window.showToast('Erreur : ' + e.message, 'error'); }
@@ -1283,12 +1468,8 @@ window.resetStatsFilters = function () {
 };
 window.exportStatsCSV = function () {
   if (!_smAllMembers.length) { window.showToast('Aucune donnée à exporter', 'warning'); return; }
-  var members = _smAllMembers.map(function (m) {
-    var md = m.metadata || {};
-    return { prenom: m.prenom || '', nom: m.nom || '', email: m.email || '', telephone: m.phone || m.telephone || md.telephone || '', ville: m.ville || '', role: m.role || 'member', status: m.status || 'active', bureau: !!m.is_bureau, lycee_technique: md.lycee_technique === true || md.lycee_technique === 'true', nom_lycee: md.nom_lycee || '', filiere: md.filiere || '', annee_depart: md.annee_depart || null, date_inscription: (m.created_at || '').slice(0, 10), metadata: md };
-  });
-  if (window.NgozExport) { window.NgozExport.exportMembres(members, { filename: 'stats_membres_' + new Date().toISOString().slice(0, 10) + '.xlsx', orgName: 'Ngozistes du Royaume' }); }
-  else { window.showToast('Module export en cours de chargement…', 'info'); setTimeout(function () { window.exportStatsCSV(); }, 1500); }
+  window.showToast('Export en cours…', 'info', 2000);
+  window.exportAll();
 };
 
 // ═══════════════ NOTIFICATIONS PANEL ═══════════════
@@ -1368,6 +1549,7 @@ window.sendNotification = async function () {
     var inserts = recipients.map(function (uid) { return { user_id: uid, title: title, message: message, type: 'announcement', is_read: false, created_at: new Date().toISOString() }; });
     var r2 = await window.supabase.from('notifications').insert(inserts);
     if (r2.error) throw r2.error;
+    logAdminAction('notification_send', 'notifications', 'batch', null, 'Notification "' + title + '" envoyée à ' + recipients.length + ' membre(s)', false);
     showFbEl(fb, 'Envoyé à ' + recipients.length + ' membre(s) !', 'ok');
     document.getElementById('notif-title').value = ''; document.getElementById('notif-message').value = '';
   } catch (e) { showFbEl(fb, 'Erreur : ' + e.message, 'err'); }
@@ -1403,6 +1585,7 @@ window.saveAccessRules = async function () {
     var delR = await window.supabase.from('access_rules').delete().eq('role', 'member'); if (delR.error) throw delR.error;
     if (inserts.length) { var insR = await window.supabase.from('access_rules').insert(inserts); if (insR.error) throw insR.error; }
     _accessRules = {}; inserts.forEach(function (r) { var key = r.page + ':' + (r.panel || '_'); _accessRules[key] = r.allowed; });
+    logAdminAction('access_rule_update', 'access_rules', 'member', null, 'Regles acces membres mises a jour (' + inserts.length + ' regles)', false);
     showFb('access-fb', 'Restrictions enregistrées !', 'ok'); window.showToast('Accès sauvegardés', 'success'); broadcastAccessRules();
   } catch (e) { showFb('access-fb', 'Erreur : ' + e.message, 'err'); }
 };
@@ -1507,16 +1690,139 @@ function memberRow(u) {
     + '</div></td></tr>';
 }
 
+// ═══════════════ EXPORT COMPLET ═══════════════
+// Collecte TOUTES les données du dashboard et lance l'export Excel
+window.exportAll = async function () {
+  if (window.showToast) window.showToast('Collecte des données…', 'info', 2000);
+  try {
+    // Récupérer les données depuis Supabase
+    var results = await Promise.allSettled([
+      window.supabase.from('users').select('*').in('role', ['member', 'admin', 'super_admin']).order('prenom'),
+      window.supabase.from('events').select('*').order('date', { ascending: false }),
+      window.supabase.from('activities').select('*').order('date', { ascending: false }),
+      window.supabase.from('team').select('*').order('display_order'),
+      window.supabase.from('announcements').select('*').order('created_at', { ascending: false }),
+      window.supabase.from('event_registrations').select('*,user:user_id(id,nom,prenom,email,telephone,phone,ville,metadata),event:event_id(id,title,date)').order('registered_at', { ascending: false }),
+    ]);
+
+    function getData(r) { return r.status === 'fulfilled' && !r.value.error ? (r.value.data || []) : []; }
+
+    var rawMembers = getData(results[0]);
+    var allData = {
+      members: rawMembers.map(function(u) {
+        var md = u.metadata || {};
+        return {
+          prenom: u.prenom || '', nom: u.nom || '', email: u.email || '',
+          telephone: u.phone || u.telephone || md.telephone || '',
+          ville: u.ville || '', role: u.role || 'member', status: u.status || 'active',
+          bureau: !!u.is_bureau,
+          lycee_technique: md.lycee_technique === true || md.lycee_technique === 'true' || u.lycee_technique === true,
+          nom_lycee: md.nom_lycee || u.nom_lycee || '',
+          filiere: md.filiere || u.filiere || '',
+          annee_depart: md.annee_depart || u.annee_depart || null,
+          date_inscription: (u.created_at || '').slice(0, 10),
+          motivation: u.motivation || '',
+          metadata: md,
+        };
+      }),
+      events:        getData(results[1]),
+      activities:    getData(results[2]),
+      team:          getData(results[3]),
+      announcements: getData(results[4]),
+      registrations: getData(results[5]),
+    };
+
+    var logoB64 = null;
+    try {
+      var logoEl = document.querySelector('.logo-img');
+      if (logoEl && logoEl.src && logoEl.src.startsWith('data:')) logoB64 = logoEl.src;
+    } catch (_) {}
+
+    // Charger le logo depuis l'URL si pas encore en base64
+    if (!logoB64) {
+      try {
+        var logoElSrc = (document.querySelector('.logo-img') || {}).src || '';
+        if (logoElSrc && !logoElSrc.startsWith('data:')) {
+          var resp = await fetch(logoElSrc);
+          if (resp.ok) {
+            var blob = await resp.blob();
+            logoB64 = await new Promise(function(res) {
+              var reader = new FileReader();
+              reader.onload = function() { res(reader.result); };
+              reader.readAsDataURL(blob);
+            });
+          }
+        }
+      } catch (_) {}
+    }
+
+    if (window.NgozExport && window.NgozExport.exportAll) {
+      window.NgozExport.exportAll(allData, {
+        filename: 'ngozistes_export_complet_' + new Date().toISOString().slice(0, 10) + '.xlsx',
+        orgName:  'Ngozistes du Royaume',
+        logoB64:  logoB64,
+      });
+    } else {
+      // Fallback : export membres uniquement
+      window.showToast('Module export en cours de chargement…', 'info', 2000);
+      setTimeout(function() { window.exportAll(); }, 1500);
+    }
+  } catch (e) {
+    if (window.showToast) window.showToast('Erreur export : ' + e.message, 'error');
+    console.error(e);
+  }
+};
+
+// Rétro-compatibilité : export membres seuls
+function _runExport(members, filename, logoB64) {
+  if (window.NgozExport && window.NgozExport.exportMembres) {
+    window.NgozExport.exportMembres(members, { filename: filename, orgName: 'Ngozistes du Royaume', logoB64: logoB64 || null });
+    return;
+  }
+  // Attendre le chargement
+  var tries = 0;
+  var wait = setInterval(function() {
+    tries++;
+    if (window.NgozExport) {
+      clearInterval(wait);
+      window.NgozExport.exportMembres(members, { filename: filename, orgName: 'Ngozistes du Royaume', logoB64: logoB64 || null });
+    } else if (tries > 30) {
+      clearInterval(wait);
+      _exportFallbackCSV(members, filename.replace('.xlsx', '.csv'));
+    }
+  }, 300);
+}
+
+// Fallback CSV si Excel impossible
+function _exportFallbackCSV(members, filename) {
+  var cols = [
+    { key:'prenom', label:'Prénom' }, { key:'nom', label:'Nom' }, { key:'email', label:'Email' },
+    { key:'telephone', label:'Téléphone' }, { key:'ville', label:'Ville' },
+    { key:'role', label:'Rôle' }, { key:'status', label:'Statut' }, { key:'bureau', label:'Bureau' },
+    { key:'lycee_technique', label:'Lycée technique' }, { key:'nom_lycee', label:'Nom lycée' },
+    { key:'filiere', label:'Filière' }, { key:'annee_depart', label:'Année départ' },
+    { key:'date_inscription', label:'Date inscription' },
+  ];
+  function csvCell(v) {
+    if (v === null || v === undefined) return '""';
+    return '"' + String(v === true ? 'Oui' : v === false ? 'Non' : v).replace(/"/g, '""') + '"';
+  }
+  var header = cols.map(function(c){ return csvCell(c.label); }).join(';');
+  var rows   = members.map(function(m){ return cols.map(function(c){ return csvCell(m[c.key]); }).join(';'); });
+  var csv    = '\uFEFF' + header + '\n' + rows.join('\n');
+  var blob   = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  var url    = URL.createObjectURL(blob);
+  var a      = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+  window.showToast(members.length + ' membres exportés (CSV)', 'success');
+}
+
+
 window.exportMembersCSV = function () {
   if (!membersCache.length) { window.showToast('Aucun membre à exporter', 'warning'); return; }
-  var members = membersCache.map(function (u) {
-    var md = u.metadata || {};
-    return { prenom: u.prenom || '', nom: u.nom || '', email: u.email || '', telephone: u.phone || u.telephone || md.telephone || '', ville: u.ville || '', role: u.role || 'member', status: u.status || 'active', bureau: !!u.is_bureau, lycee_technique: md.lycee_technique === true || md.lycee_technique === 'true' || u.lycee_technique === true, nom_lycee: md.nom_lycee || u.nom_lycee || '', filiere: md.filiere || u.filiere || '', annee_depart: md.annee_depart || u.annee_depart || null, date_inscription: (u.created_at || '').slice(0, 10), metadata: md };
-  });
-  var logoB64 = null;
-  try { var logoEl = document.querySelector('.logo-img'); if (logoEl && logoEl.src && logoEl.src.startsWith('data:')) logoB64 = logoEl.src; } catch (_) {}
-  if (window.NgozExport) { window.NgozExport.exportMembres(members, { filename: 'membres_ngozistes_' + new Date().toISOString().slice(0, 10) + '.xlsx', orgName: 'Ngozistes du Royaume', logoB64: logoB64 }); }
-  else { window.showToast('Module export en cours de chargement…', 'info'); setTimeout(function () { window.exportMembersCSV(); }, 1500); }
+  window.showToast('Export en cours…', 'info', 2000);
+  window.exportAll();
 };
 
 window.editMemberRoleStatus = async function (id) {
@@ -1555,6 +1861,7 @@ window.saveMemberRoleStatus = async function (id) {
     var r = await window.supabase.from('users').update({ role: newRole, status: newStatus, updated_at: new Date().toISOString() }).eq('id', id);
     if (r.error) throw r.error;
     showFbEl(fb, '✅ Mis à jour avec succès !', 'ok');
+    logAdminAction('user_update', 'users', id, null, 'Rôle → ' + newRole + ', Statut → ' + newStatus + ' pour user ' + id, true);
     try { await window.supabase.from('notifications').insert([{ user_id: id, title: 'Mise à jour de votre compte', message: 'Votre rôle est désormais "' + newRole + '" et votre statut "' + newStatus + '".', type: 'info', is_read: false, created_at: new Date().toISOString() }]); } catch (_) {}
     window.showToast('Rôle et statut mis à jour', 'success');
     setTimeout(function () { closeModal(); loadMembers(); }, 1000);
@@ -1594,17 +1901,30 @@ window.approveUser = async function (id) {
 };
 window.rejectUser = async function (id) {
   if (!confirm('Supprimer cette demande ?')) return;
-  try { var r = await window.supabase.from('users').delete().eq('id', id); if (r.error) throw r.error; window.showToast('Demande supprimée', 'success'); await Promise.all([loadPending(), loadOverview()]); }
-  catch (e) { window.showToast('Erreur : ' + e.message, 'error'); }
+  try {
+    var rjData = await window.supabase.from('users').select('*').eq('id', id).single();
+    var r = await window.supabase.from('users').delete().eq('id', id);
+    if (r.error) throw r.error;
+    logAdminAction('user_reject', 'users', id, rjData.data, 'Rejet de ' + ((rjData.data && rjData.data.prenom)||'') + ' ' + ((rjData.data && rjData.data.nom)||''), false);
+    window.showToast('Demande supprimée', 'success'); await Promise.all([loadPending(), loadOverview()]);
+  } catch (e) { window.showToast('Erreur : ' + e.message, 'error'); }
 };
 window.toggleStatus = async function (id, status) {
-  try { await window.supabase.from('users').update({ status: status }).eq('id', id); window.showToast('Statut mis à jour', 'success'); loadMembers(); }
-  catch (e) { window.showToast('Erreur : ' + e.message, 'error'); }
+  try {
+    var tsData = await window.supabase.from('users').select('prenom,nom,email,status').eq('id', id).single();
+    await window.supabase.from('users').update({ status: status }).eq('id', id);
+    logAdminAction('user_update', 'users', id, tsData.data, 'Statut de ' + ((tsData.data && tsData.data.prenom)||'') + ' passé à ' + status, true);
+    window.showToast('Statut mis à jour', 'success'); loadMembers();
+  } catch (e) { window.showToast('Erreur : ' + e.message, 'error'); }
 };
 window.deleteMember = async function (id) {
   if (!confirm('Supprimer ce membre ? Cette action est irréversible.')) return;
-  try { await window.supabase.from('users').delete().eq('id', id); window.showToast('Membre supprimé', 'success'); loadMembers(); }
-  catch (e) { window.showToast('Erreur : ' + e.message, 'error'); }
+  try {
+    var dmData = await window.supabase.from('users').select('*').eq('id', id).single();
+    await window.supabase.from('users').delete().eq('id', id);
+    logAdminAction('user_delete', 'users', id, dmData.data, 'Suppression de ' + ((dmData.data && dmData.data.prenom)||'') + ' ' + ((dmData.data && dmData.data.nom)||'') + ' (' + ((dmData.data && dmData.data.email)||'') + ')', true);
+    window.showToast('Membre supprimé', 'success'); loadMembers();
+  } catch (e) { window.showToast('Erreur : ' + e.message, 'error'); }
 };
 
 window.viewMember = async function (id) {
@@ -1769,7 +2089,9 @@ window.saveContent = async function (page, section, inputId) {
     var upsertData = { page: page, section: section, content: content, updated_at: new Date().toISOString() };
     if (photo !== undefined) upsertData.photo = photo;
     var r = await window.supabase.from('content_pages').upsert(upsertData, { onConflict: 'page,section' });
-    if (r.error) throw r.error; showFb('fb-' + section, 'Enregistré !', 'ok');
+    if (r.error) throw r.error;
+    logAdminAction('content_update', 'content_pages', page + '/' + section, null, 'Contenu "' + section + '" de la page "' + page + '" modifié', false);
+    showFb('fb-' + section, 'Enregistré !', 'ok');
   } catch (e) { showFb('fb-' + section, 'Erreur : ' + e.message, 'err'); }
 };
 async function loadSettings() {
@@ -1784,8 +2106,12 @@ window.saveSettings = async function () {
   var map = { 'st-site-name': 'site_name', 'st-email': 'email', 'st-phone': 'phone', 'st-city': 'city', 'st-slogan1': 'slogan1', 'st-slogan2': 'slogan2', 'st-footer': 'footer_text', 'st-facebook': 'facebook_url', 'st-tiktok': 'tiktok_url', 'st-instagram': 'instagram_url' };
   var data = { updated_at: new Date().toISOString() };
   Object.keys(map).forEach(function (k) { var el = document.getElementById(k); if (el) data[map[k]] = el.value.trim(); });
-  try { var r = await window.supabase.from('settings').update(data).eq('id', 1); if (r.error) throw r.error; showFb('fb-settings', 'Paramètres sauvegardés !', 'ok'); }
-  catch (e) { showFb('fb-settings', 'Erreur : ' + e.message, 'err'); }
+  try {
+    var r = await window.supabase.from('settings').update(data).eq('id', 1);
+    if (r.error) throw r.error;
+    logAdminAction('settings_update', 'settings', '1', null, 'Paramètres du site modifiés', false);
+    showFb('fb-settings', 'Paramètres sauvegardés !', 'ok');
+  } catch (e) { showFb('fb-settings', 'Erreur : ' + e.message, 'err'); }
 };
 
 // ═══════════════ INSCRIPTIONS ═══════════════
@@ -1840,6 +2166,7 @@ window.cancelRegistration = async function (evId, userId) {
     await window.supabase.from('event_registrations').delete().eq('event_id', evId).eq('user_id', userId);
     var ev = await window.supabase.from('events').select('current_participants').eq('id', evId).single();
     await window.supabase.from('events').update({ current_participants: Math.max(0, (ev.data && ev.data.current_participants || 0) - taken) }).eq('id', evId);
+    logAdminAction('registration_cancel', 'event_registrations', evId + '/' + userId, null, 'Annulation inscription event:' + evId + ' user:' + userId, false);
     window.showToast('Inscription annulée', 'success'); loadRegistrations();
   } catch (e) { window.showToast('Erreur : ' + e.message, 'error'); }
 };
@@ -1967,6 +2294,7 @@ window.sendNewMessage = async function () {
     var inserts = recipients.map(function (uid) { return { sender_id: currentUser.id, receiver_id: uid, subject: subject || '(sans sujet)', content: body, sent_at: new Date().toISOString() }; });
     var r = await window.supabase.from('messages').insert(inserts);
     if (r.error) throw r.error;
+    logAdminAction('message_send', 'messages', 'batch', null, 'Message "' + (subject||'sans sujet') + '" envoyé à ' + recipients.length + ' membre(s)', false);
     document.getElementById('new-msg-subject').value = ''; document.getElementById('new-msg-body').value = '';
     showFbEl(fb, 'Message envoyé à ' + recipients.length + ' membre(s) !', 'ok'); loadMessages();
   } catch (e) { showFbEl(fb, 'Erreur : ' + e.message, 'err'); }
@@ -2068,6 +2396,7 @@ window.addToBureau = async function (userId, name) {
       if (u) u.is_bureau = true;
       renderBureauAddList(window._bureauAddCache);
     }
+    logAdminAction('bureau_toggle', 'users', userId, null, 'Ajout au bureau : ' + name, true);
     window.showToast(name + ' ajouté(e) au bureau', 'success');
     loadBureauMembers(); loadMembers();
     try { await window.supabase.from('notifications').insert([{ user_id: userId, title: '🎉 Vous faites partie du bureau !', message: 'Vous avez été ajouté(e) aux membres du bureau.', type: 'bureau', is_read: false, created_at: new Date().toISOString() }]); } catch (_) {}
@@ -2079,6 +2408,7 @@ window.toggleBureau = async function (userId, makeBureau) {
   try {
     var r = await window.supabase.from('users').update({ is_bureau: makeBureau, updated_at: new Date().toISOString() }).eq('id', userId);
     if (r.error) throw r.error;
+    logAdminAction('bureau_toggle', 'users', userId, null, (makeBureau ? 'Ajout au bureau' : 'Retrait du bureau') + ' — user:' + userId, true);
     window.showToast(makeBureau ? 'Ajouté au bureau' : 'Retiré du bureau', 'success');
     loadBureauMembers(); loadMembers();
     try { await window.supabase.from('notifications').insert([{ user_id: userId, title: makeBureau ? '🎉 Vous faites partie du bureau !' : 'Changement de statut', message: makeBureau ? 'Vous avez été ajouté(e) aux membres du bureau.' : 'Votre statut de membre du bureau a été retiré.', type: 'bureau', is_read: false, created_at: new Date().toISOString() }]); } catch (_) {}
@@ -2140,8 +2470,14 @@ window.saveEvent = async function (id) {
   var img = null, file = document.getElementById('ev-img-file').files[0];
   if (file) img = await window.fileToBase64(file); else if (id) { var ex = await window.supabase.from('events').select('image').eq('id', id).single(); img = ex.data && ex.data.image || null; }
   var data = { title: title, location: document.getElementById('ev-location').value, date: new Date(date + 'T' + time).toISOString(), max_participants: parseInt(document.getElementById('ev-max').value, 10) || null, status: document.getElementById('ev-status').value, description: document.getElementById('ev-desc').value, image: img, created_by: currentUser.id, updated_at: new Date().toISOString() };
-  try { var r = id ? await window.supabase.from('events').update(data).eq('id', id) : await window.supabase.from('events').insert([data]); if (r.error) throw r.error; showFb('ev-fb', 'Enregistré !', 'ok'); setTimeout(function () { closeModal(); loadEvents(); }, 1200); }
-  catch (e) { showFb('ev-fb', 'Erreur : ' + e.message, 'err'); }
+  try {
+    var evPrev = id ? (await window.supabase.from('events').select('*').eq('id', id).single()).data : null;
+    var r = id ? await window.supabase.from('events').update(data).eq('id', id) : await window.supabase.from('events').insert([data]);
+    if (r.error) throw r.error;
+    var newId = id || (r.data && r.data[0] && r.data[0].id) || 'new';
+    logAdminAction(id ? 'event_update' : 'event_create', 'events', id || newId, evPrev, (id ? 'Modification' : 'Création') + ' événement : ' + title, true);
+    showFb('ev-fb', 'Enregistré !', 'ok'); setTimeout(function () { closeModal(); loadEvents(); }, 1200);
+  } catch (e) { showFb('ev-fb', 'Erreur : ' + e.message, 'err'); }
 };
 
 function activityForm(d) {
@@ -2158,8 +2494,13 @@ window.saveActivity = async function (id) {
   var img = null, file = document.getElementById('act-img-file').files[0];
   if (file) img = await window.fileToBase64(file); else if (id) { var ex = await window.supabase.from('activities').select('image').eq('id', id).single(); img = ex.data && ex.data.image || null; }
   var data = { title: title, location: document.getElementById('act-loc').value, date: document.getElementById('act-date').value || null, category: document.getElementById('act-cat').value, description: document.getElementById('act-desc').value, image: img, created_by: currentUser.id, updated_at: new Date().toISOString() };
-  try { var r = id ? await window.supabase.from('activities').update(data).eq('id', id) : await window.supabase.from('activities').insert([data]); if (r.error) throw r.error; showFb('act-fb', 'Enregistré !', 'ok'); setTimeout(function () { closeModal(); loadActivities(); }, 1200); }
-  catch (e) { showFb('act-fb', 'Erreur : ' + e.message, 'err'); }
+  try {
+    var actPrev = id ? (await window.supabase.from('activities').select('*').eq('id', id).single()).data : null;
+    var r = id ? await window.supabase.from('activities').update(data).eq('id', id) : await window.supabase.from('activities').insert([data]);
+    if (r.error) throw r.error;
+    logAdminAction(id ? 'activity_update' : 'activity_create', 'activities', id || 'new', actPrev, (id ? 'Modification' : 'Création') + ' activité : ' + title, true);
+    showFb('act-fb', 'Enregistré !', 'ok'); setTimeout(function () { closeModal(); loadActivities(); }, 1200);
+  } catch (e) { showFb('act-fb', 'Erreur : ' + e.message, 'err'); }
 };
 
 function teamForm(d) {
@@ -2178,8 +2519,13 @@ window.saveTeam = async function (id) {
   var img = null, file = document.getElementById('tm-photo-file').files[0];
   if (file) img = await window.fileToBase64(file); else if (id) { var ex = await window.supabase.from('team').select('photo').eq('id', id).single(); img = ex.data && ex.data.photo || null; }
   var data = { prenom: prenom, nom: nom, role: role, bio: document.getElementById('tm-bio').value, display_order: parseInt(document.getElementById('tm-order').value, 10) || 1, photo: img, social_links: { facebook: document.getElementById('tm-fb').value, linkedin: document.getElementById('tm-li').value }, updated_at: new Date().toISOString() };
-  try { var r = id ? await window.supabase.from('team').update(data).eq('id', id) : await window.supabase.from('team').insert([data]); if (r.error) throw r.error; showFb('tm-fb2', 'Enregistré !', 'ok'); setTimeout(function () { closeModal(); loadTeam(); }, 1200); }
-  catch (e) { showFb('tm-fb2', 'Erreur : ' + e.message, 'err'); }
+  try {
+    var tmPrev = id ? (await window.supabase.from('team').select('*').eq('id', id).single()).data : null;
+    var r = id ? await window.supabase.from('team').update(data).eq('id', id) : await window.supabase.from('team').insert([data]);
+    if (r.error) throw r.error;
+    logAdminAction(id ? 'team_update' : 'team_create', 'team', id || 'new', tmPrev, (id ? 'Modification' : 'Ajout') + ' équipe : ' + prenom + ' ' + nom + ' — ' + role, true);
+    showFb('tm-fb2', 'Enregistré !', 'ok'); setTimeout(function () { closeModal(); loadTeam(); }, 1200);
+  } catch (e) { showFb('tm-fb2', 'Erreur : ' + e.message, 'err'); }
 };
 
 function annForm(d) {
@@ -2194,8 +2540,13 @@ window.saveAnnouncement = async function (id) {
   var title = document.getElementById('an-title').value.trim(), content = document.getElementById('an-content').value.trim();
   if (!title || !content) { showFb('an-fb', 'Titre et contenu requis.', 'err'); return; }
   var data = { title: title, content: content, type: document.getElementById('an-type').value, visibility: document.getElementById('an-vis').value, created_by: currentUser.id, updated_at: new Date().toISOString() };
-  try { var r = id ? await window.supabase.from('announcements').update(data).eq('id', id) : await window.supabase.from('announcements').insert([data]); if (r.error) throw r.error; showFb('an-fb', 'Enregistré !', 'ok'); setTimeout(function () { closeModal(); loadAnnouncements(); }, 1200); }
-  catch (e) { showFb('an-fb', 'Erreur : ' + e.message, 'err'); }
+  try {
+    var anPrev = id ? (await window.supabase.from('announcements').select('*').eq('id', id).single()).data : null;
+    var r = id ? await window.supabase.from('announcements').update(data).eq('id', id) : await window.supabase.from('announcements').insert([data]);
+    if (r.error) throw r.error;
+    logAdminAction(id ? 'announcement_update' : 'announcement_create', 'announcements', id || 'new', anPrev, (id ? 'Modification' : 'Création') + ' annonce : ' + title, true);
+    showFb('an-fb', 'Enregistré !', 'ok'); setTimeout(function () { closeModal(); loadAnnouncements(); }, 1200);
+  } catch (e) { showFb('an-fb', 'Erreur : ' + e.message, 'err'); }
 };
 
 function reportForm(d) {
@@ -2238,8 +2589,13 @@ window.saveReport = async function (id) {
   if (fileInputEl && fileInputEl.files.length) { for (var ff of Array.from(fileInputEl.files)) { try { var b64 = await window.fileToBase64(ff); attachedFiles.push({ name: ff.name, type: ff.type, size: ff.size, data: b64 }); } catch (_) {} } }
   else if (id) { var exF = await window.supabase.from('activity_reports').select('attachments').eq('id', id).single(); attachedFiles = exF.data && exF.data.attachments || []; }
   var data = { title: title, activity_id: document.getElementById('rp-activity').value || null, date: document.getElementById('rp-date').value || null, content: document.getElementById('rp-content').value, images: images, attachments: attachedFiles, created_by: currentUser.id, updated_at: new Date().toISOString() };
-  try { var r = id ? await window.supabase.from('activity_reports').update(data).eq('id', id) : await window.supabase.from('activity_reports').insert([data]); if (r.error) throw r.error; showFb('rp-fb', 'Enregistré !', 'ok'); setTimeout(function () { closeModal(); loadReports(); }, 1200); }
-  catch (e) { showFb('rp-fb', 'Erreur : ' + e.message, 'err'); }
+  try {
+    var rpPrev = id ? (await window.supabase.from('activity_reports').select('id,title,content,date,activity_id').eq('id', id).single()).data : null;
+    var r = id ? await window.supabase.from('activity_reports').update(data).eq('id', id) : await window.supabase.from('activity_reports').insert([data]);
+    if (r.error) throw r.error;
+    logAdminAction(id ? 'report_update' : 'report_create', 'activity_reports', id || 'new', rpPrev, (id ? 'Modification' : 'Création') + ' compte rendu : ' + title, true);
+    showFb('rp-fb', 'Enregistré !', 'ok'); setTimeout(function () { closeModal(); loadReports(); }, 1200);
+  } catch (e) { showFb('rp-fb', 'Erreur : ' + e.message, 'err'); }
 };
 
 function galleryForm() {
@@ -2259,14 +2615,364 @@ window.saveGallery = async function () {
   showFb('gl-fb', 'Traitement…', 'ok');
   var inserts = []; for (var f of files) { if (f.size > 3 * 1024 * 1024) continue; try { var b64 = await window.fileToBase64(f); inserts.push({ title: document.getElementById('gl-title').value || f.name, description: document.getElementById('gl-desc').value, category: document.getElementById('gl-cat').value || 'general', image: b64, uploaded_by: currentUser.id, created_at: new Date().toISOString() }); } catch (_) {} }
   if (!inserts.length) { showFb('gl-fb', 'Aucune image valide.', 'err'); return; }
-  try { var r = await window.supabase.from('gallery').insert(inserts); if (r.error) throw r.error; showFb('gl-fb', inserts.length + ' image(s) ajoutée(s) !', 'ok'); setTimeout(function () { closeModal(); loadGallery(); }, 1500); }
-  catch (e) { showFb('gl-fb', 'Erreur : ' + e.message, 'err'); }
+  try {
+    var r = await window.supabase.from('gallery').insert(inserts);
+    if (r.error) throw r.error;
+    logAdminAction('gallery_upload', 'gallery', 'batch', null, 'Upload de ' + inserts.length + ' image(s) dans la galerie', false);
+    showFb('gl-fb', inserts.length + ' image(s) ajoutée(s) !', 'ok'); setTimeout(function () { closeModal(); loadGallery(); }, 1500);
+  } catch (e) { showFb('gl-fb', 'Erreur : ' + e.message, 'err'); }
 };
+
+
+// ═══════════════════════════════════════════════════════════════
+// SYSTÈME DE JOURNALISATION DES ACTIONS ADMIN
+// ═══════════════════════════════════════════════════════════════
+
+// ─── Helper principal : enregistre une action dans admin_logs ────────────
+async function logAdminAction(actionType, tableName, recordId, recordData, details, isReversible) {
+  try {
+    if (!currentUser) return;
+    var adminName = ((currentUser.prenom || '') + ' ' + (currentUser.nom || '')).trim() || currentUser.email || 'Admin';
+    var reversibleUntil = null;
+    if (isReversible) {
+      var ru = new Date(); ru.setHours(ru.getHours() + 48);
+      reversibleUntil = ru.toISOString();
+    }
+    // Nettoyer record_data : supprimer les photos base64 volumineuses pour alléger
+    var safeData = recordData ? JSON.parse(JSON.stringify(recordData)) : null;
+    if (safeData) {
+      ['image','photo','data'].forEach(function(k) { if (safeData[k] && typeof safeData[k] === 'string' && safeData[k].startsWith('data:')) safeData[k] = '[base64 image omise]'; });
+      if (safeData.images && Array.isArray(safeData.images)) safeData.images = '[' + safeData.images.length + ' images omises]';
+      if (safeData.attachments && Array.isArray(safeData.attachments)) safeData.attachments = '[' + safeData.attachments.length + ' fichiers omis]';
+    }
+    await window.supabase.from('admin_logs').insert([{
+      admin_id: currentUser.id,
+      admin_name: adminName,
+      action_type: actionType,
+      table_name: tableName || null,
+      record_id: recordId ? String(recordId) : null,
+      record_data: safeData,
+      details: details || null,
+      user_agent: navigator.userAgent.slice(0, 200),
+      created_at: new Date().toISOString(),
+      is_reversible: !!isReversible,
+      reversible_until: reversibleUntil,
+      undone_by: null,
+      undone_at: null
+    }]);
+  } catch (_) {
+    // Journalisation silencieuse — ne jamais bloquer l'action principale
+  }
+}
+window.logAdminAction = logAdminAction;
+
+// ─── État de pagination des logs ────────────────────────────────────────
+var _logState = { page: 1, perPage: 50, total: 0, filters: {}, inited: false, allAdmins: [] };
+
+// ─── Init des filtres (chargement des admins) ────────────────────────────
+async function initAdminLogsFilters() {
+  if (_logState.inited) return;
+  _logState.inited = true;
+  try {
+    var r = await window.supabase.from('users').select('id,prenom,nom,email').in('role', ['admin', 'super_admin']).order('prenom');
+    _logState.allAdmins = r.data || [];
+    var sel = document.getElementById('log-filter-admin');
+    if (sel) {
+      sel.innerHTML = '<option value="">Tous les admins</option>'
+        + _logState.allAdmins.map(function(a) {
+            return '<option value="' + a.id + '">' + escH((a.prenom||'') + ' ' + (a.nom||'')) + '</option>';
+          }).join('');
+    }
+  } catch(_) {}
+}
+
+// ─── Réinitialiser les filtres ───────────────────────────────────────────
+window.resetLogFilters = function() {
+  ['log-filter-admin','log-filter-action','log-filter-table','log-filter-from','log-filter-to','log-filter-search'].forEach(function(id) {
+    var el = document.getElementById(id); if (el) el.value = '';
+  });
+  loadAdminLogs(1);
+};
+
+// ─── Chargement principal des logs ──────────────────────────────────────
+window.loadAdminLogs = async function(page) {
+  if (currentUser.role !== 'super_admin') return;
+  page = page || 1;
+  _logState.page = page;
+
+  var tbody = document.getElementById('logs-tbody');
+  if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text);">Chargement… <span style="display:inline-block;width:14px;height:14px;border:2px solid var(--primary);border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;vertical-align:middle;margin-left:6px;"></span></td></tr>';
+
+  var adminId  = document.getElementById('log-filter-admin')  ? document.getElementById('log-filter-admin').value  : '';
+  var action   = document.getElementById('log-filter-action') ? document.getElementById('log-filter-action').value : '';
+  var table    = document.getElementById('log-filter-table')  ? document.getElementById('log-filter-table').value  : '';
+  var from     = document.getElementById('log-filter-from')   ? document.getElementById('log-filter-from').value   : '';
+  var to       = document.getElementById('log-filter-to')     ? document.getElementById('log-filter-to').value     : '';
+  var search   = document.getElementById('log-filter-search') ? document.getElementById('log-filter-search').value.trim() : '';
+
+  try {
+    // Requête count
+    var qc = window.supabase.from('admin_logs').select('id', { count: 'exact', head: true });
+    if (adminId) qc = qc.eq('admin_id', adminId);
+    if (action)  qc = qc.eq('action_type', action);
+    if (table)   qc = qc.eq('table_name', table);
+    if (from)    qc = qc.gte('created_at', from + 'T00:00:00Z');
+    if (to)      qc = qc.lte('created_at', to + 'T23:59:59Z');
+    if (search)  qc = qc.or('details.ilike.%' + search + '%,admin_name.ilike.%' + search + '%,record_id.ilike.%' + search + '%');
+    var cr = await qc;
+    _logState.total = cr.count || 0;
+
+    // Requête data
+    var from2 = (_logState.page - 1) * _logState.perPage;
+    var to2   = from2 + _logState.perPage - 1;
+    var qd = window.supabase.from('admin_logs').select('*').order('created_at', { ascending: false }).range(from2, to2);
+    if (adminId) qd = qd.eq('admin_id', adminId);
+    if (action)  qd = qd.eq('action_type', action);
+    if (table)   qd = qd.eq('table_name', table);
+    if (from)    qd = qd.gte('created_at', from + 'T00:00:00Z');
+    if (to)      qd = qd.lte('created_at', to + 'T23:59:59Z');
+    if (search)  qd = qd.or('details.ilike.%' + search + '%,admin_name.ilike.%' + search + '%,record_id.ilike.%' + search + '%');
+    var dr = await qd;
+
+    renderLogTable(dr.data || []);
+    renderLogPagination();
+    renderLogSummary(dr.data || []);
+  } catch(e) {
+    if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--danger);">Erreur : ' + escH(e.message) + '<br><small>La table admin_logs n\'existe peut-être pas encore. Cliquez sur "SQL" pour obtenir le script de création.</small></td></tr>';
+  }
+};
+
+// ─── Rendu du tableau ────────────────────────────────────────────────────
+function renderLogTable(logs) {
+  var tbody = document.getElementById('logs-tbody');
+  if (!tbody) return;
+  var badge = document.getElementById('logs-count-badge');
+  if (badge) { badge.textContent = _logState.total; badge.style.display = _logState.total > 0 ? 'inline-block' : 'none'; }
+
+  if (!logs.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text);font-style:italic;">Aucune action journalisée</td></tr>';
+    return;
+  }
+
+  var now = Date.now();
+  var h24 = 24 * 3600 * 1000;
+
+  var CRITICAL_ACTIONS = { user_delete:1, user_reject:1, gallery_delete:1, team_delete:1, report_delete:1, event_delete:1, activity_delete:1, announcement_delete:1, document_delete:1 };
+  var ACTION_LABELS = {
+    user_approve:'✅ Approbation', user_reject:'❌ Rejet', user_update:'✏️ Modif membre', user_delete:'🗑️ Suppr. membre',
+    event_create:'📅 Créer événement', event_update:'📅 Modif événement', event_delete:'📅 Suppr. événement',
+    activity_create:'🏃 Créer activité', activity_update:'🏃 Modif activité', activity_delete:'🏃 Suppr. activité',
+    announcement_create:'📢 Créer annonce', announcement_update:'📢 Modif annonce', announcement_delete:'📢 Suppr. annonce',
+    gallery_upload:'🖼️ Upload galerie', gallery_delete:'🖼️ Suppr. galerie',
+    team_create:'👥 Créer équipe', team_update:'👥 Modif équipe', team_delete:'👥 Suppr. équipe',
+    report_create:'📋 Créer CR', report_update:'📋 Modif CR', report_delete:'📋 Suppr. CR',
+    document_upload:'📄 Upload doc', document_delete:'📄 Suppr. doc',
+    notification_send:'🔔 Notif envoyée', message_send:'💬 Message envoyé',
+    registration_cancel:'🚫 Annul. inscription', settings_update:'⚙️ Paramètres',
+    content_update:'📝 Contenu', access_rule_update:'🛡️ Règles accès', bureau_toggle:'🏅 Bureau',
+    undo:'↩️ Annulation'
+  };
+
+  function actionClass(t) {
+    if (t.includes('create') || t.includes('upload') || t === 'user_approve') return 'la-create';
+    if (t.includes('update') || t === 'bureau_toggle') return 'la-update';
+    if (t.includes('delete') || t === 'user_delete') return 'la-delete';
+    if (t === 'user_approve') return 'la-approve';
+    if (t === 'user_reject') return 'la-reject';
+    if (t === 'notification_send' || t === 'message_send') return 'la-send';
+    if (t === 'undo') return 'la-undo';
+    return 'la-other';
+  }
+
+  tbody.innerHTML = logs.map(function(log) {
+    var dt = new Date(log.created_at);
+    var dateStr = dt.toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric' });
+    var timeStr = dt.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+    var isRecent = (now - dt.getTime()) < h24;
+    var isCritical = !!CRITICAL_ACTIONS[log.action_type];
+    var rowClass = log.undone_at ? 'log-row-undone' : (isRecent ? 'log-row-recent' : '');
+    var avatar = window.FALLBACK_AVATAR;
+    var admin = _logState.allAdmins.find(function(a) { return a.id === log.admin_id; });
+    if (admin && admin.photo) avatar = admin.photo;
+
+    var actionLabel = ACTION_LABELS[log.action_type] || log.action_type;
+    var actionCls   = actionClass(log.action_type);
+
+    // Bouton annulation
+    var undoCell = '';
+    if (log.undone_at) {
+      var undoneDate = new Date(log.undone_at).toLocaleDateString('fr-FR', { day:'numeric', month:'short' });
+      undoCell = '<span class="log-undone-tag">↩️ Annulé le ' + undoneDate + '</span>';
+    } else if (log.is_reversible && log.reversible_until) {
+      var deadline = new Date(log.reversible_until).getTime();
+      if (now < deadline) {
+        var remaining = Math.ceil((deadline - now) / 3600000);
+        undoCell = '<button class="log-undo-btn" onclick="undoLogAction(\'' + log.id + '\')" title="Annuler cette action (' + remaining + 'h restantes)">↩️ Annuler <small>(' + remaining + 'h)</small></button>';
+      } else {
+        undoCell = '<span class="log-undo-btn disabled" title="Délai de 48h dépassé">⏰ Délai dépassé</span>';
+      }
+    } else {
+      undoCell = '<span style="color:#ccc;font-size:.75rem;">—</span>';
+    }
+
+    return '<tr class="' + rowClass + '">'
+      + '<td style="font-size:.78rem;white-space:nowrap;">'
+      + (isRecent ? '<span style="display:inline-block;width:6px;height:6px;background:var(--primary);border-radius:50%;margin-right:4px;vertical-align:middle;"></span>' : '')
+      + '<strong>' + dateStr + '</strong><br><span style="color:var(--text);">' + timeStr + '</span></td>'
+      + '<td><div class="log-admin-cell"><img src="' + escH(avatar) + '" onerror="window.avatarOnError(this)"><span style="font-size:.8rem;">' + escH(log.admin_name || '—') + '</span></div></td>'
+      + '<td><span class="log-action-badge ' + actionCls + '">' + escH(actionLabel) + '</span>'
+      + (isCritical ? ' <span class="log-critical" title="Action critique">⚠️</span>' : '') + '</td>'
+      + '<td><code style="font-size:.75rem;background:#f5f5f5;padding:2px 6px;border-radius:4px;">' + escH(log.table_name || '—') + '</code></td>'
+      + '<td style="font-size:.8rem;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + escH(log.details || '') + '">' + escH(log.details || '—') + '</td>'
+      + '<td><code style="font-size:.72rem;color:var(--text);">' + escH(log.record_id ? log.record_id.slice(0, 12) + '…' : '—') + '</code></td>'
+      + '<td>' + undoCell + '</td>'
+      + '</tr>';
+  }).join('');
+}
+
+// ─── Pagination ──────────────────────────────────────────────────────────
+function renderLogPagination() {
+  var el = document.getElementById('logs-pagination'); if (!el) return;
+  var totalPages = Math.ceil(_logState.total / _logState.perPage) || 1;
+  var cur = _logState.page;
+  var from = (_logState.page - 1) * _logState.perPage + 1;
+  var to   = Math.min(_logState.page * _logState.perPage, _logState.total);
+
+  var btns = '';
+  btns += '<button class="pg-btn" onclick="loadAdminLogs(' + (cur - 1) + ')" ' + (cur <= 1 ? 'disabled' : '') + '>‹ Préc.</button>';
+  var startP = Math.max(1, cur - 2), endP = Math.min(totalPages, cur + 2);
+  for (var p = startP; p <= endP; p++) {
+    btns += '<button class="pg-btn' + (p === cur ? ' active' : '') + '" onclick="loadAdminLogs(' + p + ')">' + p + '</button>';
+  }
+  btns += '<button class="pg-btn" onclick="loadAdminLogs(' + (cur + 1) + ')" ' + (cur >= totalPages ? 'disabled' : '') + '>Suiv. ›</button>';
+
+  el.innerHTML = '<span class="pg-info">Affichage ' + from + '–' + to + ' sur <strong>' + _logState.total + '</strong> actions</span><div class="pg-btns">' + btns + '</div>';
+}
+
+// ─── Résumé visuel ──────────────────────────────────────────────────────
+function renderLogSummary(logs) {
+  var el = document.getElementById('logs-summary'); if (!el) return;
+  if (!logs.length) { el.style.display = 'none'; return; }
+  var critiques = logs.filter(function(l) { return ['user_delete','event_delete','activity_delete','gallery_delete','announcement_delete','team_delete','report_delete','document_delete'].indexOf(l.action_type) !== -1; }).length;
+  var annulables = logs.filter(function(l) { return l.is_reversible && !l.undone_at && l.reversible_until && new Date(l.reversible_until).getTime() > Date.now(); }).length;
+  var deja_annules = logs.filter(function(l) { return !!l.undone_at; }).length;
+  el.style.display = 'flex';
+  el.innerHTML = '<i class="fas fa-info-circle" style="color:var(--primary);"></i>'
+    + '<span>Page actuelle : <strong>' + logs.length + '</strong> actions</span>'
+    + (critiques ? '<span>⚠️ <strong style="color:var(--danger);">' + critiques + '</strong> action(s) critique(s)</span>' : '')
+    + (annulables ? '<span>↩️ <strong style="color:#2e7d32;">' + annulables + '</strong> annulable(s)</span>' : '')
+    + (deja_annules ? '<span>🔄 <strong style="color:var(--warning);">' + deja_annules + '</strong> déjà annulée(s)</span>' : '');
+}
+
+// ─── Annulation d'une action (UNDO) ─────────────────────────────────────
+window.undoLogAction = async function(logId) {
+  if (currentUser.role !== 'super_admin') { window.showToast('Accès refusé', 'error'); return; }
+  try {
+    var lr = await window.supabase.from('admin_logs').select('*').eq('id', logId).single();
+    if (lr.error || !lr.data) { window.showToast('Log introuvable', 'error'); return; }
+    var log = lr.data;
+
+    if (log.undone_at) { window.showToast('Déjà annulée', 'warning'); return; }
+    if (!log.is_reversible || !log.reversible_until) { window.showToast('Action non annulable', 'warning'); return; }
+    if (new Date(log.reversible_until).getTime() < Date.now()) { window.showToast('Délai de 48h dépassé', 'warning'); return; }
+    if (!confirm('Annuler cette action ?\n\n"' + (log.details || log.action_type) + '"\n\nCette opération est irréversible et sera elle-même journalisée.')) return;
+
+    var restored = false;
+    var restoreMsg = '';
+
+    // Restauration selon le type d'action
+    if (log.action_type === 'user_delete' && log.record_data) {
+      var ud = await window.supabase.from('users').insert([log.record_data]);
+      if (!ud.error) { restored = true; restoreMsg = 'Membre restauré'; }
+    } else if (log.action_type === 'user_update' && log.record_data && log.record_id) {
+      var uu = await window.supabase.from('users').update(log.record_data).eq('id', log.record_id);
+      if (!uu.error) { restored = true; restoreMsg = 'Membre restauré à l\'état précédent'; }
+    } else if (log.action_type === 'user_approve' && log.record_data && log.record_id) {
+      var ua = await window.supabase.from('users').update({ role: log.record_data.role || 'pending', status: log.record_data.status || 'pending' }).eq('id', log.record_id);
+      if (!ua.error) { restored = true; restoreMsg = 'Approbation annulée'; }
+    } else if (log.action_type.includes('_delete') && log.record_data && log.record_id) {
+      var tbl = log.table_name;
+      var ins = await window.supabase.from(tbl).insert([log.record_data]);
+      if (!ins.error) { restored = true; restoreMsg = 'Enregistrement restauré dans ' + tbl; }
+    } else if (log.action_type.includes('_update') && log.record_data && log.record_id) {
+      var tbl2 = log.table_name;
+      var upd = await window.supabase.from(tbl2).update(log.record_data).eq('id', log.record_id);
+      if (!upd.error) { restored = true; restoreMsg = 'Données restaurées dans ' + tbl2; }
+    } else if (log.action_type.includes('_create') && log.record_id && log.table_name) {
+      var del = await window.supabase.from(log.table_name).delete().eq('id', log.record_id);
+      if (!del.error) { restored = true; restoreMsg = 'Création annulée (enregistrement supprimé)'; }
+    } else {
+      restoreMsg = 'Type d\'action non restaurable automatiquement';
+    }
+
+    // Marquer le log comme annulé
+    await window.supabase.from('admin_logs').update({ undone_by: currentUser.id, undone_at: new Date().toISOString() }).eq('id', logId);
+
+    // Journaliser l'annulation
+    await logAdminAction('undo', log.table_name, log.record_id, { original_log_id: logId, original_action: log.action_type }, 'Annulation de : ' + (log.details || log.action_type), false);
+
+    window.showToast(restored ? '↩️ ' + restoreMsg : '⚠️ ' + restoreMsg, restored ? 'success' : 'warning', 5000);
+    loadAdminLogs(_logState.page);
+    // Rafraîchir le panel concerné si ouvert
+    if (log.table_name === 'users') { loadMembers(); loadPending(); }
+    else if (log.table_name === 'events') loadEvents();
+    else if (log.table_name === 'activities') loadActivities();
+    else if (log.table_name === 'gallery') loadGallery();
+    else if (log.table_name === 'team') loadTeam();
+    else if (log.table_name === 'announcements') loadAnnouncements();
+    else if (log.table_name === 'activity_reports') loadReports();
+
+  } catch(e) { window.showToast('Erreur annulation : ' + e.message, 'error'); }
+};
+
+// ─── Export CSV des logs ─────────────────────────────────────────────────
+window.exportLogsCSV = async function() {
+  try {
+    window.showToast('Export en cours…', 'info', 2000);
+    var q = window.supabase.from('admin_logs').select('*').order('created_at', { ascending: false }).limit(5000);
+    var adminId = document.getElementById('log-filter-admin')  ? document.getElementById('log-filter-admin').value  : '';
+    var action  = document.getElementById('log-filter-action') ? document.getElementById('log-filter-action').value : '';
+    var table   = document.getElementById('log-filter-table')  ? document.getElementById('log-filter-table').value  : '';
+    var from    = document.getElementById('log-filter-from')   ? document.getElementById('log-filter-from').value   : '';
+    var to      = document.getElementById('log-filter-to')     ? document.getElementById('log-filter-to').value     : '';
+    if (adminId) q = q.eq('admin_id', adminId);
+    if (action)  q = q.eq('action_type', action);
+    if (table)   q = q.eq('table_name', table);
+    if (from)    q = q.gte('created_at', from + 'T00:00:00Z');
+    if (to)      q = q.lte('created_at', to + 'T23:59:59Z');
+    var r = await q;
+    var rows = r.data || [];
+    if (!rows.length) { window.showToast('Aucune donnée à exporter', 'warning'); return; }
+    var cols = ['created_at','admin_name','action_type','table_name','record_id','details','is_reversible','undone_at'];
+    var csv = cols.join(';') + '\n' + rows.map(function(row) {
+      return cols.map(function(c) {
+        var v = row[c]; if (v === null || v === undefined) v = '';
+        return '"' + String(v).replace(/"/g, '""') + '"';
+      }).join(';');
+    }).join('\n');
+    var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a'); a.href = url;
+    a.download = 'admin_logs_' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click(); URL.revokeObjectURL(url);
+    window.showToast(rows.length + ' entrées exportées', 'success');
+  } catch(e) { window.showToast('Erreur export : ' + e.message, 'error'); }
+};
+
 
 window.deleteRecord = async function (table, id, reload) {
   if (!confirm('Supprimer ? Irréversible.')) return;
-  try { var r = await window.supabase.from(table).delete().eq('id', id); if (r.error) throw r.error; window.showToast('Supprimé', 'success'); if (reload) reload(); }
-  catch (e) { window.showToast('Erreur : ' + e.message, 'error'); }
+  try {
+    var drPrev = await window.supabase.from(table).select('*').eq('id', id).single();
+    var r = await window.supabase.from(table).delete().eq('id', id);
+    if (r.error) throw r.error;
+    var tMap = { events:'event_delete', activities:'activity_delete', gallery:'gallery_delete', team:'team_delete', announcements:'announcement_delete', activity_reports:'report_delete', documents:'document_delete' };
+    var actType = tMap[table] || (table + '_delete');
+    var drData = drPrev.data || {};
+    var label = drData.title || drData.nom || drData.name || id;
+    logAdminAction(actType, table, id, drPrev.data, 'Suppression de "' + label + '" dans ' + table, true);
+    window.showToast('Supprimé', 'success'); if (reload) reload();
+  } catch (e) { window.showToast('Erreur : ' + e.message, 'error'); }
 };
 
 function filterTable(tableId, q) {
