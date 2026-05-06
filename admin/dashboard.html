@@ -26,7 +26,6 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;color:var(--text);over
 .top-nav-ham.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
 @media(max-width:768px){.top-nav-ham{display:flex}}
 
-/* Indicateur auto-refresh — discret, pas d'animation visible */
 .refresh-indicator{display:flex;align-items:center;gap:6px;font-size:.75rem;color:#bbb;padding:4px 10px;border-radius:20px;background:transparent;border:none;cursor:pointer;transition:color .3s;white-space:nowrap;user-select:none}
 .refresh-indicator:hover{color:#888}
 .refresh-indicator.paused{color:#ff9800}
@@ -237,15 +236,13 @@ tr:hover td{background:#fafafa}
 .role-status-form{background:#f8f9fa;border:1px solid #eee;border-radius:8px;padding:14px;margin-bottom:14px}
 .role-status-form h4{font-size:.88rem;font-weight:600;color:var(--dark);margin-bottom:12px;display:flex;align-items:center;gap:6px}
 
-/* Tableaux scrollables avec hauteur max — 10 lignes visibles (~560px) */
-.table-scroll-wrap{overflow-y:auto;overflow-x:auto;max-height:560px;border-radius:0 0 8px 8px}
+.table-scroll-wrap{overflow-y:auto;overflow-x:auto;max-height:700px;border-radius:0 0 8px 8px}
 .table-scroll-wrap::-webkit-scrollbar{width:6px;height:6px}
 .table-scroll-wrap::-webkit-scrollbar-track{background:#f5f5f5;border-radius:3px}
 .table-scroll-wrap::-webkit-scrollbar-thumb{background:#ddd;border-radius:3px}
 .table-scroll-wrap::-webkit-scrollbar-thumb:hover{background:#bbb}
 .table-scroll-wrap table thead th{position:sticky;top:0;z-index:2;background:var(--light);box-shadow:0 1px 0 #eee}
 
-/* Stats membres — liste scrollable */
 .sm-members-scroll{overflow-y:auto;max-height:380px;border-radius:0 0 8px 8px}
 .sm-members-scroll::-webkit-scrollbar{width:6px}
 .sm-members-scroll::-webkit-scrollbar-track{background:#f5f5f5;border-radius:3px}
@@ -253,7 +250,6 @@ tr:hover td{background:#fafafa}
 .sm-members-scroll::-webkit-scrollbar-thumb:hover{background:#bbb}
 .sm-members-scroll table thead th{position:sticky;top:0;z-index:2;background:var(--light);box-shadow:0 1px 0 #eee}
 
-/* Stats — ville & lycée scrollables */
 .sm-small-scroll{overflow-y:auto;max-height:280px}
 .sm-small-scroll::-webkit-scrollbar{width:5px}
 .sm-small-scroll::-webkit-scrollbar-track{background:#f5f5f5}
@@ -261,7 +257,6 @@ tr:hover td{background:#fafafa}
 .sm-small-scroll::-webkit-scrollbar-thumb:hover{background:#bbb}
 .sm-small-scroll table thead th{position:sticky;top:0;z-index:2;background:var(--light);box-shadow:0 1px 0 #eee}
 
-/* Bureau — cartes membres */
 .bureau-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:4px}
 .bureau-card{background:white;border-radius:10px;border:1px solid #eee;padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06);position:relative;transition:box-shadow .2s}
 .bureau-card:hover{box-shadow:0 3px 12px rgba(0,0,0,.1)}
@@ -272,7 +267,6 @@ tr:hover td{background:#fafafa}
 .bureau-card .bc-remove{position:absolute;top:8px;right:8px;background:none;border:none;color:#ddd;cursor:pointer;font-size:.8rem;padding:4px;border-radius:50%;transition:var(--tr)}
 .bureau-card .bc-remove:hover{background:#ffebee;color:var(--danger)}
 
-/* Modal pour ajouter au bureau */
 .bureau-add-list{max-height:360px;overflow-y:auto;border:1px solid #eee;border-radius:8px}
 .bureau-add-list::-webkit-scrollbar{width:6px}
 .bureau-add-list::-webkit-scrollbar-thumb{background:#ddd;border-radius:3px}
@@ -355,7 +349,6 @@ tr:hover td{background:#fafafa}
   <div class="topbar">
     <h1 id="panel-title">Vue générale</h1>
     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-      <!-- Indicateur auto-refresh discret -->
       <div class="refresh-indicator" id="refresh-indicator" onclick="toggleAutoRefresh()" title="Rafraîchissement automatique">
         <div class="refresh-dot active" id="refresh-dot"></div>
         <span id="refresh-label">sync</span>
@@ -390,11 +383,7 @@ tr:hover td{background:#fafafa}
       </div>
       <div class="table-scroll-wrap">
         <table id="members-table">
-          <thead>
-            <tr>
-              <th>Photo</th><th>Nom</th><th>Email</th><th>Ville</th><th>Téléphone</th><th>Rôle</th><th>Bureau</th><th>Statut</th><th>Lycée</th><th>Date</th><th>Actions</th>
-            </tr>
-          </thead>
+          <thead><tr><th>Photo</th><th>Nom</th><th>Email</th><th>Ville</th><th>Téléphone</th><th>Rôle</th><th>Bureau</th><th>Statut</th><th>Lycée</th><th>Date</th><th>Actions</th></tr></thead>
           <tbody id="members-tbody"></tbody>
         </table>
       </div>
@@ -453,52 +442,22 @@ tr:hover td{background:#fafafa}
   <!-- DOCUMENTS OFFICIELS -->
   <div class="panel" id="panel-documents">
     <div class="doc-card">
-      <div class="doc-card-head">
-        <i class="fas fa-gavel"></i>
-        <div><h3>Règlement intérieur</h3><small>Document officiel — visible sur la page À propos</small></div>
-      </div>
+      <div class="doc-card-head"><i class="fas fa-gavel"></i><div><h3>Règlement intérieur</h3><small>Document officiel — visible sur la page À propos</small></div></div>
       <div class="doc-card-body">
-        <div class="doc-preview-box" id="ri-preview-box">
-          <div class="doc-preview-icon" id="ri-preview-icon">📄</div>
-          <div class="doc-preview-info"><div class="doc-preview-name" id="ri-preview-name">—</div><div class="doc-preview-meta" id="ri-preview-meta"></div></div>
-          <div class="doc-preview-actions"><a id="ri-view-btn" href="#" target="_blank" class="doc-btn-view" style="display:none;"><i class="fas fa-eye"></i> Voir</a><button class="doc-btn-del" onclick="deleteDoc('reglement_interieur')"><i class="fas fa-trash"></i> Supprimer</button></div>
-        </div>
-        <div class="doc-upload-zone" id="ri-drop-zone">
-          <input type="file" id="ri-file" accept=".pdf,.doc,.docx,.txt" onchange="handleDocFile('ri','reglement_interieur',this.files[0])">
-          <i class="fas fa-cloud-upload-alt"></i>
-          <p><strong>Cliquer ou glisser-déposer</strong> le règlement intérieur</p>
-          <div class="uz-hint">PDF, Word ou texte — Max 10 Mo</div>
-        </div>
+        <div class="doc-preview-box" id="ri-preview-box"><div class="doc-preview-icon" id="ri-preview-icon">📄</div><div class="doc-preview-info"><div class="doc-preview-name" id="ri-preview-name">—</div><div class="doc-preview-meta" id="ri-preview-meta"></div></div><div class="doc-preview-actions"><a id="ri-view-btn" href="#" target="_blank" class="doc-btn-view" style="display:none;"><i class="fas fa-eye"></i> Voir</a><button class="doc-btn-del" onclick="deleteDoc('reglement_interieur')"><i class="fas fa-trash"></i> Supprimer</button></div></div>
+        <div class="doc-upload-zone" id="ri-drop-zone"><input type="file" id="ri-file" accept=".pdf,.doc,.docx,.txt" onchange="handleDocFile('ri','reglement_interieur',this.files[0])"><i class="fas fa-cloud-upload-alt"></i><p><strong>Cliquer ou glisser-déposer</strong> le règlement intérieur</p><div class="uz-hint">PDF, Word ou texte — Max 10 Mo</div></div>
         <div class="doc-upload-progress" id="ri-progress"><div class="doc-upload-progress-fill" id="ri-progress-fill"></div></div>
-        <div class="doc-textarea-wrap">
-          <label><i class="fas fa-align-left" style="margin-right:5px;color:var(--primary)"></i>Texte affiché en ligne <small style="color:#aaa;">(optionnel)</small></label>
-          <textarea id="ri-content" placeholder="Saisir ou coller le texte du règlement intérieur…"></textarea>
-        </div>
+        <div class="doc-textarea-wrap"><label><i class="fas fa-align-left" style="margin-right:5px;color:var(--primary)"></i>Texte affiché en ligne <small style="color:#aaa;">(optionnel)</small></label><textarea id="ri-content" placeholder="Saisir ou coller le texte du règlement intérieur…"></textarea></div>
         <div class="doc-save-bar"><button class="btn-primary" onclick="saveDoc('reglement_interieur')"><i class="fas fa-save"></i> Enregistrer</button><div id="ri-fb" style="font-size:.85rem;"></div></div>
       </div>
     </div>
     <div class="doc-card">
-      <div class="doc-card-head" style="background:linear-gradient(135deg,#9c27b0,var(--secondary));">
-        <i class="fas fa-file-signature"></i>
-        <div><h3>Conditions d'adhésion</h3><small>Document officiel — visible sur la page Adhésion</small></div>
-      </div>
+      <div class="doc-card-head" style="background:linear-gradient(135deg,#9c27b0,var(--secondary));"><i class="fas fa-file-signature"></i><div><h3>Conditions d'adhésion</h3><small>Document officiel — visible sur la page Adhésion</small></div></div>
       <div class="doc-card-body">
-        <div class="doc-preview-box" id="ca-preview-box">
-          <div class="doc-preview-icon" id="ca-preview-icon">📄</div>
-          <div class="doc-preview-info"><div class="doc-preview-name" id="ca-preview-name">—</div><div class="doc-preview-meta" id="ca-preview-meta"></div></div>
-          <div class="doc-preview-actions"><a id="ca-view-btn" href="#" target="_blank" class="doc-btn-view" style="display:none;"><i class="fas fa-eye"></i> Voir</a><button class="doc-btn-del" onclick="deleteDoc('conditions_adhesion')"><i class="fas fa-trash"></i> Supprimer</button></div>
-        </div>
-        <div class="doc-upload-zone" id="ca-drop-zone">
-          <input type="file" id="ca-file" accept=".pdf,.doc,.docx,.txt" onchange="handleDocFile('ca','conditions_adhesion',this.files[0])">
-          <i class="fas fa-cloud-upload-alt"></i>
-          <p><strong>Cliquer ou glisser-déposer</strong> les conditions d'adhésion</p>
-          <div class="uz-hint">PDF, Word ou texte — Max 10 Mo</div>
-        </div>
+        <div class="doc-preview-box" id="ca-preview-box"><div class="doc-preview-icon" id="ca-preview-icon">📄</div><div class="doc-preview-info"><div class="doc-preview-name" id="ca-preview-name">—</div><div class="doc-preview-meta" id="ca-preview-meta"></div></div><div class="doc-preview-actions"><a id="ca-view-btn" href="#" target="_blank" class="doc-btn-view" style="display:none;"><i class="fas fa-eye"></i> Voir</a><button class="doc-btn-del" onclick="deleteDoc('conditions_adhesion')"><i class="fas fa-trash"></i> Supprimer</button></div></div>
+        <div class="doc-upload-zone" id="ca-drop-zone"><input type="file" id="ca-file" accept=".pdf,.doc,.docx,.txt" onchange="handleDocFile('ca','conditions_adhesion',this.files[0])"><i class="fas fa-cloud-upload-alt"></i><p><strong>Cliquer ou glisser-déposer</strong> les conditions d'adhésion</p><div class="uz-hint">PDF, Word ou texte — Max 10 Mo</div></div>
         <div class="doc-upload-progress" id="ca-progress"><div class="doc-upload-progress-fill" id="ca-progress-fill"></div></div>
-        <div class="doc-textarea-wrap">
-          <label><i class="fas fa-align-left" style="margin-right:5px;color:#9c27b0"></i>Texte affiché en ligne <small style="color:#aaa;">(optionnel)</small></label>
-          <textarea id="ca-content" placeholder="Saisir ou coller le texte des conditions d'adhésion…"></textarea>
-        </div>
+        <div class="doc-textarea-wrap"><label><i class="fas fa-align-left" style="margin-right:5px;color:#9c27b0"></i>Texte affiché en ligne <small style="color:#aaa;">(optionnel)</small></label><textarea id="ca-content" placeholder="Saisir ou coller le texte des conditions d'adhésion…"></textarea></div>
         <div class="doc-save-bar"><button class="btn-primary" style="background:#9c27b0;" onclick="saveDoc('conditions_adhesion')"><i class="fas fa-save"></i> Enregistrer</button><div id="ca-fb" style="font-size:.85rem;"></div></div>
       </div>
     </div>
@@ -604,12 +563,9 @@ var _smCharts={};
 var _smFiltersInited=false;
 
 // ═══════════════ SILENT DOM DIFF ═══════════════
-// Met à jour un élément HTML sans le remplacer entièrement si le contenu est identique
-// Cela évite tout flash, saut de scroll, ou perte de focus
 function silentUpdate(el, newHtml) {
   if (!el) return;
-  if (el.innerHTML === newHtml) return; // rien à faire
-  // Sauvegarder le scroll du conteneur scrollable le plus proche
+  if (el.innerHTML === newHtml) return;
   var scrollEls = [];
   var p = el;
   while (p) {
@@ -620,14 +576,12 @@ function silentUpdate(el, newHtml) {
   scrollEls.forEach(function(se) { se[0].scrollTop = se[1]; se[0].scrollLeft = se[2]; });
 }
 
-// Met à jour une seule valeur texte d'un élément sans toucher le DOM si identique
 function silentText(el, newText) {
   if (!el) return;
   if (el.textContent === String(newText)) return;
   el.textContent = String(newText);
 }
 
-// Met à jour un badge (nombre + display) sans rebattre le DOM
 function silentBadge(el, count) {
   if (!el) return;
   var str = String(count > 99 ? '99+' : count);
@@ -641,7 +595,7 @@ function silentBadge(el, count) {
 // ═══════════════ AUTO-REFRESH SYSTEM ═══════════════
 var _autoRefresh = {
   enabled: true,
-  interval: 5000,         // 5 secondes — assez fréquent sans surcharger
+  interval: 5000,
   timer: null,
   isRefreshing: false,
   currentPanel: 'overview'
@@ -674,8 +628,6 @@ function isModalOpen() {
   return modal && modal.classList.contains('active');
 }
 
-// Vérifie si l'utilisateur est en train d'interagir avec la page
-// (focus sur un input/textarea/select) — on ne refresh pas dans ce cas
 function userIsInteracting() {
   var active = document.activeElement;
   if (!active) return false;
@@ -687,13 +639,10 @@ async function autoRefreshTick() {
   if (isModalOpen() || _autoRefresh.isRefreshing || userIsInteracting()) return;
   _autoRefresh.isRefreshing = true;
   try {
-    // Badges toujours mis à jour en silence
     await updateBadgesBackground();
-    // Panel actif rafraîchi silencieusement
     await refreshPanel(_autoRefresh.currentPanel);
-  } catch (e) {
-    // Silencieux — pas de console.warn pour ne pas spammer
-  } finally {
+  } catch (e) {}
+  finally {
     _autoRefresh.isRefreshing = false;
   }
 }
@@ -713,26 +662,16 @@ async function refreshPanel(panel) {
     case 'messages':       return loadMessagesSilent();
     case 'notifications':  return loadNotificationsPanel();
     case 'bureau-members': return loadBureauMembers();
-    // Ces panels ont des champs que l'utilisateur peut éditer — pas de refresh auto
-    case 'documents':
-    case 'content':
-    case 'settings':
-    case 'notif-prefs':
-    case 'access-control':
-    case 'stats-membres':
-      return null;
     default: return null;
   }
 }
 
-// Membres : préserve le filtre de recherche actif
 async function loadMembersSilent() {
   var searchVal = document.getElementById('search-members') ? document.getElementById('search-members').value : '';
   await loadMembers();
   if (searchVal) filterTable('members-table', searchVal);
 }
 
-// Inscriptions : préserve le filtre d'événement sélectionné
 async function loadRegistrationsSilent() {
   var filterVal = document.getElementById('reg-event-filter') ? document.getElementById('reg-event-filter').value : 'all';
   await loadRegistrations();
@@ -743,7 +682,6 @@ async function loadRegistrationsSilent() {
   }
 }
 
-// Messages : préserve le message ouvert actif
 async function loadMessagesSilent() {
   var savedMsgId = openMessageId;
   var savedScrollInbox = 0, savedScrollSent = 0;
@@ -751,21 +689,15 @@ async function loadMessagesSilent() {
   var sentEl = document.getElementById('sent-list');
   if (inboxEl) savedScrollInbox = inboxEl.scrollTop;
   if (sentEl) savedScrollSent = sentEl.scrollTop;
-
   await loadMessages();
-
-  // Restaurer le scroll des listes
   if (inboxEl) inboxEl.scrollTop = savedScrollInbox;
   if (sentEl) sentEl.scrollTop = savedScrollSent;
-
-  // Restaurer la classe active du message ouvert
   if (savedMsgId) {
     var msgEl = document.querySelector('.msg-item[data-msgid="' + savedMsgId + '"]');
     if (msgEl) msgEl.classList.add('active');
   }
 }
 
-// Badges en fond — 100% silencieux, jamais de modification du DOM visible
 async function updateBadgesBackground() {
   try {
     var nr = await window.supabase.from('notifications').select('id', { count: 'exact', head: true }).eq('user_id', currentUser.id).eq('is_read', false);
@@ -804,8 +736,6 @@ function updateRefreshUI() {
     if (ind) { ind.classList.add('paused'); ind.title = 'En pause — cliquer pour reprendre'; }
   }
 }
-
-// ═══════════════
 
 var PANEL_TITLES = {
   overview:'Vue générale', members:'Membres', pending:'Demandes en attente',
@@ -955,7 +885,6 @@ async function loadDocuments() {
       var prefix = doc.type === 'reglement_interieur' ? 'ri' : 'ca';
       renderDocPreview(prefix, doc);
       var contentEl = document.getElementById(prefix + '-content');
-      // Ne jamais écraser un champ en cours d'édition
       if (contentEl && doc.content && document.activeElement !== contentEl) contentEl.value = doc.content;
     });
   } catch (e) { console.warn('Docs load error:', e); }
@@ -974,7 +903,6 @@ function renderDocPreview(prefix, doc) {
   var newIcon = (fileExt === 'pdf' ? '📕' : fileExt === 'docx' || fileExt === 'doc' ? '📘' : '📄');
   var newName = fileName || (doc.content ? 'Texte en ligne' : 'Document');
   var newMeta = (fileExt ? icons[fileExt] || fileExt.toUpperCase() : 'Texte') + (updated ? ' — Mis à jour le ' + updated : '');
-  // Mises à jour silencieuses
   if (iconEl && iconEl.textContent !== newIcon) iconEl.textContent = newIcon;
   if (nameEl && nameEl.textContent !== newName) nameEl.textContent = newName;
   if (metaEl && metaEl.textContent !== newMeta) metaEl.textContent = newMeta;
@@ -1082,104 +1010,210 @@ async function initStatsFilters() {
   } catch (e) {}
   loadStatsMembers();
 }
+
+// ─── SOURCE DE VÉRITÉ UNIQUE : calcul centralisé des agrégats ───────────
+// Aucune limite : KPIs, tableaux ET graphiques affichent TOUTES les données.
+function computeStatsAggregates(membres) {
+  var total    = membres.length;
+  var avecLyc  = 0;
+  var villeCounts   = {};
+  var lyceeCounts   = {};
+  var filiereCounts = {};
+
+  membres.forEach(function (m) {
+    var md  = m.metadata || {};
+    var lyc = md.lycee_technique === true || md.lycee_technique === 'true';
+
+    if (lyc) avecLyc++;
+
+    var ville = m.ville || 'Non renseignée';
+    villeCounts[ville] = (villeCounts[ville] || 0) + 1;
+
+    if (md.nom_lycee) {
+      lyceeCounts[md.nom_lycee] = (lyceeCounts[md.nom_lycee] || 0) + 1;
+    }
+
+    if (md.filiere) {
+      filiereCounts[md.filiere] = (filiereCounts[md.filiere] || 0) + 1;
+    }
+  });
+
+  // Tri décroissant — toutes les entrées, sans limite
+  var villeEntries   = Object.entries(villeCounts).sort(function (a, b) { return b[1] - a[1]; });
+  var lyceeEntries   = Object.entries(lyceeCounts).sort(function (a, b) { return b[1] - a[1]; });
+  var filiereEntries = Object.entries(filiereCounts).sort(function (a, b) { return b[1] - a[1]; });
+
+  return {
+    total          : total,
+    avecLyc        : avecLyc,
+    sansLyc        : total - avecLyc,
+    nbVilles       : villeEntries.length,
+    nbLycees       : lyceeEntries.length,
+    nbFilieres     : filiereEntries.length,
+    villeEntries   : villeEntries,
+    lyceeEntries   : lyceeEntries,
+    filiereEntries : filiereEntries
+  };
+}
+
 window.loadStatsMembers = async function () {
   document.getElementById('sm-kpis').innerHTML = '<div class="sm-loading" style="grid-column:1/-1">Chargement…</div>';
-  var filterVille = document.getElementById('sm-filter-ville') ? document.getElementById('sm-filter-ville').value : '';
-  var filterLycee = document.getElementById('sm-filter-lycee') ? document.getElementById('sm-filter-lycee').value : '';
+  var filterVille   = document.getElementById('sm-filter-ville')   ? document.getElementById('sm-filter-ville').value   : '';
+  var filterLycee   = document.getElementById('sm-filter-lycee')   ? document.getElementById('sm-filter-lycee').value   : '';
   var filterFiliere = document.getElementById('sm-filter-filiere') ? document.getElementById('sm-filter-filiere').value : '';
-  var filterSearch = document.getElementById('sm-filter-search') ? document.getElementById('sm-filter-search').value.trim().toLowerCase() : '';
+  var filterSearch  = document.getElementById('sm-filter-search')  ? document.getElementById('sm-filter-search').value.trim().toLowerCase() : '';
   try {
     var q = window.supabase.from('users').select('id,prenom,nom,email,photo,ville,status,role,metadata,created_at').in('role', ['member', 'admin']).eq('status', 'active').order('prenom');
     if (filterVille) q = q.eq('ville', filterVille);
-    var r = await q; if (r.error) throw r.error;
+    var r = await q;
+    if (r.error) throw r.error;
+
     var all = (r.data || []).filter(function (m) {
-      var md = m.metadata || {};
+      var md  = m.metadata || {};
       var lyc = md.lycee_technique === true || md.lycee_technique === 'true';
-      if (filterLycee === 'oui' && !lyc) return false;
-      if (filterLycee === 'non' && lyc) return false;
+      if (filterLycee === 'oui' && !lyc)  return false;
+      if (filterLycee === 'non' &&  lyc)  return false;
       if (filterFiliere && md.filiere !== filterFiliere) return false;
-      if (filterSearch) { var s = ((m.prenom || '') + ' ' + (m.nom || '') + ' ' + (m.email || '')).toLowerCase(); if (!s.includes(filterSearch)) return false; }
+      if (filterSearch) {
+        var s = ((m.prenom || '') + ' ' + (m.nom || '') + ' ' + (m.email || '')).toLowerCase();
+        if (!s.includes(filterSearch)) return false;
+      }
       return true;
     });
     _smAllMembers = all;
-    renderKPIs(all); renderVilleTable(all); renderLyceeTable(all); renderMembersTable(all);
-    if (window.Chart) renderCharts(all);
-    else { var s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js'; s.onload = function () { renderCharts(all); }; document.head.appendChild(s); }
+
+    // Calcul unique partagé par toutes les vues
+    var computed = computeStatsAggregates(all);
+
+    renderKPIs(computed);
+    renderVilleTable(computed.villeEntries, computed.total);
+    renderLyceeTable(computed.lyceeEntries, computed.total);
+    renderMembersTable(all);
+
+    if (window.Chart) {
+      renderCharts(computed);
+    } else {
+      var s2 = document.createElement('script');
+      s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js';
+      s2.onload = function () { renderCharts(computed); };
+      document.head.appendChild(s2);
+    }
   } catch (e) {
     document.getElementById('sm-kpis').innerHTML = '<div style="color:var(--danger);grid-column:1/-1;text-align:center;padding:20px;">Erreur : ' + escH(e.message) + '</div>';
   }
 };
-function renderKPIs(membres) {
-  var total = membres.length;
-  var avecLyc = membres.filter(function (m) { return m.metadata && (m.metadata.lycee_technique === true || m.metadata.lycee_technique === 'true'); }).length;
-  var villes = new Set(membres.map(function (m) { return m.ville; }).filter(Boolean)).size;
-  var lycees = new Set(membres.map(function (m) { return m.metadata && m.metadata.nom_lycee; }).filter(Boolean)).size;
-  var filieres = new Set(membres.map(function (m) { return m.metadata && m.metadata.filiere; }).filter(Boolean)).size;
+
+// ─── KPIs : affiche les valeurs issues de computeStatsAggregates ─────────
+function renderKPIs(computed) {
   document.getElementById('sm-kpis').innerHTML = [
-    { v: total, l: 'Total membres', cls: '' },
-    { v: avecLyc, l: 'Avec lycée tech.', cls: 'blue' },
-    { v: total - avecLyc, l: 'Sans lycée tech.', cls: 'orange' },
-    { v: villes, l: 'Villes représentées', cls: 'purple' },
-    { v: lycees, l: 'Lycées distincts', cls: 'teal' },
-    { v: filieres, l: 'Filières distinctes', cls: 'red' }
+    { v: computed.total,      l: 'Total membres',         cls: ''       },
+    { v: computed.avecLyc,    l: 'Avec lycée tech.',      cls: 'blue'   },
+    { v: computed.sansLyc,    l: 'Sans lycée tech.',      cls: 'orange' },
+    { v: computed.nbVilles,   l: 'Villes représentées',  cls: 'purple' },
+    { v: computed.nbLycees,   l: 'Lycées distincts',     cls: 'teal'   },
+    { v: computed.nbFilieres, l: 'Filières distinctes',  cls: 'red'    }
   ].map(function (k) {
-    return '<div class="sm-kpi ' + k.cls + '"><div class="sm-kpi-val">' + k.v + '</div><div class="sm-kpi-lbl">' + k.l + '</div></div>';
+    return '<div class="sm-kpi ' + k.cls + '"><div class="sm-kpi-val">' + k.v
+      + '</div><div class="sm-kpi-lbl">' + k.l + '</div></div>';
   }).join('');
 }
-function renderVilleTable(membres) {
-  var counts = {}; membres.forEach(function (m) { var v = m.ville || 'Non renseignée'; counts[v] = (counts[v] || 0) + 1; });
-  var sorted = Object.entries(counts).sort(function (a, b) { return b[1] - a[1]; });
-  var total = membres.length || 1;
-  var html = sorted.length
-    ? sorted.map(function (e) { var pct = ((e[1] / total) * 100).toFixed(1); return '<tr><td>' + escH(e[0]) + '</td><td><strong>' + e[1] + '</strong></td><td class="sm-pct">' + pct + '%</td><td><div class="sm-bar"><div class="sm-bar-fill" style="width:' + pct + '%"></div></div></td></tr>'; }).join('')
+
+// ─── TABLEAU VILLES : même données que graphique villes ──────────────────
+function renderVilleTable(villeEntries, total) {
+  var safeTotal = total || 1;
+  var html = villeEntries.length
+    ? villeEntries.map(function (e) {
+        var pct = ((e[1] / safeTotal) * 100).toFixed(1);
+        return '<tr>'
+          + '<td>' + escH(e[0]) + '</td>'
+          + '<td><strong>' + e[1] + '</strong></td>'
+          + '<td class="sm-pct">' + pct + '%</td>'
+          + '<td><div class="sm-bar"><div class="sm-bar-fill" style="width:' + pct + '%"></div></div></td>'
+          + '</tr>';
+      }).join('')
     : '<tr><td colspan="4" class="sm-empty">Aucune donnée</td></tr>';
   silentUpdate(document.getElementById('tbl-ville-body'), html);
 }
-function renderLyceeTable(membres) {
-  var counts = {}; membres.filter(function (m) { return m.metadata && m.metadata.nom_lycee; }).forEach(function (m) { var l = m.metadata.nom_lycee; counts[l] = (counts[l] || 0) + 1; });
-  var sorted = Object.entries(counts).sort(function (a, b) { return b[1] - a[1]; }).slice(0, 15);
-  var total = membres.length || 1;
-  var html = sorted.length
-    ? sorted.map(function (e) { var pct = ((e[1] / total) * 100).toFixed(1); var barW = Math.min(parseFloat(pct) * 5, 100); return '<tr><td>' + escH(e[0]) + '</td><td><strong>' + e[1] + '</strong></td><td class="sm-pct">' + pct + '%</td><td><div class="sm-bar"><div class="sm-bar-fill" style="width:' + barW + '%"></div></div></td></tr>'; }).join('')
+
+// ─── TABLEAU LYCÉES : même données que graphique lycées ──────────────────
+function renderLyceeTable(lyceeEntries, total) {
+  var safeTotal = total || 1;
+  var html = lyceeEntries.length
+    ? lyceeEntries.map(function (e) {
+        var pct  = ((e[1] / safeTotal) * 100).toFixed(1);
+        var barW = Math.min(parseFloat(pct) * 5, 100);
+        return '<tr>'
+          + '<td>' + escH(e[0]) + '</td>'
+          + '<td><strong>' + e[1] + '</strong></td>'
+          + '<td class="sm-pct">' + pct + '%</td>'
+          + '<td><div class="sm-bar"><div class="sm-bar-fill" style="width:' + barW + '%"></div></div></td>'
+          + '</tr>';
+      }).join('')
     : '<tr><td colspan="4" class="sm-empty">Aucun lycée renseigné</td></tr>';
   silentUpdate(document.getElementById('tbl-lycee-body'), html);
+  silentUpdate(document.getElementById('tbl-lycee-body'), html);
 }
+
+// ─── LISTE MEMBRES ────────────────────────────────────────────────────────
 function renderMembersTable(membres) {
-  var lbl = document.getElementById('sm-count-lbl'); if (lbl) lbl.textContent = '(' + membres.length + ')';
+  var lbl = document.getElementById('sm-count-lbl');
+  if (lbl) lbl.textContent = '(' + membres.length + ')';
   var html = membres.length
     ? membres.map(function (m) {
-      var md = m.metadata || {};
-      var photo = escH(m.photo || window.FALLBACK_AVATAR);
-      var lyc = md.lycee_technique === true || md.lycee_technique === 'true';
-      return '<tr>'
-        + '<td><img src="' + photo + '" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);" onerror="window.avatarOnError(this)"></td>'
-        + '<td>' + escH((m.prenom || '') + ' ' + (m.nom || '')) + '</td>'
-        + '<td style="font-size:.78rem;">' + escH(m.email || '') + '</td>'
-        + '<td>' + escH(m.ville || '—') + '</td>'
-        + '<td style="text-align:center;"><span class="badge ' + (lyc ? 'badge-green' : 'badge-grey') + '">' + (lyc ? '✓ Oui' : 'Non') + '</span></td>'
-        + '<td>' + escH((md.nom_lycee) || '—') + '</td>'
-        + '<td>' + escH((md.filiere) || '—') + '</td>'
-        + '<td>' + escH(md.annee_depart ? String(md.annee_depart) : '—') + '</td>'
-        + '</tr>';
-    }).join('')
+        var md    = m.metadata || {};
+        var photo = escH(m.photo || window.FALLBACK_AVATAR);
+        var lyc   = md.lycee_technique === true || md.lycee_technique === 'true';
+        return '<tr>'
+          + '<td><img src="' + photo + '" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);" onerror="window.avatarOnError(this)"></td>'
+          + '<td>' + escH((m.prenom || '') + ' ' + (m.nom || '')) + '</td>'
+          + '<td style="font-size:.78rem;">' + escH(m.email || '') + '</td>'
+          + '<td>' + escH(m.ville || '—') + '</td>'
+          + '<td style="text-align:center;"><span class="badge ' + (lyc ? 'badge-green' : 'badge-grey') + '">' + (lyc ? '✓ Oui' : 'Non') + '</span></td>'
+          + '<td>' + escH((md.nom_lycee) || '—') + '</td>'
+          + '<td>' + escH((md.filiere)   || '—') + '</td>'
+          + '<td>' + escH(md.annee_depart ? String(md.annee_depart) : '—') + '</td>'
+          + '</tr>';
+      }).join('')
     : '<tr><td colspan="8" class="sm-empty">Aucun membre correspondant</td></tr>';
   silentUpdate(document.getElementById('tbl-members-stats-body'), html);
 }
 
-// ═══════════════ GRAPHIQUES ═══════════════
-function renderCharts(membres) {
-  var PALETTE = ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0', '#F44336', '#00BCD4', '#8BC34A', '#3F51B5', '#FF5722', '#009688', '#795548', '#607D8B', '#E91E63', '#CDDC39', '#FFC107', '#673AB7'];
-  var vc = {}; membres.forEach(function (m) { var v = m.ville || 'Non renseignée'; vc[v] = (vc[v] || 0) + 1; });
-  var vs = Object.entries(vc).sort(function (a, b) { return b[1] - a[1]; }).slice(0, 10);
-  buildChart('chart-ville', 'pie', vs.map(function (e) { return e[0]; }), vs.map(function (e) { return e[1]; }), PALETTE, false, membres.length);
-  var lc = {}; membres.filter(function (m) { return m.metadata && m.metadata.nom_lycee; }).forEach(function (m) { var l = m.metadata.nom_lycee; lc[l] = (lc[l] || 0) + 1; });
-  var ls = Object.entries(lc).sort(function (a, b) { return b[1] - a[1]; }).slice(0, 8);
-  buildChart('chart-lycee', 'bar', ls.map(function (e) { return e[0]; }), ls.map(function (e) { return e[1]; }), PALETTE, true, membres.length);
-  var avecLyc = membres.filter(function (m) { return m.metadata && (m.metadata.lycee_technique === true || m.metadata.lycee_technique === 'true'); }).length;
-  buildChart('chart-has-lycee', 'doughnut', ['Avec lycée technique', 'Sans lycée technique'], [avecLyc, membres.length - avecLyc], ['#4CAF50', '#9e9e9e'], false, membres.length);
-  var fc = {}; membres.filter(function (m) { return m.metadata && m.metadata.filiere; }).forEach(function (m) { var f = m.metadata.filiere; fc[f] = (fc[f] || 0) + 1; });
-  var fs = Object.entries(fc).sort(function (a, b) { return b[1] - a[1]; }).slice(0, 10);
-  buildChart('chart-filiere', 'bar', fs.map(function (e) { return e[0]; }), fs.map(function (e) { return e[1]; }), PALETTE, false, membres.length);
+// ─── GRAPHIQUES : reçoivent exactement les mêmes agrégats que les KPIs ───
+function renderCharts(computed) {
+  var PALETTE = [
+    '#4CAF50','#2196F3','#FF9800','#9C27B0','#F44336','#00BCD4',
+    '#8BC34A','#3F51B5','#FF5722','#009688','#795548','#607D8B',
+    '#E91E63','#CDDC39','#FFC107','#673AB7'
+  ];
+  var total = computed.total || 1;
+
+  // Villes — toutes les villes (= KPI nbVilles)
+  buildChart('chart-ville', 'pie',
+    computed.villeEntries.map(function (e) { return e[0]; }),
+    computed.villeEntries.map(function (e) { return e[1]; }),
+    PALETTE, false, total
+  );
+
+  // Lycées — tous les lycées (= KPI nbLycees)
+  buildChart('chart-lycee', 'bar',
+    computed.lyceeEntries.map(function (e) { return e[0]; }),
+    computed.lyceeEntries.map(function (e) { return e[1]; }),
+    PALETTE, true, total
+  );
+
+  // Lycée oui/non
+  buildChart('chart-has-lycee', 'doughnut',
+    ['Avec lycée technique', 'Sans lycée technique'],
+    [computed.avecLyc, computed.sansLyc],
+    ['#4CAF50', '#9e9e9e'], false, total
+  );
+
+  // Filières — toutes les filières (= KPI nbFilieres)
+  buildChart('chart-filiere', 'bar',
+    computed.filiereEntries.map(function (e) { return e[0]; }),
+    computed.filiereEntries.map(function (e) { return e[1]; }),
+    PALETTE, false, total
+  );
 }
 
 function buildChart(canvasId, type, labels, data, colors, horizontal, totalMembers) {
@@ -1260,7 +1294,6 @@ window.exportStatsCSV = function () {
 // ═══════════════ NOTIFICATIONS PANEL ═══════════════
 async function loadNotificationsPanel() {
   var el = document.getElementById('notif-list-admin'); if (!el) return;
-  // Premier chargement seulement → spinner ; ensuite silencieux
   var isFirstLoad = el.children.length === 0 || (el.children.length === 1 && el.children[0].style.textAlign === 'center');
   if (isFirstLoad) el.innerHTML = '<div style="padding:30px;text-align:center;color:var(--text);">Chargement…</div>';
   try {
@@ -1723,7 +1756,6 @@ async function loadContentPages() {
     if (r.error || !r.data) return;
     r.data.forEach(function (row) {
       var el = document.getElementById('ct-' + row.section);
-      // Ne jamais écraser un champ actif
       if (el && document.activeElement !== el) el.value = row.content || '';
       if (row.section === 'history' && row.photo) { _contentPhotos.history = row.photo; var prev = document.getElementById('ct-history-photo-prev'); if (prev) { prev.src = row.photo; prev.classList.add('show'); } }
       if (row.section === 'organization' && row.photo) { _contentPhotos.organization = row.photo; var prev2 = document.getElementById('ct-org-photo-prev'); if (prev2) { prev2.src = row.photo; prev2.classList.add('show'); } }
@@ -1745,11 +1777,7 @@ async function loadSettings() {
     var r = await window.supabase.from('settings').select('*').eq('id', 1).single();
     if (r.error || !r.data) return; var d = r.data;
     var map = { 'st-site-name': 'site_name', 'st-email': 'email', 'st-phone': 'phone', 'st-city': 'city', 'st-slogan1': 'slogan1', 'st-slogan2': 'slogan2', 'st-footer': 'footer_text', 'st-facebook': 'facebook_url', 'st-tiktok': 'tiktok_url', 'st-instagram': 'instagram_url' };
-    Object.keys(map).forEach(function (k) {
-      var el = document.getElementById(k);
-      // Ne pas écraser un champ en cours d'édition
-      if (el && document.activeElement !== el) el.value = d[map[k]] || '';
-    });
+    Object.keys(map).forEach(function (k) { var el = document.getElementById(k); if (el && document.activeElement !== el) el.value = d[map[k]] || ''; });
   } catch (e) {}
 }
 window.saveSettings = async function () {
@@ -1768,7 +1796,6 @@ async function loadRegistrations() {
     if (r.error) throw r.error; allRegistrations = r.data || [];
     var evR = await window.supabase.from('events').select('id,title').order('date', { ascending: false });
     allRegEvents = evR.data || [];
-    // Mettre à jour le select silencieusement
     var sel = document.getElementById('reg-event-filter');
     var newSelHtml = '<option value="all">— Tous les événements —</option>' + allRegEvents.map(function (ev) { return '<option value="' + ev.id + '">' + window.escapeHtml(ev.title || '') + '</option>'; }).join('');
     silentUpdate(sel, newSelHtml);
@@ -1826,7 +1853,6 @@ async function loadMessages() {
     var newSelHtml = '<option value="all">Tous les membres actifs</option><option value="" disabled>— Choisir un membre —</option>'
       + membersCache.map(function (m) { return '<option value="' + m.id + '">' + window.escapeHtml((m.prenom || '') + ' ' + (m.nom || '')) + '</option>'; }).join('');
     silentUpdate(sel, newSelHtml);
-
     var delR = await window.supabase.from('message_deletions').select('message_id').eq('user_id', currentUser.id);
     var deletedIds = new Set((delR.data || []).map(function (d) { return d.message_id; }));
     var inR = await window.supabase.from('messages').select('*,sender:sender_id(id,nom,prenom,email,photo)').eq('receiver_id', currentUser.id).order('sent_at', { ascending: false });
@@ -1952,22 +1978,17 @@ async function loadBureauMembers() {
   var emptyEl = document.getElementById('bureau-empty');
   if (!grid) return;
   try {
-    // Charger uniquement les membres du bureau
     var r = await window.supabase.from('users').select('id,prenom,nom,email,photo,ville,role,metadata').in('role', ['member', 'admin']).eq('status', 'active').eq('is_bureau', true).order('prenom');
     if (r.error) throw r.error;
     var bureauMembers = r.data || [];
-
-    // Badge compteur
     var badge = document.getElementById('bureau-count-badge');
     if (badge) badge.textContent = bureauMembers.length;
-
     if (!bureauMembers.length) {
       silentUpdate(grid, '');
       if (emptyEl) emptyEl.style.display = 'block';
       return;
     }
     if (emptyEl) emptyEl.style.display = 'none';
-
     var html = bureauMembers.map(function (u) {
       var photo = escH(u.photo || window.FALLBACK_AVATAR);
       var md = u.metadata || {};
@@ -2042,7 +2063,6 @@ window.addToBureau = async function (userId, name) {
   try {
     var r = await window.supabase.from('users').update({ is_bureau: true, updated_at: new Date().toISOString() }).eq('id', userId);
     if (r.error) throw r.error;
-    // Mettre à jour visuellement dans la liste sans fermer le modal
     if (window._bureauAddCache) {
       var u = window._bureauAddCache.find(function (m) { return m.id === userId; });
       if (u) u.is_bureau = true;
