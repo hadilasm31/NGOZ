@@ -102,8 +102,6 @@ tr:hover td{background:#fafafa}
 .photo-prev{width:70px;height:70px;border-radius:4px;object-fit:cover;border:2px solid #ddd;background:#f0f0f0;display:none}
 .photo-prev.show{display:block}
 .photo-prev.round{border-radius:50%}
-.multi-img-previews{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.multi-img-previews img{width:70px;height:55px;object-fit:cover;border-radius:4px;border:2px solid var(--primary)}
 .btn-primary{padding:10px 24px;background:var(--primary);color:white;border:none;border-radius:var(--radius);font-size:.9rem;font-weight:600;cursor:pointer;transition:var(--tr);display:inline-flex;align-items:center;gap:7px}
 .btn-primary:hover{background:#45a049;transform:translateY(-2px)}
 .form-btns{display:flex;gap:10px;margin-top:18px;justify-content:flex-end}
@@ -198,8 +196,6 @@ tr:hover td{background:#fafafa}
 .stats-filter-group select:focus,.stats-filter-group input:focus{border-color:var(--primary)}
 .btn-filter{padding:9px 18px;background:var(--primary);color:white;border:none;border-radius:7px;font-size:.85rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;align-self:flex-end;white-space:nowrap}
 .btn-filter:hover{background:#45a049}
-.btn-export{padding:9px 18px;background:var(--secondary);color:white;border:none;border-radius:7px;font-size:.85rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;align-self:flex-end;white-space:nowrap}
-.btn-export:hover{background:#1565c0}
 .sm-summary-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:13px;margin-bottom:18px}
 .sm-kpi{background:white;border-radius:10px;padding:15px;box-shadow:var(--shadow);text-align:center;border-top:4px solid var(--primary)}
 .sm-kpi.blue{border-top-color:var(--secondary)}.sm-kpi.orange{border-top-color:var(--warning)}.sm-kpi.purple{border-top-color:#9c27b0}.sm-kpi.teal{border-top-color:#009688}.sm-kpi.red{border-top-color:var(--danger)}
@@ -280,42 +276,6 @@ tr:hover td{background:#fafafa}
 .bureau-add-item .bai-btn:hover{background:#9c27b0;color:white}
 
 @media(max-width:900px){.stats-row{grid-template-columns:repeat(3,1fr)}.settings-grid{grid-template-columns:1fr}.sm-charts-row{grid-template-columns:1fr}}
-
-/* ═══ JOURNAUX ADMIN ═══ */
-.log-filters{background:white;border-radius:10px;padding:16px 20px;box-shadow:var(--shadow);margin-bottom:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
-.log-filter-group{display:flex;flex-direction:column;gap:4px;min-width:140px}
-.log-filter-group label{font-size:.7rem;font-weight:600;color:var(--text);text-transform:uppercase;letter-spacing:.4px}
-.log-filter-group select,.log-filter-group input{padding:7px 11px;border:1px solid #ddd;border-radius:7px;font-size:.83rem;outline:none;font-family:inherit;transition:border-color .2s}
-.log-filter-group select:focus,.log-filter-group input:focus{border-color:var(--primary)}
-.log-table-wrap{overflow-x:auto;overflow-y:auto;max-height:620px;border-radius:0 0 8px 8px}
-.log-table-wrap table thead th{position:sticky;top:0;z-index:2;background:var(--light);box-shadow:0 1px 0 #eee}
-.log-table{width:100%;border-collapse:collapse;font-size:.82rem}
-.log-table th{background:var(--light);padding:9px 11px;text-align:left;font-weight:600;color:var(--dark);white-space:nowrap;border-bottom:2px solid #eee}
-.log-table td{padding:9px 11px;border-bottom:1px solid #f0f0f0;vertical-align:middle}
-.log-table tr:hover td{background:#fafafa}
-.log-row-recent{background:#fffde7 !important}
-.log-row-recent:hover td{background:#fff9c4 !important}
-.log-row-undone td{opacity:.55}
-.log-action-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:.7rem;font-weight:700;white-space:nowrap}
-.la-create{background:#e8f5e9;color:#2e7d32}.la-update{background:#e3f2fd;color:#1565c0}.la-delete{background:#ffebee;color:#c62828}
-.la-approve{background:#e8f5e9;color:#1b5e20}.la-reject{background:#fce4ec;color:#880e4f}
-.la-send{background:#e8eaf6;color:#283593}.la-upload{background:#f3e5f5;color:#6a1b9a}
-.la-undo{background:#fff3e0;color:#e65100}.la-other{background:#f5f5f5;color:#555}
-.log-undo-btn{padding:4px 10px;background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7;border-radius:5px;font-size:.72rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:all .2s;white-space:nowrap}
-.log-undo-btn:hover{background:#2e7d32;color:white}
-.log-undo-btn.disabled{background:#f5f5f5;color:#aaa;border-color:#eee;cursor:not-allowed}
-.log-undone-tag{font-size:.72rem;color:var(--danger);font-style:italic;white-space:nowrap}
-.log-admin-cell{display:flex;align-items:center;gap:7px;white-space:nowrap}
-.log-admin-cell img{width:28px;height:28px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);flex-shrink:0}
-.log-critical{font-size:.85rem}
-.log-pagination{display:flex;align-items:center;justify-content:space-between;padding:12px 0 0;flex-wrap:wrap;gap:8px}
-.log-pagination .pg-info{font-size:.82rem;color:var(--text)}
-.log-pagination .pg-btns{display:flex;gap:6px}
-.pg-btn{padding:6px 14px;border:1px solid #ddd;background:white;border-radius:6px;font-size:.82rem;cursor:pointer;transition:all .2s;color:var(--dark)}
-.pg-btn:hover{background:var(--primary);color:white;border-color:var(--primary)}
-.pg-btn:disabled{background:#f5f5f5;color:#aaa;cursor:not-allowed}
-.pg-btn.active{background:var(--primary);color:white;border-color:var(--primary)}
-.log-sql-box{background:#1e1e1e;color:#d4d4d4;border-radius:8px;padding:14px;font-family:monospace;font-size:.78rem;line-height:1.6;margin-top:14px;overflow-x:auto;white-space:pre}
 @media(max-width:768px){
   .sidebar{transform:translateX(-110%)}.sidebar.open{transform:translateX(0)}
   .main{margin-left:0;padding:72px 12px 12px}
@@ -373,7 +333,6 @@ tr:hover td{background:#fafafa}
     <div class="sb-section" id="sa-section" style="display:none;">Super Admin</div>
     <button class="sb-item" data-panel="access-control" id="btn-access-control" style="display:none;"><i class="fas fa-shield-alt"></i> Contrôle d'accès</button>
     <button class="sb-item" data-panel="bureau-members" id="btn-bureau-members" style="display:none;"><i class="fas fa-user-shield"></i> Membres bureau</button>
-    <button class="sb-item" data-panel="admin-logs" id="btn-admin-logs" style="display:none;"><i class="fas fa-history"></i> Journaux admin</button>
     <div class="sb-section">Accès rapide</div>
     <button class="sb-item" onclick="window.open('../index.html','_blank')"><i class="fas fa-globe"></i> Voir le site</button>
   </nav>
@@ -392,7 +351,6 @@ tr:hover td{background:#fafafa}
       </div>
       <button title="Notifications" onclick="switchToPanel('notifications')" style="background:none;border:none;cursor:pointer;font-size:1.2rem;padding:5px 7px;border-radius:50%;position:relative;">🔔<span id="tb-badge" style="position:absolute;top:-3px;right:-3px;background:#f44336;color:white;border-radius:50%;width:16px;height:16px;font-size:.6rem;font-weight:700;display:none;align-items:center;justify-content:center;border:2px solid white;"></span></button>
       <button id="tb-silence-btn" title="Mode silence" onclick="toggleAdminSilence()" style="background:none;border:none;cursor:pointer;font-size:.95rem;padding:5px 7px;border-radius:50%;color:#888;"><i class="fas fa-volume-up"></i></button>
-      <button onclick="window.exportAll()" title="Exporter toutes les données en Excel" style="background:var(--primary);color:white;border:none;cursor:pointer;font-size:.78rem;padding:6px 12px;border-radius:6px;font-weight:600;display:flex;align-items:center;gap:5px;"><i class="fas fa-file-excel"></i> Export Excel</button>
       <div class="user-mini">
         <img id="tb-avatar" src="" alt="Avatar" onerror="window.avatarOnError(this)">
         <span id="tb-name">Admin</span>
@@ -416,7 +374,6 @@ tr:hover td{background:#fafafa}
         <h2>Tous les membres</h2>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
           <div class="search-bar"><i class="fas fa-search" style="color:var(--text);"></i><input type="text" id="search-members" placeholder="Rechercher…" oninput="filterTable('members-table',this.value)"></div>
-          <button class="btn-primary" style="font-size:.82rem;padding:7px 14px;" onclick="exportMembersCSV()"><i class="fas fa-download"></i> Export CSV</button>
         </div>
       </div>
       <div class="table-scroll-wrap">
@@ -510,7 +467,6 @@ tr:hover td{background:#fafafa}
       <div class="stats-filter-group"><label><i class="fas fa-search"></i> Recherche</label><input type="text" id="sm-filter-search" placeholder="Nom, email…"></div>
       <button class="btn-filter" onclick="loadStatsMembers()"><i class="fas fa-filter"></i> Filtrer</button>
       <button class="btn-filter" style="background:#888;" onclick="resetStatsFilters()"><i class="fas fa-times"></i> Reset</button>
-      <button class="btn-export" onclick="exportStatsCSV()"><i class="fas fa-download"></i> Export CSV</button>
     </div>
     <div class="sm-summary-row" id="sm-kpis"><div class="sm-loading" style="grid-column:1/-1">Chargement…</div></div>
     <div class="sm-charts-row">
@@ -583,150 +539,6 @@ tr:hover td{background:#fafafa}
     </div>
   </div>
 
-  <!-- JOURNAUX ADMIN -->
-  <div class="panel" id="panel-admin-logs">
-    <!-- SQL helper box -->
-    <div id="logs-sql-helper" style="display:none;margin-bottom:16px;">
-      <div class="table-card" style="padding:16px;">
-        <h3 style="font-size:.9rem;color:var(--dark);margin-bottom:10px;"><i class="fas fa-database" style="color:var(--primary);margin-right:6px;"></i>Script SQL — Créer la table <code>admin_logs</code></h3>
-        <div class="log-sql-box">CREATE TABLE IF NOT EXISTS admin_logs (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  admin_id UUID REFERENCES users(id) ON DELETE SET NULL,
-  admin_name TEXT NOT NULL,
-  action_type TEXT NOT NULL,
-  table_name TEXT,
-  record_id TEXT,
-  record_data JSONB,
-  details TEXT,
-  ip_address TEXT,
-  user_agent TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  is_reversible BOOLEAN DEFAULT false,
-  reversible_until TIMESTAMPTZ,
-  undone_by UUID REFERENCES users(id) ON DELETE SET NULL,
-  undone_at TIMESTAMPTZ
-);
-CREATE INDEX IF NOT EXISTS idx_admin_logs_created ON admin_logs(created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_admin_logs_admin ON admin_logs(admin_id);
-CREATE INDEX IF NOT EXISTS idx_admin_logs_action ON admin_logs(action_type);
--- Activer RLS et autoriser les admins
-ALTER TABLE admin_logs ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "super_admin_all" ON admin_logs FOR ALL USING (true) WITH CHECK (true);</div>
-        <button class="btn-primary" style="margin-top:10px;font-size:.8rem;padding:7px 14px;" onclick="document.getElementById('logs-sql-helper').style.display='none'"><i class="fas fa-times"></i> Fermer</button>
-      </div>
-    </div>
-    <!-- Filtres -->
-    <div class="log-filters">
-      <div class="log-filter-group">
-        <label><i class="fas fa-user-shield"></i> Admin</label>
-        <select id="log-filter-admin"><option value="">Tous les admins</option></select>
-      </div>
-      <div class="log-filter-group">
-        <label><i class="fas fa-bolt"></i> Action</label>
-        <select id="log-filter-action">
-          <option value="">Toutes les actions</option>
-          <option value="user_approve">✅ Approbation membre</option>
-          <option value="user_reject">❌ Rejet membre</option>
-          <option value="user_update">✏️ Modif membre</option>
-          <option value="user_delete">🗑️ Suppression membre</option>
-          <option value="event_create">📅 Créer événement</option>
-          <option value="event_update">📅 Modifier événement</option>
-          <option value="event_delete">📅 Suppr. événement</option>
-          <option value="activity_create">🏃 Créer activité</option>
-          <option value="activity_update">🏃 Modifier activité</option>
-          <option value="activity_delete">🏃 Suppr. activité</option>
-          <option value="announcement_create">📢 Créer annonce</option>
-          <option value="announcement_update">📢 Modifier annonce</option>
-          <option value="announcement_delete">📢 Suppr. annonce</option>
-          <option value="gallery_upload">🖼️ Upload galerie</option>
-          <option value="gallery_delete">🖼️ Suppr. galerie</option>
-          <option value="team_create">👥 Créer équipe</option>
-          <option value="team_update">👥 Modifier équipe</option>
-          <option value="team_delete">👥 Suppr. équipe</option>
-          <option value="report_create">📋 Créer compte rendu</option>
-          <option value="report_update">📋 Modifier compte rendu</option>
-          <option value="report_delete">📋 Suppr. compte rendu</option>
-          <option value="document_upload">📄 Upload document</option>
-          <option value="document_delete">📄 Suppr. document</option>
-          <option value="notification_send">🔔 Notif envoyée</option>
-          <option value="message_send">💬 Message envoyé</option>
-          <option value="registration_cancel">🚫 Annul. inscription</option>
-          <option value="settings_update">⚙️ Paramètres modifiés</option>
-          <option value="content_update">📝 Contenu modifié</option>
-          <option value="access_rule_update">🛡️ Règles accès</option>
-          <option value="bureau_toggle">🏅 Bureau toggle</option>
-          <option value="undo">↩️ Annulation</option>
-        </select>
-      </div>
-      <div class="log-filter-group">
-        <label><i class="fas fa-table"></i> Table</label>
-        <select id="log-filter-table">
-          <option value="">Toutes</option>
-          <option value="users">users</option>
-          <option value="events">events</option>
-          <option value="activities">activities</option>
-          <option value="announcements">announcements</option>
-          <option value="gallery">gallery</option>
-          <option value="team">team</option>
-          <option value="activity_reports">activity_reports</option>
-          <option value="documents">documents</option>
-          <option value="notifications">notifications</option>
-          <option value="messages">messages</option>
-          <option value="settings">settings</option>
-          <option value="content_pages">content_pages</option>
-          <option value="access_rules">access_rules</option>
-        </select>
-      </div>
-      <div class="log-filter-group">
-        <label><i class="fas fa-calendar-alt"></i> Du</label>
-        <input type="date" id="log-filter-from">
-      </div>
-      <div class="log-filter-group">
-        <label><i class="fas fa-calendar-alt"></i> Au</label>
-        <input type="date" id="log-filter-to">
-      </div>
-      <div class="log-filter-group" style="min-width:180px;">
-        <label><i class="fas fa-search"></i> Recherche</label>
-        <input type="text" id="log-filter-search" placeholder="Nom, détail, ID…">
-      </div>
-      <div style="display:flex;gap:6px;align-self:flex-end;flex-wrap:wrap;">
-        <button class="btn-filter" onclick="loadAdminLogs(1)"><i class="fas fa-filter"></i> Filtrer</button>
-        <button class="btn-filter" style="background:#888;" onclick="resetLogFilters()"><i class="fas fa-times"></i> Reset</button>
-        <button class="btn-export" onclick="exportLogsCSV()"><i class="fas fa-download"></i> Export</button>
-        <button class="btn-primary" style="background:#ff9800;font-size:.82rem;padding:7px 12px;" onclick="document.getElementById('logs-sql-helper').style.display='block'"><i class="fas fa-database"></i> SQL</button>
-      </div>
-    </div>
-    <!-- Résumé -->
-    <div id="logs-summary" style="display:none;background:white;border-radius:10px;padding:12px 18px;box-shadow:var(--shadow);margin-bottom:14px;font-size:.85rem;display:flex;align-items:center;gap:16px;flex-wrap:wrap;"></div>
-    <!-- Tableau -->
-    <div class="table-card" style="padding:0;overflow:hidden;">
-      <div style="padding:14px 18px;background:var(--light);border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-        <h2 style="font-size:1rem;color:var(--dark);font-weight:600;margin:0;"><i class="fas fa-history" style="color:var(--primary);margin-right:7px;"></i>Journal des actions <span id="logs-count-badge" style="background:var(--primary);color:white;border-radius:20px;padding:2px 9px;font-size:.72rem;margin-left:6px;display:none;"></span></h2>
-        <div style="display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--text);">
-          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;background:#fffde7;border:1px solid #f9a825;border-radius:2px;"></span> Dernières 24h</span>
-          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;background:#ffebee;border:1px solid #ef9a9a;border-radius:2px;"></span> Action critique</span>
-        </div>
-      </div>
-      <div class="log-table-wrap">
-        <table class="log-table">
-          <thead>
-            <tr>
-              <th style="width:130px;">Date/Heure</th>
-              <th style="width:150px;">Admin</th>
-              <th style="width:170px;">Action</th>
-              <th style="width:120px;">Table</th>
-              <th>Détails</th>
-              <th style="width:100px;">ID Enreg.</th>
-              <th style="width:130px;">Annulation</th>
-            </tr>
-          </thead>
-          <tbody id="logs-tbody"></tbody>
-        </table>
-      </div>
-      <div class="log-pagination" style="padding:12px 18px;" id="logs-pagination"></div>
-    </div>
-  </div>
-
 </main>
 
 <!-- Modal CRUD -->
@@ -757,13 +569,11 @@ function silentUpdate(el, newHtml) {
   el.innerHTML = newHtml;
   scrollEls.forEach(function(se) { se[0].scrollTop = se[1]; se[0].scrollLeft = se[2]; });
 }
-
 function silentText(el, newText) {
   if (!el) return;
   if (el.textContent === String(newText)) return;
   el.textContent = String(newText);
 }
-
 function silentBadge(el, count) {
   if (!el) return;
   var str = String(count > 99 ? '99+' : count);
@@ -775,13 +585,7 @@ function silentBadge(el, count) {
 }
 
 // ═══════════════ AUTO-REFRESH SYSTEM ═══════════════
-var _autoRefresh = {
-  enabled: true,
-  interval: 5000,
-  timer: null,
-  isRefreshing: false,
-  currentPanel: 'overview'
-};
+var _autoRefresh = { enabled: true, interval: 5000, timer: null, isRefreshing: false, currentPanel: 'overview' };
 
 function startAutoRefresh() {
   stopAutoRefresh();
@@ -789,44 +593,24 @@ function startAutoRefresh() {
   _autoRefresh.timer = setInterval(autoRefreshTick, _autoRefresh.interval);
   updateRefreshUI();
 }
-
 function stopAutoRefresh() {
   if (_autoRefresh.timer) { clearInterval(_autoRefresh.timer); _autoRefresh.timer = null; }
 }
-
 function toggleAutoRefresh() {
-  if (_autoRefresh.enabled) {
-    _autoRefresh.enabled = false;
-    stopAutoRefresh();
-  } else {
-    startAutoRefresh();
-  }
+  if (_autoRefresh.enabled) { _autoRefresh.enabled = false; stopAutoRefresh(); }
+  else { startAutoRefresh(); }
   updateRefreshUI();
 }
 window.toggleAutoRefresh = toggleAutoRefresh;
 
-function isModalOpen() {
-  var modal = document.getElementById('modal');
-  return modal && modal.classList.contains('active');
-}
-
-function userIsInteracting() {
-  var active = document.activeElement;
-  if (!active) return false;
-  var tag = active.tagName;
-  return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
-}
+function isModalOpen() { var modal = document.getElementById('modal'); return modal && modal.classList.contains('active'); }
+function userIsInteracting() { var active = document.activeElement; if (!active) return false; var tag = active.tagName; return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT'; }
 
 async function autoRefreshTick() {
   if (isModalOpen() || _autoRefresh.isRefreshing || userIsInteracting()) return;
   _autoRefresh.isRefreshing = true;
-  try {
-    await updateBadgesBackground();
-    await refreshPanel(_autoRefresh.currentPanel);
-  } catch (e) {}
-  finally {
-    _autoRefresh.isRefreshing = false;
-  }
+  try { await updateBadgesBackground(); await refreshPanel(_autoRefresh.currentPanel); } catch (e) {}
+  finally { _autoRefresh.isRefreshing = false; }
 }
 
 async function refreshPanel(panel) {
@@ -844,7 +628,6 @@ async function refreshPanel(panel) {
     case 'messages':       return loadMessagesSilent();
     case 'notifications':  return loadNotificationsPanel();
     case 'bureau-members': return loadBureauMembers();
-    case 'admin-logs':     return loadAdminLogs(_logState.page);
     default: return null;
   }
 }
@@ -854,70 +637,32 @@ async function loadMembersSilent() {
   await loadMembers();
   if (searchVal) filterTable('members-table', searchVal);
 }
-
 async function loadRegistrationsSilent() {
   var filterVal = document.getElementById('reg-event-filter') ? document.getElementById('reg-event-filter').value : 'all';
   await loadRegistrations();
-  if (filterVal !== 'all') {
-    var sel = document.getElementById('reg-event-filter');
-    if (sel) sel.value = filterVal;
-    filterRegistrations();
-  }
+  if (filterVal !== 'all') { var sel = document.getElementById('reg-event-filter'); if (sel) sel.value = filterVal; filterRegistrations(); }
 }
-
 async function loadMessagesSilent() {
   var savedMsgId = openMessageId;
-  var savedScrollInbox = 0, savedScrollSent = 0;
-  var inboxEl = document.getElementById('inbox-list');
-  var sentEl = document.getElementById('sent-list');
-  if (inboxEl) savedScrollInbox = inboxEl.scrollTop;
-  if (sentEl) savedScrollSent = sentEl.scrollTop;
+  var inboxEl = document.getElementById('inbox-list'), sentEl = document.getElementById('sent-list');
+  var savedScrollInbox = inboxEl ? inboxEl.scrollTop : 0, savedScrollSent = sentEl ? sentEl.scrollTop : 0;
   await loadMessages();
   if (inboxEl) inboxEl.scrollTop = savedScrollInbox;
   if (sentEl) sentEl.scrollTop = savedScrollSent;
-  if (savedMsgId) {
-    var msgEl = document.querySelector('.msg-item[data-msgid="' + savedMsgId + '"]');
-    if (msgEl) msgEl.classList.add('active');
-  }
+  if (savedMsgId) { var msgEl = document.querySelector('.msg-item[data-msgid="' + savedMsgId + '"]'); if (msgEl) msgEl.classList.add('active'); }
 }
 
 async function updateBadgesBackground() {
-  try {
-    var nr = await window.supabase.from('notifications').select('id', { count: 'exact', head: true }).eq('user_id', currentUser.id).eq('is_read', false);
-    var unreadNotifs = nr.count || 0;
-    silentBadge(document.getElementById('sb-notif-badge'), unreadNotifs);
-    var tb = document.getElementById('tb-badge');
-    if (tb) {
-      var s = String(unreadNotifs > 99 ? '99+' : unreadNotifs);
-      if (tb.textContent !== s) tb.textContent = s;
-      var want = unreadNotifs > 0 ? 'flex' : 'none';
-      if (tb.style.display !== want) tb.style.display = want;
-    }
-  } catch (_) {}
-  try {
-    var mr = await window.supabase.from('messages').select('id', { count: 'exact', head: true }).eq('receiver_id', currentUser.id).eq('is_read', false);
-    silentBadge(document.getElementById('msg-badge'), mr.count || 0);
-  } catch (_) {}
-  try {
-    var pr = await window.supabase.from('users').select('id', { count: 'exact', head: true }).eq('role', 'pending');
-    silentBadge(document.getElementById('pending-badge'), pr.count || 0);
-  } catch (_) {}
+  try { var nr = await window.supabase.from('notifications').select('id', { count: 'exact', head: true }).eq('user_id', currentUser.id).eq('is_read', false); var unreadNotifs = nr.count || 0; silentBadge(document.getElementById('sb-notif-badge'), unreadNotifs); var tb = document.getElementById('tb-badge'); if (tb) { var s = String(unreadNotifs > 99 ? '99+' : unreadNotifs); if (tb.textContent !== s) tb.textContent = s; var want = unreadNotifs > 0 ? 'flex' : 'none'; if (tb.style.display !== want) tb.style.display = want; } } catch (_) {}
+  try { var mr = await window.supabase.from('messages').select('id', { count: 'exact', head: true }).eq('receiver_id', currentUser.id).eq('is_read', false); silentBadge(document.getElementById('msg-badge'), mr.count || 0); } catch (_) {}
+  try { var pr = await window.supabase.from('users').select('id', { count: 'exact', head: true }).eq('role', 'pending'); silentBadge(document.getElementById('pending-badge'), pr.count || 0); } catch (_) {}
 }
 
 function updateRefreshUI() {
-  var dot = document.getElementById('refresh-dot');
-  var lbl = document.getElementById('refresh-label');
-  var ind = document.getElementById('refresh-indicator');
+  var dot = document.getElementById('refresh-dot'), lbl = document.getElementById('refresh-label'), ind = document.getElementById('refresh-indicator');
   if (!dot) return;
-  if (_autoRefresh.enabled) {
-    dot.className = 'refresh-dot active';
-    if (lbl) lbl.textContent = 'sync';
-    if (ind) { ind.classList.remove('paused'); ind.title = 'Rafraîchissement actif — cliquer pour mettre en pause'; }
-  } else {
-    dot.className = 'refresh-dot paused';
-    if (lbl) lbl.textContent = 'pause';
-    if (ind) { ind.classList.add('paused'); ind.title = 'En pause — cliquer pour reprendre'; }
-  }
+  if (_autoRefresh.enabled) { dot.className = 'refresh-dot active'; if (lbl) lbl.textContent = 'sync'; if (ind) { ind.classList.remove('paused'); ind.title = 'Rafraîchissement actif — cliquer pour mettre en pause'; } }
+  else { dot.className = 'refresh-dot paused'; if (lbl) lbl.textContent = 'pause'; if (ind) { ind.classList.add('paused'); ind.title = 'En pause — cliquer pour reprendre'; } }
 }
 
 var PANEL_TITLES = {
@@ -927,7 +672,7 @@ var PANEL_TITLES = {
   messages:'Messages', notifications:'Notifications',
   documents:'Documents officiels', 'stats-membres':'Statistiques membres',
   content:'Contenu pages', settings:'Paramètres site', 'notif-prefs':'Préférences notifications',
-  'access-control':'Contrôle d\'accès', 'bureau-members':'Membres du bureau', 'admin-logs':'Journaux admin'
+  'access-control':'Contrôle d\'accès', 'bureau-members':'Membres du bureau'
 };
 
 // ─── INIT ───
@@ -936,7 +681,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   if (!currentUser || !window.Auth.isAdmin()) { window.location.href = '../login.html'; return; }
   initSidebar(); initModal(); initPanels(); renderHeader(); initAdminNotifPrefs(); updateAdminSilenceUI(); initContentPhotoUploads(); initDocDragDrop();
   if (currentUser.role === 'super_admin') {
-    ['sa-section', 'btn-access-control', 'btn-bureau-members', 'btn-admin-logs'].forEach(function (id) {
+    ['sa-section', 'btn-access-control', 'btn-bureau-members'].forEach(function (id) {
       var el = document.getElementById(id); if (el) el.style.display = el.tagName === 'BUTTON' ? 'flex' : 'block';
     });
     loadAccessRules(); loadBureauMembers();
@@ -992,7 +737,6 @@ function switchToPanel(id) {
   if (id === 'documents' && !Object.keys(_smDocData).length) loadDocuments();
   if (id === 'stats-membres') { if (!_smFiltersInited) { _smFiltersInited = true; initStatsFilters(); } else loadStatsMembers(); }
   if (id === 'notifications') loadNotificationsPanel();
-  if (id === 'admin-logs') { initAdminLogsFilters(); loadAdminLogs(1); }
 }
 window.switchToPanel = switchToPanel;
 
@@ -1074,11 +818,7 @@ async function loadDocuments() {
   } catch (e) { console.warn('Docs load error:', e); }
 }
 function renderDocPreview(prefix, doc) {
-  var box = document.getElementById(prefix + '-preview-box');
-  var nameEl = document.getElementById(prefix + '-preview-name');
-  var metaEl = document.getElementById(prefix + '-preview-meta');
-  var iconEl = document.getElementById(prefix + '-preview-icon');
-  var viewEl = document.getElementById(prefix + '-view-btn');
+  var box = document.getElementById(prefix + '-preview-box'), nameEl = document.getElementById(prefix + '-preview-name'), metaEl = document.getElementById(prefix + '-preview-meta'), iconEl = document.getElementById(prefix + '-preview-icon'), viewEl = document.getElementById(prefix + '-view-btn');
   if (!box || !doc) return;
   var fileName = doc.file_name || (doc.file_url ? doc.file_url.split('/').pop() : '');
   var fileExt = fileName ? fileName.split('.').pop().toLowerCase() : '';
@@ -1090,8 +830,7 @@ function renderDocPreview(prefix, doc) {
   if (iconEl && iconEl.textContent !== newIcon) iconEl.textContent = newIcon;
   if (nameEl && nameEl.textContent !== newName) nameEl.textContent = newName;
   if (metaEl && metaEl.textContent !== newMeta) metaEl.textContent = newMeta;
-  if (viewEl && doc.file_url) { if (viewEl.href !== doc.file_url) viewEl.href = doc.file_url; viewEl.style.display = 'inline-flex'; }
-  else if (viewEl) { viewEl.style.display = 'none'; }
+  if (viewEl && doc.file_url) { if (viewEl.href !== doc.file_url) viewEl.href = doc.file_url; viewEl.style.display = 'inline-flex'; } else if (viewEl) { viewEl.style.display = 'none'; }
   if (!box.classList.contains('show')) box.classList.add('show');
 }
 var _docPendingFiles = {};
@@ -1101,10 +840,7 @@ window.handleDocFile = async function (prefix, docType, file) {
   var allowed = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
   if (!allowed.includes(file.type)) { window.showToast('Format non supporté (PDF, Word, texte)', 'error'); return; }
   _docPendingFiles[docType] = file;
-  var nameEl = document.getElementById(prefix + '-preview-name');
-  var metaEl = document.getElementById(prefix + '-preview-meta');
-  var iconEl = document.getElementById(prefix + '-preview-icon');
-  var box = document.getElementById(prefix + '-preview-box');
+  var nameEl = document.getElementById(prefix + '-preview-name'), metaEl = document.getElementById(prefix + '-preview-meta'), iconEl = document.getElementById(prefix + '-preview-icon'), box = document.getElementById(prefix + '-preview-box');
   var ext = file.name.split('.').pop().toLowerCase();
   if (iconEl) iconEl.textContent = ext === 'pdf' ? '📕' : ext.includes('doc') ? '📘' : '📄';
   if (nameEl) nameEl.textContent = file.name;
@@ -1121,17 +857,12 @@ window.saveDoc = async function (docType) {
   try {
     var fileUrl = null, fileName = null;
     if (file) {
-      var prog = document.getElementById(prefix + '-progress');
-      var fill = document.getElementById(prefix + '-progress-fill');
+      var prog = document.getElementById(prefix + '-progress'), fill = document.getElementById(prefix + '-progress-fill');
       if (prog) { prog.style.display = 'block'; fill.style.width = '30%'; }
       try {
-        var ext = file.name.split('.').pop().toLowerCase();
-        var path = 'documents/' + docType + '_' + Date.now() + '.' + ext;
+        var ext = file.name.split('.').pop().toLowerCase(), path = 'documents/' + docType + '_' + Date.now() + '.' + ext;
         var upRes = await window.supabase.storage.from('documents').upload(path, file, { upsert: true });
-        if (!upRes.error) {
-          var pubRes = window.supabase.storage.from('documents').getPublicUrl(path);
-          fileUrl = pubRes.data.publicUrl; fileName = file.name;
-        }
+        if (!upRes.error) { var pubRes = window.supabase.storage.from('documents').getPublicUrl(path); fileUrl = pubRes.data.publicUrl; fileName = file.name; }
       } catch (storErr) { fileUrl = await window.fileToBase64(file); fileName = file.name; }
       if (fill) fill.style.width = '80%';
     }
@@ -1146,10 +877,9 @@ window.saveDoc = async function (docType) {
     delete _docPendingFiles[docType];
     var refetch = await window.supabase.from('documents').select('*').eq('type', docType).maybeSingle();
     if (refetch.data) { _smDocData[docType] = refetch.data; renderDocPreview(prefix, refetch.data); }
-    var prog2 = document.getElementById(prefix + '-progress'); var fill2 = document.getElementById(prefix + '-progress-fill');
+    var prog2 = document.getElementById(prefix + '-progress'), fill2 = document.getElementById(prefix + '-progress-fill');
     if (fill2) fill2.style.width = '100%';
     setTimeout(function () { if (prog2) prog2.style.display = 'none'; if (fill2) fill2.style.width = '0%'; }, 600);
-    logAdminAction('document_upload', 'documents', docType, null, 'Document "' + docType + '" mis à jour' + (fileName ? ' — fichier : ' + fileName : ''), false);
     showFbEl(fbEl, '✅ Enregistré avec succès !', 'ok');
     window.showToast('Document sauvegardé', 'success');
   } catch (e) { showFbEl(fbEl, '❌ Erreur : ' + e.message, 'err'); window.showToast('Erreur : ' + e.message, 'error'); }
@@ -1161,7 +891,7 @@ window.deleteDoc = async function (docType) {
     var existing = _smDocData[docType];
     if (existing && existing.id) { var r = await window.supabase.from('documents').delete().eq('id', existing.id); if (r.error) throw r.error; }
     delete _smDocData[docType];
-    var box = document.getElementById(prefix + '-preview-box'); var cEl = document.getElementById(prefix + '-content');
+    var box = document.getElementById(prefix + '-preview-box'), cEl = document.getElementById(prefix + '-content');
     if (box) box.classList.remove('show'); if (cEl) cEl.value = '';
     window.showToast('Document supprimé', 'success');
   } catch (e) { window.showToast('Erreur : ' + e.message, 'error'); }
@@ -1174,8 +904,7 @@ function initDocDragDrop() {
     zone.addEventListener('drop', function (e) {
       e.preventDefault(); zone.classList.remove('drag');
       var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
-      var pfx = zId.startsWith('ri') ? 'ri' : 'ca';
-      var dt = pfx === 'ri' ? 'reglement_interieur' : 'conditions_adhesion';
+      var pfx = zId.startsWith('ri') ? 'ri' : 'ca', dt = pfx === 'ri' ? 'reglement_interieur' : 'conditions_adhesion';
       if (f) window.handleDocFile(pfx, dt, f);
     });
   });
@@ -1196,280 +925,116 @@ async function initStatsFilters() {
   loadStatsMembers();
 }
 
-// ─── SOURCE DE VÉRITÉ UNIQUE : calcul centralisé des agrégats ───────────
-// Aucune limite : KPIs, tableaux ET graphiques affichent TOUTES les données.
 function computeStatsAggregates(membres) {
-  var total    = membres.length;
-  var avecLyc  = 0;
-  var villeCounts   = {};
-  var lyceeCounts   = {};
-  var filiereCounts = {};
-
+  var total = membres.length, avecLyc = 0, villeCounts = {}, lyceeCounts = {}, filiereCounts = {};
   membres.forEach(function (m) {
-    var md  = m.metadata || {};
-    var lyc = md.lycee_technique === true || md.lycee_technique === 'true';
-
+    var md = m.metadata || {}, lyc = md.lycee_technique === true || md.lycee_technique === 'true';
     if (lyc) avecLyc++;
-
     var ville = m.ville || 'Non renseignée';
     villeCounts[ville] = (villeCounts[ville] || 0) + 1;
-
-    if (md.nom_lycee) {
-      lyceeCounts[md.nom_lycee] = (lyceeCounts[md.nom_lycee] || 0) + 1;
-    }
-
-    if (md.filiere) {
-      filiereCounts[md.filiere] = (filiereCounts[md.filiere] || 0) + 1;
-    }
+    if (md.nom_lycee) lyceeCounts[md.nom_lycee] = (lyceeCounts[md.nom_lycee] || 0) + 1;
+    if (md.filiere) filiereCounts[md.filiere] = (filiereCounts[md.filiere] || 0) + 1;
   });
-
-  // Tri décroissant — toutes les entrées, sans limite
-  var villeEntries   = Object.entries(villeCounts).sort(function (a, b) { return b[1] - a[1]; });
-  var lyceeEntries   = Object.entries(lyceeCounts).sort(function (a, b) { return b[1] - a[1]; });
+  var villeEntries = Object.entries(villeCounts).sort(function (a, b) { return b[1] - a[1]; });
+  var lyceeEntries = Object.entries(lyceeCounts).sort(function (a, b) { return b[1] - a[1]; });
   var filiereEntries = Object.entries(filiereCounts).sort(function (a, b) { return b[1] - a[1]; });
-
-  return {
-    total          : total,
-    avecLyc        : avecLyc,
-    sansLyc        : total - avecLyc,
-    nbVilles       : villeEntries.length,
-    nbLycees       : lyceeEntries.length,
-    nbFilieres     : filiereEntries.length,
-    villeEntries   : villeEntries,
-    lyceeEntries   : lyceeEntries,
-    filiereEntries : filiereEntries
-  };
+  return { total: total, avecLyc: avecLyc, sansLyc: total - avecLyc, nbVilles: villeEntries.length, nbLycees: lyceeEntries.length, nbFilieres: filiereEntries.length, villeEntries: villeEntries, lyceeEntries: lyceeEntries, filiereEntries: filiereEntries };
 }
 
 window.loadStatsMembers = async function () {
   document.getElementById('sm-kpis').innerHTML = '<div class="sm-loading" style="grid-column:1/-1">Chargement…</div>';
-  var filterVille   = document.getElementById('sm-filter-ville')   ? document.getElementById('sm-filter-ville').value   : '';
-  var filterLycee   = document.getElementById('sm-filter-lycee')   ? document.getElementById('sm-filter-lycee').value   : '';
+  var filterVille = document.getElementById('sm-filter-ville') ? document.getElementById('sm-filter-ville').value : '';
+  var filterLycee = document.getElementById('sm-filter-lycee') ? document.getElementById('sm-filter-lycee').value : '';
   var filterFiliere = document.getElementById('sm-filter-filiere') ? document.getElementById('sm-filter-filiere').value : '';
-  var filterSearch  = document.getElementById('sm-filter-search')  ? document.getElementById('sm-filter-search').value.trim().toLowerCase() : '';
+  var filterSearch = document.getElementById('sm-filter-search') ? document.getElementById('sm-filter-search').value.trim().toLowerCase() : '';
   try {
     var q = window.supabase.from('users').select('id,prenom,nom,email,photo,ville,status,role,metadata,created_at').in('role', ['member', 'admin']).eq('status', 'active').order('prenom');
     if (filterVille) q = q.eq('ville', filterVille);
     var r = await q;
     if (r.error) throw r.error;
-
     var all = (r.data || []).filter(function (m) {
-      var md  = m.metadata || {};
-      var lyc = md.lycee_technique === true || md.lycee_technique === 'true';
-      if (filterLycee === 'oui' && !lyc)  return false;
-      if (filterLycee === 'non' &&  lyc)  return false;
+      var md = m.metadata || {}, lyc = md.lycee_technique === true || md.lycee_technique === 'true';
+      if (filterLycee === 'oui' && !lyc) return false;
+      if (filterLycee === 'non' && lyc) return false;
       if (filterFiliere && md.filiere !== filterFiliere) return false;
-      if (filterSearch) {
-        var s = ((m.prenom || '') + ' ' + (m.nom || '') + ' ' + (m.email || '')).toLowerCase();
-        if (!s.includes(filterSearch)) return false;
-      }
+      if (filterSearch) { var s = ((m.prenom || '') + ' ' + (m.nom || '') + ' ' + (m.email || '')).toLowerCase(); if (!s.includes(filterSearch)) return false; }
       return true;
     });
     _smAllMembers = all;
-
-    // Calcul unique partagé par toutes les vues
     var computed = computeStatsAggregates(all);
-
-    renderKPIs(computed);
-    renderVilleTable(computed.villeEntries, computed.total);
-    renderLyceeTable(computed.lyceeEntries, computed.total);
-    renderMembersTable(all);
-
-    if (window.Chart) {
-      renderCharts(computed);
-    } else {
-      var s2 = document.createElement('script');
-      s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js';
-      s2.onload = function () { renderCharts(computed); };
-      document.head.appendChild(s2);
-    }
-  } catch (e) {
-    document.getElementById('sm-kpis').innerHTML = '<div style="color:var(--danger);grid-column:1/-1;text-align:center;padding:20px;">Erreur : ' + escH(e.message) + '</div>';
-  }
+    renderKPIs(computed); renderVilleTable(computed.villeEntries, computed.total); renderLyceeTable(computed.lyceeEntries, computed.total); renderMembersTable(all);
+    if (window.Chart) { renderCharts(computed); } else { var s2 = document.createElement('script'); s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js'; s2.onload = function () { renderCharts(computed); }; document.head.appendChild(s2); }
+  } catch (e) { document.getElementById('sm-kpis').innerHTML = '<div style="color:var(--danger);grid-column:1/-1;text-align:center;padding:20px;">Erreur : ' + escH(e.message) + '</div>'; }
 };
 
-// ─── KPIs : affiche les valeurs issues de computeStatsAggregates ─────────
 function renderKPIs(computed) {
   document.getElementById('sm-kpis').innerHTML = [
-    { v: computed.total,      l: 'Total membres',         cls: ''       },
-    { v: computed.avecLyc,    l: 'Avec lycée tech.',      cls: 'blue'   },
-    { v: computed.sansLyc,    l: 'Sans lycée tech.',      cls: 'orange' },
-    { v: computed.nbVilles,   l: 'Villes représentées',  cls: 'purple' },
-    { v: computed.nbLycees,   l: 'Lycées distincts',     cls: 'teal'   },
-    { v: computed.nbFilieres, l: 'Filières distinctes',  cls: 'red'    }
-  ].map(function (k) {
-    return '<div class="sm-kpi ' + k.cls + '"><div class="sm-kpi-val">' + k.v
-      + '</div><div class="sm-kpi-lbl">' + k.l + '</div></div>';
-  }).join('');
+    { v: computed.total, l: 'Total membres', cls: '' },
+    { v: computed.avecLyc, l: 'Avec lycée tech.', cls: 'blue' },
+    { v: computed.sansLyc, l: 'Sans lycée tech.', cls: 'orange' },
+    { v: computed.nbVilles, l: 'Villes représentées', cls: 'purple' },
+    { v: computed.nbLycees, l: 'Lycées distincts', cls: 'teal' },
+    { v: computed.nbFilieres, l: 'Filières distinctes', cls: 'red' }
+  ].map(function (k) { return '<div class="sm-kpi ' + k.cls + '"><div class="sm-kpi-val">' + k.v + '</div><div class="sm-kpi-lbl">' + k.l + '</div></div>'; }).join('');
 }
 
-// ─── TABLEAU VILLES : même données que graphique villes ──────────────────
 function renderVilleTable(villeEntries, total) {
   var safeTotal = total || 1;
-  var html = villeEntries.length
-    ? villeEntries.map(function (e) {
-        var pct = ((e[1] / safeTotal) * 100).toFixed(1);
-        return '<tr>'
-          + '<td>' + escH(e[0]) + '</td>'
-          + '<td><strong>' + e[1] + '</strong></td>'
-          + '<td class="sm-pct">' + pct + '%</td>'
-          + '<td><div class="sm-bar"><div class="sm-bar-fill" style="width:' + pct + '%"></div></div></td>'
-          + '</tr>';
-      }).join('')
-    : '<tr><td colspan="4" class="sm-empty">Aucune donnée</td></tr>';
+  var html = villeEntries.length ? villeEntries.map(function (e) { var pct = ((e[1] / safeTotal) * 100).toFixed(1); return '<tr><td>' + escH(e[0]) + '</td><td><strong>' + e[1] + '</strong></td><td class="sm-pct">' + pct + '%</td><td><div class="sm-bar"><div class="sm-bar-fill" style="width:' + pct + '%"></div></div></td></tr>'; }).join('') : '<tr><td colspan="4" class="sm-empty">Aucune donnée</td></tr>';
   silentUpdate(document.getElementById('tbl-ville-body'), html);
 }
 
-// ─── TABLEAU LYCÉES : même données que graphique lycées ──────────────────
 function renderLyceeTable(lyceeEntries, total) {
   var safeTotal = total || 1;
-  var html = lyceeEntries.length
-    ? lyceeEntries.map(function (e) {
-        var pct  = ((e[1] / safeTotal) * 100).toFixed(1);
-        var barW = Math.min(parseFloat(pct) * 5, 100);
-        return '<tr>'
-          + '<td>' + escH(e[0]) + '</td>'
-          + '<td><strong>' + e[1] + '</strong></td>'
-          + '<td class="sm-pct">' + pct + '%</td>'
-          + '<td><div class="sm-bar"><div class="sm-bar-fill" style="width:' + barW + '%"></div></div></td>'
-          + '</tr>';
-      }).join('')
-    : '<tr><td colspan="4" class="sm-empty">Aucun lycée renseigné</td></tr>';
-  silentUpdate(document.getElementById('tbl-lycee-body'), html);
+  var html = lyceeEntries.length ? lyceeEntries.map(function (e) { var pct = ((e[1] / safeTotal) * 100).toFixed(1); var barW = Math.min(parseFloat(pct) * 5, 100); return '<tr><td>' + escH(e[0]) + '</td><td><strong>' + e[1] + '</strong></td><td class="sm-pct">' + pct + '%</td><td><div class="sm-bar"><div class="sm-bar-fill" style="width:' + barW + '%"></div></div></td></tr>'; }).join('') : '<tr><td colspan="4" class="sm-empty">Aucun lycée renseigné</td></tr>';
   silentUpdate(document.getElementById('tbl-lycee-body'), html);
 }
 
-// ─── LISTE MEMBRES ────────────────────────────────────────────────────────
 function renderMembersTable(membres) {
-  var lbl = document.getElementById('sm-count-lbl');
-  if (lbl) lbl.textContent = '(' + membres.length + ')';
-  var html = membres.length
-    ? membres.map(function (m) {
-        var md    = m.metadata || {};
-        var photo = escH(m.photo || window.FALLBACK_AVATAR);
-        var lyc   = md.lycee_technique === true || md.lycee_technique === 'true';
-        return '<tr>'
-          + '<td><img src="' + photo + '" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);" onerror="window.avatarOnError(this)"></td>'
-          + '<td>' + escH((m.prenom || '') + ' ' + (m.nom || '')) + '</td>'
-          + '<td style="font-size:.78rem;">' + escH(m.email || '') + '</td>'
-          + '<td>' + escH(m.ville || '—') + '</td>'
-          + '<td style="text-align:center;"><span class="badge ' + (lyc ? 'badge-green' : 'badge-grey') + '">' + (lyc ? '✓ Oui' : 'Non') + '</span></td>'
-          + '<td>' + escH((md.nom_lycee) || '—') + '</td>'
-          + '<td>' + escH((md.filiere)   || '—') + '</td>'
-          + '<td>' + escH(md.annee_depart ? String(md.annee_depart) : '—') + '</td>'
-          + '</tr>';
-      }).join('')
-    : '<tr><td colspan="8" class="sm-empty">Aucun membre correspondant</td></tr>';
+  var lbl = document.getElementById('sm-count-lbl'); if (lbl) lbl.textContent = '(' + membres.length + ')';
+  var html = membres.length ? membres.map(function (m) {
+    var md = m.metadata || {}, photo = escH(m.photo || window.FALLBACK_AVATAR), lyc = md.lycee_technique === true || md.lycee_technique === 'true';
+    return '<tr><td><img src="' + photo + '" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);" onerror="window.avatarOnError(this)"></td>'
+      + '<td>' + escH((m.prenom || '') + ' ' + (m.nom || '')) + '</td><td style="font-size:.78rem;">' + escH(m.email || '') + '</td><td>' + escH(m.ville || '—') + '</td>'
+      + '<td style="text-align:center;"><span class="badge ' + (lyc ? 'badge-green' : 'badge-grey') + '">' + (lyc ? '✓ Oui' : 'Non') + '</span></td>'
+      + '<td>' + escH((md.nom_lycee) || '—') + '</td><td>' + escH((md.filiere) || '—') + '</td><td>' + escH(md.annee_depart ? String(md.annee_depart) : '—') + '</td></tr>';
+  }).join('') : '<tr><td colspan="8" class="sm-empty">Aucun membre correspondant</td></tr>';
   silentUpdate(document.getElementById('tbl-members-stats-body'), html);
 }
 
-// ─── GRAPHIQUES : reçoivent exactement les mêmes agrégats que les KPIs ───
 function renderCharts(computed) {
-  var PALETTE = [
-    '#4CAF50','#2196F3','#FF9800','#9C27B0','#F44336','#00BCD4',
-    '#8BC34A','#3F51B5','#FF5722','#009688','#795548','#607D8B',
-    '#E91E63','#CDDC39','#FFC107','#673AB7'
-  ];
+  var PALETTE = ['#4CAF50','#2196F3','#FF9800','#9C27B0','#F44336','#00BCD4','#8BC34A','#3F51B5','#FF5722','#009688','#795548','#607D8B','#E91E63','#CDDC39','#FFC107','#673AB7'];
   var total = computed.total || 1;
-
-  // Villes — toutes les villes (= KPI nbVilles)
-  buildChart('chart-ville', 'pie',
-    computed.villeEntries.map(function (e) { return e[0]; }),
-    computed.villeEntries.map(function (e) { return e[1]; }),
-    PALETTE, false, total
-  );
-
-  // Lycées — tous les lycées (= KPI nbLycees)
-  buildChart('chart-lycee', 'bar',
-    computed.lyceeEntries.map(function (e) { return e[0]; }),
-    computed.lyceeEntries.map(function (e) { return e[1]; }),
-    PALETTE, true, total
-  );
-
-  // Lycée oui/non
-  buildChart('chart-has-lycee', 'doughnut',
-    ['Avec lycée technique', 'Sans lycée technique'],
-    [computed.avecLyc, computed.sansLyc],
-    ['#4CAF50', '#9e9e9e'], false, total
-  );
-
-  // Filières — toutes les filières (= KPI nbFilieres)
-  buildChart('chart-filiere', 'bar',
-    computed.filiereEntries.map(function (e) { return e[0]; }),
-    computed.filiereEntries.map(function (e) { return e[1]; }),
-    PALETTE, false, total
-  );
+  buildChart('chart-ville', 'pie', computed.villeEntries.map(function (e) { return e[0]; }), computed.villeEntries.map(function (e) { return e[1]; }), PALETTE, false, total);
+  buildChart('chart-lycee', 'bar', computed.lyceeEntries.map(function (e) { return e[0]; }), computed.lyceeEntries.map(function (e) { return e[1]; }), PALETTE, true, total);
+  buildChart('chart-has-lycee', 'doughnut', ['Avec lycée technique', 'Sans lycée technique'], [computed.avecLyc, computed.sansLyc], ['#4CAF50', '#9e9e9e'], false, total);
+  buildChart('chart-filiere', 'bar', computed.filiereEntries.map(function (e) { return e[0]; }), computed.filiereEntries.map(function (e) { return e[1]; }), PALETTE, false, total);
 }
 
 function buildChart(canvasId, type, labels, data, colors, horizontal, totalMembers) {
   var canvas = document.getElementById(canvasId); if (!canvas) return;
   if (_smCharts[canvasId]) { _smCharts[canvasId].destroy(); delete _smCharts[canvasId]; }
-  var isBar = (type === 'bar');
-  var isPie = (type === 'pie' || type === 'doughnut');
-  var maxTickLen = 16;
+  var isBar = (type === 'bar'), isPie = (type === 'pie' || type === 'doughnut'), maxTickLen = 16;
   var bgColors = labels.map(function (_, i) { return colors[i % colors.length]; });
-  var maxVal = data.length ? Math.max.apply(null, data) : 1;
-  var yMax = Math.ceil(maxVal * 1.15) || 2;
+  var maxVal = data.length ? Math.max.apply(null, data) : 1, yMax = Math.ceil(maxVal * 1.15) || 2;
   var options = {
     responsive: true, maintainAspectRatio: false,
     plugins: {
-      legend: {
-        display: isPie, position: 'bottom',
-        labels: {
-          font: { size: 11 }, boxWidth: 12,
-          generateLabels: function (chart) {
-            var original = window.Chart.defaults.plugins.legend.labels.generateLabels(chart);
-            original.forEach(function (lbl) { if (lbl.text && lbl.text.length > 22) lbl.text = lbl.text.slice(0, 22) + '…'; });
-            return original;
-          }
-        }
-      },
-      tooltip: {
-        callbacks: {
-          title: function (items) { return items[0].label || ''; },
-          label: function (ctx) {
-            var val = isBar ? (horizontal ? ctx.parsed.x : ctx.parsed.y) : ctx.parsed;
-            var tot = totalMembers || ctx.dataset.data.reduce(function (a, b) { return a + b; }, 0) || 1;
-            var pct = ((val / tot) * 100).toFixed(1);
-            return ' ' + val + ' membre' + (val > 1 ? 's' : '') + ' (' + pct + '%)';
-          }
-        }
-      }
+      legend: { display: isPie, position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12, generateLabels: function (chart) { var original = window.Chart.defaults.plugins.legend.labels.generateLabels(chart); original.forEach(function (lbl) { if (lbl.text && lbl.text.length > 22) lbl.text = lbl.text.slice(0, 22) + '…'; }); return original; } } },
+      tooltip: { callbacks: { title: function (items) { return items[0].label || ''; }, label: function (ctx) { var val = isBar ? (horizontal ? ctx.parsed.x : ctx.parsed.y) : ctx.parsed; var tot = totalMembers || ctx.dataset.data.reduce(function (a, b) { return a + b; }, 0) || 1; var pct = ((val / tot) * 100).toFixed(1); return ' ' + val + ' membre' + (val > 1 ? 's' : '') + ' (' + pct + '%)'; } } }
     }
   };
   if (isBar) {
-    if (horizontal) {
-      options.indexAxis = 'y';
-      options.scales = {
-        x: { beginAtZero: true, max: yMax, ticks: { font: { size: 11 }, stepSize: 1, callback: function (val) { return Number.isInteger(val) ? val : ''; } }, grid: { color: '#f0f0f0' } },
-        y: { ticks: { font: { size: 11 }, callback: function (val, index) { var lbl = this.getLabelForValue(index); if (!lbl) return ''; return lbl.length > maxTickLen ? lbl.slice(0, maxTickLen) + '…' : lbl; } }, grid: { display: false } }
-      };
-    } else {
-      options.scales = {
-        x: { ticks: { font: { size: 11 }, maxRotation: 35, minRotation: 0, callback: function (val, index) { var lbl = this.getLabelForValue(index); if (!lbl) return ''; return lbl.length > maxTickLen ? lbl.slice(0, maxTickLen) + '…' : lbl; } }, grid: { display: false } },
-        y: { beginAtZero: true, max: yMax, ticks: { font: { size: 11 }, stepSize: 1, callback: function (val) { return Number.isInteger(val) ? val : ''; } }, grid: { color: '#f0f0f0' } }
-      };
-    }
+    if (horizontal) { options.indexAxis = 'y'; options.scales = { x: { beginAtZero: true, max: yMax, ticks: { font: { size: 11 }, stepSize: 1, callback: function (val) { return Number.isInteger(val) ? val : ''; } }, grid: { color: '#f0f0f0' } }, y: { ticks: { font: { size: 11 }, callback: function (val, index) { var lbl = this.getLabelForValue(index); if (!lbl) return ''; return lbl.length > maxTickLen ? lbl.slice(0, maxTickLen) + '…' : lbl; } }, grid: { display: false } } }; }
+    else { options.scales = { x: { ticks: { font: { size: 11 }, maxRotation: 35, minRotation: 0, callback: function (val, index) { var lbl = this.getLabelForValue(index); if (!lbl) return ''; return lbl.length > maxTickLen ? lbl.slice(0, maxTickLen) + '…' : lbl; } }, grid: { display: false } }, y: { beginAtZero: true, max: yMax, ticks: { font: { size: 11 }, stepSize: 1, callback: function (val) { return Number.isInteger(val) ? val : ''; } }, grid: { color: '#f0f0f0' } } }; }
   }
-  _smCharts[canvasId] = new window.Chart(canvas, {
-    type: type,
-    data: {
-      labels: labels.length ? labels : ['Aucune donnée'],
-      datasets: [{ data: data.length ? data : [1], backgroundColor: bgColors, borderColor: isBar ? bgColors : isPie ? 'white' : 'white', borderWidth: isBar ? 0 : 2, borderRadius: isBar ? 4 : 0, hoverBorderWidth: isBar ? 0 : 2 }]
-    },
-    options: options
-  });
+  _smCharts[canvasId] = new window.Chart(canvas, { type: type, data: { labels: labels.length ? labels : ['Aucune donnée'], datasets: [{ data: data.length ? data : [1], backgroundColor: bgColors, borderColor: isBar ? bgColors : isPie ? 'white' : 'white', borderWidth: isBar ? 0 : 2, borderRadius: isBar ? 4 : 0, hoverBorderWidth: isBar ? 0 : 2 }] }, options: options });
 }
 
 window.resetStatsFilters = function () {
   ['sm-filter-ville', 'sm-filter-lycee', 'sm-filter-filiere'].forEach(function (id) { var el = document.getElementById(id); if (el) el.value = ''; });
   var se = document.getElementById('sm-filter-search'); if (se) se.value = '';
   window.loadStatsMembers();
-};
-window.exportStatsCSV = function () {
-  if (!_smAllMembers.length) { window.showToast('Aucune donnée à exporter', 'warning'); return; }
-  window.showToast('Export en cours…', 'info', 2000);
-  window.exportAll();
 };
 
 // ═══════════════ NOTIFICATIONS PANEL ═══════════════
@@ -1495,9 +1060,7 @@ async function loadNotificationsPanel() {
         + '<button class="notif-item-del" onclick="deleteOneNotif(\'' + n.id + '\')" title="Supprimer"><i class="fas fa-times"></i></button>'
         + '</div>';
     }).join('');
-    var savedScroll = el.scrollTop;
-    silentUpdate(el, newHtml);
-    el.scrollTop = savedScroll;
+    var savedScroll = el.scrollTop; silentUpdate(el, newHtml); el.scrollTop = savedScroll;
   } catch (e) { if (isFirstLoad) el.innerHTML = '<div style="padding:20px;text-align:center;color:var(--danger);">Erreur</div>'; }
 }
 window.navigateFromNotif = async function (type, link, notifId) {
@@ -1549,7 +1112,6 @@ window.sendNotification = async function () {
     var inserts = recipients.map(function (uid) { return { user_id: uid, title: title, message: message, type: 'announcement', is_read: false, created_at: new Date().toISOString() }; });
     var r2 = await window.supabase.from('notifications').insert(inserts);
     if (r2.error) throw r2.error;
-    logAdminAction('notification_send', 'notifications', 'batch', null, 'Notification "' + title + '" envoyée à ' + recipients.length + ' membre(s)', false);
     showFbEl(fb, 'Envoyé à ' + recipients.length + ' membre(s) !', 'ok');
     document.getElementById('notif-title').value = ''; document.getElementById('notif-message').value = '';
   } catch (e) { showFbEl(fb, 'Erreur : ' + e.message, 'err'); }
@@ -1567,9 +1129,7 @@ function renderAccessUI() { renderAccessGroup('access-pages', ACCESS_PAGES, 'mem
 function renderAccessGroup(containerId, items, role, isPanel) {
   var el = document.getElementById(containerId); if (!el) return;
   el.innerHTML = items.map(function (item) {
-    var key = (isPanel ? 'dashboard' : item) + ':' + (isPanel ? item : '_');
-    var allowed = _accessRules[key] !== false;
-    var swId = 'sw-' + key.replace(':', '_');
+    var key = (isPanel ? 'dashboard' : item) + ':' + (isPanel ? item : '_'), allowed = _accessRules[key] !== false, swId = 'sw-' + key.replace(':', '_');
     return '<div class="access-toggle-row"><label for="' + swId + '">' + window.escapeHtml(ACCESS_LABELS[item] || item) + '</label>'
       + '<label class="toggle-sw"><input type="checkbox" id="' + swId + '" data-key="' + key + '" data-role="' + role + '" data-page="' + (isPanel ? 'dashboard' : item) + '" data-panel="' + (isPanel ? item : '') + '"' + (allowed ? ' checked' : '') + '>'
       + '<span class="tog-slider"></span></label></div>';
@@ -1585,7 +1145,6 @@ window.saveAccessRules = async function () {
     var delR = await window.supabase.from('access_rules').delete().eq('role', 'member'); if (delR.error) throw delR.error;
     if (inserts.length) { var insR = await window.supabase.from('access_rules').insert(inserts); if (insR.error) throw insR.error; }
     _accessRules = {}; inserts.forEach(function (r) { var key = r.page + ':' + (r.panel || '_'); _accessRules[key] = r.allowed; });
-    logAdminAction('access_rule_update', 'access_rules', 'member', null, 'Regles acces membres mises a jour (' + inserts.length + ' regles)', false);
     showFb('access-fb', 'Restrictions enregistrées !', 'ok'); window.showToast('Accès sauvegardés', 'success'); broadcastAccessRules();
   } catch (e) { showFb('access-fb', 'Erreur : ' + e.message, 'err'); }
 };
@@ -1620,9 +1179,7 @@ async function loadOverview() {
       { v: r[4].count || 0, l: 'Photos galerie', ic: 'ic-teal', i: 'fa-images' },
       { v: r[5].count || 0, l: 'Équipe', ic: 'ic-red', i: 'fa-user-tie' }
     ];
-    var statsHtml = stats.map(function (s) {
-      return '<div class="stat-card"><div class="stat-icon ' + s.ic + '"><i class="fas ' + s.i + '"></i></div><div><div class="stat-val">' + s.v + '</div><div class="stat-lbl">' + s.l + '</div></div></div>';
-    }).join('');
+    var statsHtml = stats.map(function (s) { return '<div class="stat-card"><div class="stat-icon ' + s.ic + '"><i class="fas ' + s.i + '"></i></div><div><div class="stat-val">' + s.v + '</div><div class="stat-lbl">' + s.l + '</div></div></div>'; }).join('');
     silentUpdate(document.getElementById('ov-stats'), statsHtml);
     silentBadge(document.getElementById('pending-badge'), r[1].count || 0);
   } catch (e) {}
@@ -1659,14 +1216,11 @@ async function loadMembers() {
 }
 
 function memberRow(u) {
-  var photo = window.escapeHtml(u.photo || window.FALLBACK_AVATAR);
-  var d = new Date(u.created_at).toLocaleDateString('fr-FR');
+  var photo = window.escapeHtml(u.photo || window.FALLBACK_AVATAR), d = new Date(u.created_at).toLocaleDateString('fr-FR');
   var roleColors = { super_admin: 'badge-red', admin: 'badge-blue', member: 'badge-green', pending: 'badge-orange', inactive: 'badge-grey' };
-  var rb = roleColors[u.role] || 'badge-grey';
-  var sb2 = u.status === 'active' ? 'badge-green' : u.status === 'pending' ? 'badge-orange' : 'badge-red';
+  var rb = roleColors[u.role] || 'badge-grey', sb2 = u.status === 'active' ? 'badge-green' : u.status === 'pending' ? 'badge-orange' : 'badge-red';
   var bb = u.is_bureau ? '<span class="badge badge-purple">✓ Bureau</span>' : '—';
-  var md = u.metadata || {};
-  var lyc = md.lycee_technique === true || md.lycee_technique === 'true';
+  var md = u.metadata || {}, lyc = md.lycee_technique === true || md.lycee_technique === 'true';
   var lycText = lyc ? (md.nom_lycee ? truncT(md.nom_lycee, 18) : 'Oui') : '—';
   var phone = window.escapeHtml(u.phone || u.telephone || md.telephone || '—');
   var isSA = currentUser.role === 'super_admin';
@@ -1690,178 +1244,25 @@ function memberRow(u) {
     + '</div></td></tr>';
 }
 
-// ═══════════════ EXPORT COMPLET ═══════════════
-// Collecte TOUTES les données du dashboard et lance l'export Excel
-window.exportAll = async function () {
-  if (window.showToast) window.showToast('Collecte des données…', 'info', 2000);
-  try {
-    // Récupérer les données depuis Supabase
-    var results = await Promise.allSettled([
-      window.supabase.from('users').select('*').in('role', ['member', 'admin', 'super_admin']).order('prenom'),
-      window.supabase.from('events').select('*').order('date', { ascending: false }),
-      window.supabase.from('activities').select('*').order('date', { ascending: false }),
-      window.supabase.from('team').select('*').order('display_order'),
-      window.supabase.from('announcements').select('*').order('created_at', { ascending: false }),
-      window.supabase.from('event_registrations').select('*,user:user_id(id,nom,prenom,email,telephone,phone,ville,metadata),event:event_id(id,title,date)').order('registered_at', { ascending: false }),
-    ]);
-
-    function getData(r) { return r.status === 'fulfilled' && !r.value.error ? (r.value.data || []) : []; }
-
-    var rawMembers = getData(results[0]);
-    var allData = {
-      members: rawMembers.map(function(u) {
-        var md = u.metadata || {};
-        return {
-          prenom: u.prenom || '', nom: u.nom || '', email: u.email || '',
-          telephone: u.phone || u.telephone || md.telephone || '',
-          ville: u.ville || '', role: u.role || 'member', status: u.status || 'active',
-          bureau: !!u.is_bureau,
-          lycee_technique: md.lycee_technique === true || md.lycee_technique === 'true' || u.lycee_technique === true,
-          nom_lycee: md.nom_lycee || u.nom_lycee || '',
-          filiere: md.filiere || u.filiere || '',
-          annee_depart: md.annee_depart || u.annee_depart || null,
-          date_inscription: (u.created_at || '').slice(0, 10),
-          motivation: u.motivation || '',
-          metadata: md,
-        };
-      }),
-      events:        getData(results[1]),
-      activities:    getData(results[2]),
-      team:          getData(results[3]),
-      announcements: getData(results[4]),
-      registrations: getData(results[5]),
-    };
-
-    var logoB64 = null;
-    try {
-      var logoEl = document.querySelector('.logo-img');
-      if (logoEl && logoEl.src && logoEl.src.startsWith('data:')) logoB64 = logoEl.src;
-    } catch (_) {}
-
-    // Charger le logo depuis l'URL si pas encore en base64
-    if (!logoB64) {
-      try {
-        var logoElSrc = (document.querySelector('.logo-img') || {}).src || '';
-        if (logoElSrc && !logoElSrc.startsWith('data:')) {
-          var resp = await fetch(logoElSrc);
-          if (resp.ok) {
-            var blob = await resp.blob();
-            logoB64 = await new Promise(function(res) {
-              var reader = new FileReader();
-              reader.onload = function() { res(reader.result); };
-              reader.readAsDataURL(blob);
-            });
-          }
-        }
-      } catch (_) {}
-    }
-
-    if (window.NgozExport && window.NgozExport.exportAll) {
-      window.NgozExport.exportAll(allData, {
-        filename: 'ngozistes_export_complet_' + new Date().toISOString().slice(0, 10) + '.xlsx',
-        orgName:  'Ngozistes du Royaume',
-        logoB64:  logoB64,
-      });
-    } else {
-      // Fallback : export membres uniquement
-      window.showToast('Module export en cours de chargement…', 'info', 2000);
-      setTimeout(function() { window.exportAll(); }, 1500);
-    }
-  } catch (e) {
-    if (window.showToast) window.showToast('Erreur export : ' + e.message, 'error');
-    console.error(e);
-  }
-};
-
-// Rétro-compatibilité : export membres seuls
-function _runExport(members, filename, logoB64) {
-  if (window.NgozExport && window.NgozExport.exportMembres) {
-    window.NgozExport.exportMembres(members, { filename: filename, orgName: 'Ngozistes du Royaume', logoB64: logoB64 || null });
-    return;
-  }
-  // Attendre le chargement
-  var tries = 0;
-  var wait = setInterval(function() {
-    tries++;
-    if (window.NgozExport) {
-      clearInterval(wait);
-      window.NgozExport.exportMembres(members, { filename: filename, orgName: 'Ngozistes du Royaume', logoB64: logoB64 || null });
-    } else if (tries > 30) {
-      clearInterval(wait);
-      _exportFallbackCSV(members, filename.replace('.xlsx', '.csv'));
-    }
-  }, 300);
-}
-
-// Fallback CSV si Excel impossible
-function _exportFallbackCSV(members, filename) {
-  var cols = [
-    { key:'prenom', label:'Prénom' }, { key:'nom', label:'Nom' }, { key:'email', label:'Email' },
-    { key:'telephone', label:'Téléphone' }, { key:'ville', label:'Ville' },
-    { key:'role', label:'Rôle' }, { key:'status', label:'Statut' }, { key:'bureau', label:'Bureau' },
-    { key:'lycee_technique', label:'Lycée technique' }, { key:'nom_lycee', label:'Nom lycée' },
-    { key:'filiere', label:'Filière' }, { key:'annee_depart', label:'Année départ' },
-    { key:'date_inscription', label:'Date inscription' },
-  ];
-  function csvCell(v) {
-    if (v === null || v === undefined) return '""';
-    return '"' + String(v === true ? 'Oui' : v === false ? 'Non' : v).replace(/"/g, '""') + '"';
-  }
-  var header = cols.map(function(c){ return csvCell(c.label); }).join(';');
-  var rows   = members.map(function(m){ return cols.map(function(c){ return csvCell(m[c.key]); }).join(';'); });
-  var csv    = '\uFEFF' + header + '\n' + rows.join('\n');
-  var blob   = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  var url    = URL.createObjectURL(blob);
-  var a      = document.createElement('a');
-  a.href = url; a.download = filename; a.click();
-  setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
-  window.showToast(members.length + ' membres exportés (CSV)', 'success');
-}
-
-
-window.exportMembersCSV = function () {
-  if (!membersCache.length) { window.showToast('Aucun membre à exporter', 'warning'); return; }
-  window.showToast('Export en cours…', 'info', 2000);
-  window.exportAll();
-};
-
 window.editMemberRoleStatus = async function (id) {
   var u = membersCache.find(function (m) { return m.id === id; });
   if (!u) { window.showToast('Membre introuvable', 'error'); return; }
   var html = '<h2 class="modal-title"><i class="fas fa-user-edit" style="color:var(--primary);margin-right:8px;"></i>Modifier rôle &amp; statut</h2>'
-    + '<div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">'
-    + '<img src="' + window.escapeHtml(u.photo || window.FALLBACK_AVATAR) + '" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:3px solid var(--primary);" onerror="window.avatarOnError(this)">'
-    + '<div><strong style="font-size:1.05rem;">' + window.escapeHtml((u.prenom || '') + ' ' + (u.nom || '')) + '</strong>'
-    + '<div style="font-size:.83rem;color:var(--text);">' + window.escapeHtml(u.email || '') + '</div></div></div>'
-    + '<div class="role-status-form"><h4><i class="fas fa-id-badge" style="color:var(--primary);"></i> Rôle</h4>'
-    + '<div class="fg" style="margin-bottom:0;"><select id="edit-role" style="width:100%;padding:10px 13px;border:1px solid #ddd;border-radius:var(--radius);font-size:.88rem;">'
-    + '<option value="member"' + (u.role === 'member' ? ' selected' : '') + '>member — Membre standard</option>'
-    + '<option value="admin"' + (u.role === 'admin' ? ' selected' : '') + '>admin — Administrateur</option>'
-    + '<option value="super_admin"' + (u.role === 'super_admin' ? ' selected' : '') + '>super_admin — Super Admin</option>'
-    + '</select></div></div>'
-    + '<div class="role-status-form" style="margin-top:12px;"><h4><i class="fas fa-toggle-on" style="color:var(--primary);"></i> Statut</h4>'
-    + '<div class="fg" style="margin-bottom:0;"><select id="edit-status" style="width:100%;padding:10px 13px;border:1px solid #ddd;border-radius:var(--radius);font-size:.88rem;">'
-    + '<option value="active"' + (u.status === 'active' ? ' selected' : '') + '>active — Compte actif</option>'
-    + '<option value="inactive"' + (u.status === 'inactive' ? ' selected' : '') + '>inactive — Compte désactivé</option>'
-    + '<option value="pending"' + (u.status === 'pending' ? ' selected' : '') + '>pending — En attente d\'approbation</option>'
-    + '</select></div></div>'
-    + '<div id="edit-rs-fb" style="margin-top:10px;"></div>'
-    + '<div class="form-btns"><button class="btn-primary" onclick="saveMemberRoleStatus(\'' + id + '\')">'
-    + '<i class="fas fa-save"></i> Enregistrer</button></div>';
+    + '<div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;"><img src="' + window.escapeHtml(u.photo || window.FALLBACK_AVATAR) + '" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:3px solid var(--primary);" onerror="window.avatarOnError(this)"><div><strong style="font-size:1.05rem;">' + window.escapeHtml((u.prenom || '') + ' ' + (u.nom || '')) + '</strong><div style="font-size:.83rem;color:var(--text);">' + window.escapeHtml(u.email || '') + '</div></div></div>'
+    + '<div class="role-status-form"><h4><i class="fas fa-id-badge" style="color:var(--primary);"></i> Rôle</h4><div class="fg" style="margin-bottom:0;"><select id="edit-role" style="width:100%;padding:10px 13px;border:1px solid #ddd;border-radius:var(--radius);font-size:.88rem;"><option value="member"' + (u.role === 'member' ? ' selected' : '') + '>member — Membre standard</option><option value="admin"' + (u.role === 'admin' ? ' selected' : '') + '>admin — Administrateur</option><option value="super_admin"' + (u.role === 'super_admin' ? ' selected' : '') + '>super_admin — Super Admin</option></select></div></div>'
+    + '<div class="role-status-form" style="margin-top:12px;"><h4><i class="fas fa-toggle-on" style="color:var(--primary);"></i> Statut</h4><div class="fg" style="margin-bottom:0;"><select id="edit-status" style="width:100%;padding:10px 13px;border:1px solid #ddd;border-radius:var(--radius);font-size:.88rem;"><option value="active"' + (u.status === 'active' ? ' selected' : '') + '>active — Compte actif</option><option value="inactive"' + (u.status === 'inactive' ? ' selected' : '') + '>inactive — Compte désactivé</option><option value="pending"' + (u.status === 'pending' ? ' selected' : '') + '>pending — En attente</option></select></div></div>'
+    + '<div id="edit-rs-fb" style="margin-top:10px;"></div><div class="form-btns"><button class="btn-primary" onclick="saveMemberRoleStatus(\'' + id + '\')"><i class="fas fa-save"></i> Enregistrer</button></div>';
   document.getElementById('modal-content').innerHTML = html;
   openModalEl();
 };
 
 window.saveMemberRoleStatus = async function (id) {
-  var newRole = document.getElementById('edit-role').value;
-  var newStatus = document.getElementById('edit-status').value;
-  var fb = document.getElementById('edit-rs-fb');
+  var newRole = document.getElementById('edit-role').value, newStatus = document.getElementById('edit-status').value, fb = document.getElementById('edit-rs-fb');
   showFbEl(fb, 'Enregistrement…', 'ok');
   try {
     var r = await window.supabase.from('users').update({ role: newRole, status: newStatus, updated_at: new Date().toISOString() }).eq('id', id);
     if (r.error) throw r.error;
     showFbEl(fb, '✅ Mis à jour avec succès !', 'ok');
-    logAdminAction('user_update', 'users', id, null, 'Rôle → ' + newRole + ', Statut → ' + newStatus + ' pour user ' + id, true);
     try { await window.supabase.from('notifications').insert([{ user_id: id, title: 'Mise à jour de votre compte', message: 'Votre rôle est désormais "' + newRole + '" et votre statut "' + newStatus + '".', type: 'info', is_read: false, created_at: new Date().toISOString() }]); } catch (_) {}
     window.showToast('Rôle et statut mis à jour', 'success');
     setTimeout(function () { closeModal(); loadMembers(); }, 1000);
@@ -1902,27 +1303,21 @@ window.approveUser = async function (id) {
 window.rejectUser = async function (id) {
   if (!confirm('Supprimer cette demande ?')) return;
   try {
-    var rjData = await window.supabase.from('users').select('*').eq('id', id).single();
     var r = await window.supabase.from('users').delete().eq('id', id);
     if (r.error) throw r.error;
-    logAdminAction('user_reject', 'users', id, rjData.data, 'Rejet de ' + ((rjData.data && rjData.data.prenom)||'') + ' ' + ((rjData.data && rjData.data.nom)||''), false);
     window.showToast('Demande supprimée', 'success'); await Promise.all([loadPending(), loadOverview()]);
   } catch (e) { window.showToast('Erreur : ' + e.message, 'error'); }
 };
 window.toggleStatus = async function (id, status) {
   try {
-    var tsData = await window.supabase.from('users').select('prenom,nom,email,status').eq('id', id).single();
     await window.supabase.from('users').update({ status: status }).eq('id', id);
-    logAdminAction('user_update', 'users', id, tsData.data, 'Statut de ' + ((tsData.data && tsData.data.prenom)||'') + ' passé à ' + status, true);
     window.showToast('Statut mis à jour', 'success'); loadMembers();
   } catch (e) { window.showToast('Erreur : ' + e.message, 'error'); }
 };
 window.deleteMember = async function (id) {
   if (!confirm('Supprimer ce membre ? Cette action est irréversible.')) return;
   try {
-    var dmData = await window.supabase.from('users').select('*').eq('id', id).single();
     await window.supabase.from('users').delete().eq('id', id);
-    logAdminAction('user_delete', 'users', id, dmData.data, 'Suppression de ' + ((dmData.data && dmData.data.prenom)||'') + ' ' + ((dmData.data && dmData.data.nom)||'') + ' (' + ((dmData.data && dmData.data.email)||'') + ')', true);
     window.showToast('Membre supprimé', 'success'); loadMembers();
   } catch (e) { window.showToast('Erreur : ' + e.message, 'error'); }
 };
@@ -1931,18 +1326,11 @@ window.viewMember = async function (id) {
   try {
     var r = await window.supabase.from('users').select('*').eq('id', id).single();
     if (r.error || !r.data) return;
-    var u = r.data, photo = window.escapeHtml(u.photo || window.FALLBACK_AVATAR);
-    var md = u.metadata || {};
-    var lycInfo = md.lycee_technique ?
-      '<div style="margin-top:10px;padding:10px;background:#f0f9f0;border-radius:6px;font-size:.84rem;">'
-      + '<strong><i class="fas fa-school" style="color:var(--primary);margin-right:4px;"></i>Lycée technique</strong><br>'
-      + 'Nom : ' + window.escapeHtml(md.nom_lycee || '—') + '<br>'
-      + 'Filière : ' + window.escapeHtml(md.filiere || '—') + '<br>'
-      + 'Année départ : ' + window.escapeHtml(md.annee_depart ? String(md.annee_depart) : '—') + '</div>' : '';
+    var u = r.data, photo = window.escapeHtml(u.photo || window.FALLBACK_AVATAR), md = u.metadata || {};
+    var lycInfo = md.lycee_technique ? '<div style="margin-top:10px;padding:10px;background:#f0f9f0;border-radius:6px;font-size:.84rem;"><strong><i class="fas fa-school" style="color:var(--primary);margin-right:4px;"></i>Lycée technique</strong><br>Nom : ' + window.escapeHtml(md.nom_lycee || '—') + '<br>Filière : ' + window.escapeHtml(md.filiere || '—') + '<br>Année départ : ' + window.escapeHtml(md.annee_depart ? String(md.annee_depart) : '—') + '</div>' : '';
     var phone = u.phone || u.telephone || md.telephone || '';
     document.getElementById('modal-content').innerHTML = '<h2 class="modal-title">Fiche membre</h2>'
-      + '<div style="display:flex;gap:18px;align-items:flex-start;margin-bottom:14px;">'
-      + '<img src="' + photo + '" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--primary);" onerror="window.avatarOnError(this)">'
+      + '<div style="display:flex;gap:18px;align-items:flex-start;margin-bottom:14px;"><img src="' + photo + '" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--primary);" onerror="window.avatarOnError(this)">'
       + '<div style="flex:1;"><strong style="font-size:1.05rem;">' + window.escapeHtml((u.prenom || '') + ' ' + (u.nom || '')) + '</strong>'
       + '<div style="font-size:.83rem;color:var(--text);margin-top:2px;"><i class="fas fa-envelope" style="width:14px;"></i> ' + window.escapeHtml(u.email || '') + '</div>'
       + (phone ? '<div style="font-size:.83rem;color:var(--text);margin-top:2px;"><i class="fas fa-phone" style="width:14px;"></i> ' + window.escapeHtml(phone) + '</div>' : '')
@@ -1950,13 +1338,10 @@ window.viewMember = async function (id) {
       + '<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">'
       + '<span class="badge ' + ({ super_admin: 'badge-red', admin: 'badge-blue', member: 'badge-green', pending: 'badge-orange' }[u.role] || 'badge-grey') + '">' + window.escapeHtml(u.role || '') + '</span>'
       + '<span class="badge ' + (u.status === 'active' ? 'badge-green' : u.status === 'pending' ? 'badge-orange' : 'badge-red') + '">' + window.escapeHtml(u.status || '') + '</span>'
-      + (u.is_bureau ? '<span class="badge badge-purple">✓ Bureau</span>' : '')
-      + '</div></div></div>'
-      + (lycInfo)
+      + (u.is_bureau ? '<span class="badge badge-purple">✓ Bureau</span>' : '') + '</div></div></div>'
+      + lycInfo
       + (u.motivation ? '<div style="margin-top:14px;"><strong style="font-size:.88rem;">Motivation :</strong><p style="font-size:.88rem;margin-top:6px;line-height:1.6;color:var(--dark);">' + window.escapeHtml(u.motivation) + '</p></div>' : '')
-      + (currentUser.role === 'super_admin' ? '<div style="margin-top:14px;padding-top:12px;border-top:1px solid #eee;display:flex;gap:8px;flex-wrap:wrap;">'
-        + '<button class="btn-action role-edit" onclick="closeModal();editMemberRoleStatus(\'' + u.id + '\');"><i class="fas fa-user-edit"></i> Modifier rôle/statut</button>'
-        + '</div>' : '');
+      + (currentUser.role === 'super_admin' ? '<div style="margin-top:14px;padding-top:12px;border-top:1px solid #eee;display:flex;gap:8px;flex-wrap:wrap;"><button class="btn-action role-edit" onclick="closeModal();editMemberRoleStatus(\'' + u.id + '\');"><i class="fas fa-user-edit"></i> Modifier rôle/statut</button></div>' : '');
     openModalEl();
   } catch (e) { window.showToast('Erreur', 'error'); }
 };
@@ -1969,8 +1354,7 @@ async function loadEvents() {
     if (r.error) throw r.error;
     var html = (r.data || []).length ? (r.data || []).map(function (ev) {
       var d = new Date(ev.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
-      var img = window.escapeHtml(ev.image || window.FALLBACK_IMG);
-      var sb2 = ev.status === 'published' ? 'badge-green' : ev.status === 'draft' ? 'badge-grey' : 'badge-red';
+      var img = window.escapeHtml(ev.image || window.FALLBACK_IMG), sb2 = ev.status === 'published' ? 'badge-green' : ev.status === 'draft' ? 'badge-grey' : 'badge-red';
       return '<tr><td><img src="' + img + '" style="width:50px;height:36px;border-radius:4px;object-fit:cover;" onerror="window.imgOnError(this)"></td>'
         + '<td>' + window.escapeHtml(ev.title || '') + '</td><td>' + d + '</td>'
         + '<td>' + window.escapeHtml(window.truncateText(ev.location || '—', 16)) + '</td>'
@@ -1988,8 +1372,7 @@ async function loadActivities() {
     var r = await window.supabase.from('activities').select('*').order('date', { ascending: false });
     if (r.error) throw r.error; activitiesCache = r.data || [];
     var html = activitiesCache.length ? activitiesCache.map(function (a) {
-      var d = a.date ? new Date(a.date).toLocaleDateString('fr-FR') : '—';
-      var img = window.escapeHtml(a.image || window.FALLBACK_IMG);
+      var d = a.date ? new Date(a.date).toLocaleDateString('fr-FR') : '—', img = window.escapeHtml(a.image || window.FALLBACK_IMG);
       return '<tr><td><img src="' + img + '" style="width:50px;height:36px;border-radius:4px;object-fit:cover;" onerror="window.imgOnError(this)"></td>'
         + '<td>' + window.escapeHtml(a.title || '') + '</td><td>' + d + '</td>'
         + '<td><span class="badge badge-blue">' + window.getCategoryLabel(a.category) + '</span></td>'
@@ -2057,8 +1440,7 @@ async function loadReports() {
     if (r.error) throw r.error;
     var html = (r.data || []).length ? (r.data || []).map(function (rp) {
       var d = rp.created_at ? new Date(rp.created_at).toLocaleDateString('fr-FR') : '—';
-      var imgs = Array.isArray(rp.images) ? rp.images : [];
-      var atts = Array.isArray(rp.attachments) ? rp.attachments : [];
+      var imgs = Array.isArray(rp.images) ? rp.images : [], atts = Array.isArray(rp.attachments) ? rp.attachments : [];
       return '<tr><td>' + window.escapeHtml(rp.title || '') + '</td>'
         + '<td>' + window.escapeHtml(rp.activities ? rp.activities.title || '—' : '—') + '</td>'
         + '<td>' + d + '</td>'
@@ -2090,7 +1472,6 @@ window.saveContent = async function (page, section, inputId) {
     if (photo !== undefined) upsertData.photo = photo;
     var r = await window.supabase.from('content_pages').upsert(upsertData, { onConflict: 'page,section' });
     if (r.error) throw r.error;
-    logAdminAction('content_update', 'content_pages', page + '/' + section, null, 'Contenu "' + section + '" de la page "' + page + '" modifié', false);
     showFb('fb-' + section, 'Enregistré !', 'ok');
   } catch (e) { showFb('fb-' + section, 'Erreur : ' + e.message, 'err'); }
 };
@@ -2109,7 +1490,6 @@ window.saveSettings = async function () {
   try {
     var r = await window.supabase.from('settings').update(data).eq('id', 1);
     if (r.error) throw r.error;
-    logAdminAction('settings_update', 'settings', '1', null, 'Paramètres du site modifiés', false);
     showFb('fb-settings', 'Paramètres sauvegardés !', 'ok');
   } catch (e) { showFb('fb-settings', 'Erreur : ' + e.message, 'err'); }
 };
@@ -2130,10 +1510,7 @@ async function loadRegistrations() {
 }
 function renderRegistrations(regs) {
   var tb = document.getElementById('reg-tbody'), summary = document.getElementById('reg-summary');
-  if (!regs || !regs.length) {
-    silentUpdate(tb, '<tr class="empty-row"><td colspan="8">Aucune inscription</td></tr>');
-    if (summary) summary.style.display = 'none'; return;
-  }
+  if (!regs || !regs.length) { silentUpdate(tb, '<tr class="empty-row"><td colspan="8">Aucune inscription</td></tr>'); if (summary) summary.style.display = 'none'; return; }
   var html = regs.map(function (reg) {
     var u = reg.user || {}, ev = reg.event || {};
     var photo = window.escapeHtml(u.photo || window.FALLBACK_AVATAR);
@@ -2166,7 +1543,6 @@ window.cancelRegistration = async function (evId, userId) {
     await window.supabase.from('event_registrations').delete().eq('event_id', evId).eq('user_id', userId);
     var ev = await window.supabase.from('events').select('current_participants').eq('id', evId).single();
     await window.supabase.from('events').update({ current_participants: Math.max(0, (ev.data && ev.data.current_participants || 0) - taken) }).eq('id', evId);
-    logAdminAction('registration_cancel', 'event_registrations', evId + '/' + userId, null, 'Annulation inscription event:' + evId + ' user:' + userId, false);
     window.showToast('Inscription annulée', 'success'); loadRegistrations();
   } catch (e) { window.showToast('Erreur : ' + e.message, 'error'); }
 };
@@ -2177,8 +1553,7 @@ async function loadMessages() {
     var mR = await window.supabase.from('users').select('id,nom,prenom,email').in('role', ['member', 'admin']).eq('status', 'active').order('prenom');
     membersCache = mR.data || [];
     var sel = document.getElementById('new-msg-to');
-    var newSelHtml = '<option value="all">Tous les membres actifs</option><option value="" disabled>— Choisir un membre —</option>'
-      + membersCache.map(function (m) { return '<option value="' + m.id + '">' + window.escapeHtml((m.prenom || '') + ' ' + (m.nom || '')) + '</option>'; }).join('');
+    var newSelHtml = '<option value="all">Tous les membres actifs</option><option value="" disabled>— Choisir un membre —</option>' + membersCache.map(function (m) { return '<option value="' + m.id + '">' + window.escapeHtml((m.prenom || '') + ' ' + (m.nom || '')) + '</option>'; }).join('');
     silentUpdate(sel, newSelHtml);
     var delR = await window.supabase.from('message_deletions').select('message_id').eq('user_id', currentUser.id);
     var deletedIds = new Set((delR.data || []).map(function (d) { return d.message_id; }));
@@ -2194,36 +1569,30 @@ async function loadMessages() {
   } catch (e) { console.error(e); }
 }
 function renderInbox() {
-  var el = document.getElementById('inbox-list');
-  var savedScroll = el ? el.scrollTop : 0;
+  var el = document.getElementById('inbox-list'), savedScroll = el ? el.scrollTop : 0;
   var html = !inboxMessages.length ? '<div class="msg-empty">Aucun message reçu</div>'
     : inboxMessages.map(function (m) {
       var sender = m.sender ? window.escapeHtml((m.sender.prenom || '') + ' ' + (m.sender.nom || '')) : 'Inconnu';
-      var preview = window.escapeHtml(window.truncateText(m.content || '', 45));
-      var dateStr = new Date(m.sent_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+      var preview = window.escapeHtml(window.truncateText(m.content || '', 45)), dateStr = new Date(m.sent_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
       var isActive = String(m.id) === String(openMessageId);
       return '<div class="msg-item' + (m.is_read ? '' : ' unread') + (isActive ? ' active' : '') + '" data-msgid="' + m.id + '" data-type="inbox" onclick="readMessage(\'' + m.id + '\',\'inbox\')">'
         + '<div class="msg-sender">' + sender + (!m.is_read ? ' <span style="width:7px;height:7px;background:#f44336;border-radius:50%;display:inline-block;margin-left:4px;"></span>' : '') + '</div>'
         + '<div class="msg-preview">' + preview + '</div><div class="msg-time">' + dateStr + '</div></div>';
     }).join('');
-  silentUpdate(el, html);
-  if (el) el.scrollTop = savedScroll;
+  silentUpdate(el, html); if (el) el.scrollTop = savedScroll;
 }
 function renderSent() {
-  var el = document.getElementById('sent-list');
-  var savedScroll = el ? el.scrollTop : 0;
+  var el = document.getElementById('sent-list'), savedScroll = el ? el.scrollTop : 0;
   var html = !sentMessages.length ? '<div class="msg-empty">Aucun message envoyé</div>'
     : sentMessages.slice(0, 8).map(function (m) {
       var rec = m.receiver ? window.escapeHtml((m.receiver.prenom || '') + ' ' + (m.receiver.nom || '')) : 'Tous';
-      var preview = window.escapeHtml(window.truncateText(m.content || '', 40));
-      var dateStr = new Date(m.sent_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+      var preview = window.escapeHtml(window.truncateText(m.content || '', 40)), dateStr = new Date(m.sent_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
       var isActive = String(m.id) === String(openMessageId);
       return '<div class="msg-item' + (isActive ? ' active' : '') + '" data-msgid="' + m.id + '" data-type="sent" onclick="readMessage(\'' + m.id + '\',\'sent\')">'
         + '<div class="msg-sender" style="color:var(--secondary);">→ ' + rec + '</div>'
         + '<div class="msg-preview">' + preview + '</div><div class="msg-time">' + dateStr + '</div></div>';
     }).join('');
-  silentUpdate(el, html);
-  if (el) el.scrollTop = savedScroll;
+  silentUpdate(el, html); if (el) el.scrollTop = savedScroll;
 }
 window.readMessage = async function (msgId, type) {
   document.querySelectorAll('.msg-item').forEach(function (el) { el.classList.toggle('active', el.dataset.msgid === msgId && el.dataset.type === type); });
@@ -2236,8 +1605,7 @@ window.readMessage = async function (msgId, type) {
     var sender = msg.sender ? window.escapeHtml((msg.sender.prenom || '') + ' ' + (msg.sender.nom || '')) : 'Inconnu';
     document.getElementById('msg-read-meta').innerHTML = 'De : <strong>' + sender + '</strong> — ' + new Date(msg.sent_at).toLocaleString('fr-FR');
     replyToUserId = msg.sender ? msg.sender.id : null;
-    replyBlk.style.display = replyToUserId ? 'block' : 'none';
-    actZone.style.display = 'flex';
+    replyBlk.style.display = replyToUserId ? 'block' : 'none'; actZone.style.display = 'flex';
     document.getElementById('reply-body').value = ''; document.getElementById('reply-fb').innerHTML = '';
     if (!msg.is_read) {
       await window.supabase.from('messages').update({ is_read: true }).eq('id', msgId);
@@ -2270,7 +1638,7 @@ window.deleteAdminMsg = async function (forAll) {
   } catch (e) { window.showToast('Erreur : ' + e.message, 'error'); }
 };
 window.sendReply = async function () {
-  var body = document.getElementById('reply-body').value.trim(); var fb = document.getElementById('reply-fb');
+  var body = document.getElementById('reply-body').value.trim(), fb = document.getElementById('reply-fb');
   if (!body) { showFbEl(fb, 'Écrivez votre réponse.', 'err'); return; }
   if (!replyToUserId) { showFbEl(fb, 'Destinataire introuvable.', 'err'); return; }
   var origSubj = document.getElementById('msg-read-subject').textContent;
@@ -2281,10 +1649,7 @@ window.sendReply = async function () {
   } catch (e) { showFbEl(fb, 'Erreur : ' + e.message, 'err'); }
 };
 window.sendNewMessage = async function () {
-  var to = document.getElementById('new-msg-to').value;
-  var subject = document.getElementById('new-msg-subject').value.trim();
-  var body = document.getElementById('new-msg-body').value.trim();
-  var fb = document.getElementById('new-msg-fb');
+  var to = document.getElementById('new-msg-to').value, subject = document.getElementById('new-msg-subject').value.trim(), body = document.getElementById('new-msg-body').value.trim(), fb = document.getElementById('new-msg-fb');
   if (!body) { showFbEl(fb, 'Écrivez un message.', 'err'); return; }
   try {
     var recipients = [];
@@ -2294,7 +1659,6 @@ window.sendNewMessage = async function () {
     var inserts = recipients.map(function (uid) { return { sender_id: currentUser.id, receiver_id: uid, subject: subject || '(sans sujet)', content: body, sent_at: new Date().toISOString() }; });
     var r = await window.supabase.from('messages').insert(inserts);
     if (r.error) throw r.error;
-    logAdminAction('message_send', 'messages', 'batch', null, 'Message "' + (subject||'sans sujet') + '" envoyé à ' + recipients.length + ' membre(s)', false);
     document.getElementById('new-msg-subject').value = ''; document.getElementById('new-msg-body').value = '';
     showFbEl(fb, 'Message envoyé à ' + recipients.length + ' membre(s) !', 'ok'); loadMessages();
   } catch (e) { showFbEl(fb, 'Erreur : ' + e.message, 'err'); }
@@ -2302,24 +1666,17 @@ window.sendNewMessage = async function () {
 
 // ═══════════════ MEMBRES BUREAU ═══════════════
 async function loadBureauMembers() {
-  var grid = document.getElementById('bureau-grid');
-  var emptyEl = document.getElementById('bureau-empty');
+  var grid = document.getElementById('bureau-grid'), emptyEl = document.getElementById('bureau-empty');
   if (!grid) return;
   try {
     var r = await window.supabase.from('users').select('id,prenom,nom,email,photo,ville,role,metadata').in('role', ['member', 'admin']).eq('status', 'active').eq('is_bureau', true).order('prenom');
     if (r.error) throw r.error;
     var bureauMembers = r.data || [];
-    var badge = document.getElementById('bureau-count-badge');
-    if (badge) badge.textContent = bureauMembers.length;
-    if (!bureauMembers.length) {
-      silentUpdate(grid, '');
-      if (emptyEl) emptyEl.style.display = 'block';
-      return;
-    }
+    var badge = document.getElementById('bureau-count-badge'); if (badge) badge.textContent = bureauMembers.length;
+    if (!bureauMembers.length) { silentUpdate(grid, ''); if (emptyEl) emptyEl.style.display = 'block'; return; }
     if (emptyEl) emptyEl.style.display = 'none';
     var html = bureauMembers.map(function (u) {
-      var photo = escH(u.photo || window.FALLBACK_AVATAR);
-      var md = u.metadata || {};
+      var photo = escH(u.photo || window.FALLBACK_AVATAR), md = u.metadata || {};
       var roleLabel = { super_admin: 'Super Admin', admin: 'Administrateur', member: 'Membre' }[u.role] || u.role;
       var bureauRole = md.bureau_role || roleLabel;
       return '<div class="bureau-card">'
@@ -2331,9 +1688,7 @@ async function loadBureauMembers() {
         + '</div>';
     }).join('');
     silentUpdate(grid, html);
-  } catch (e) {
-    silentUpdate(grid, '<p style="color:var(--danger);padding:20px;">Erreur : ' + escH(e.message) + '</p>');
-  }
+  } catch (e) { silentUpdate(grid, '<p style="color:var(--danger);padding:20px;">Erreur : ' + escH(e.message) + '</p>'); }
 }
 
 window.removeBureauMember = async function (userId, name) {
@@ -2356,24 +1711,16 @@ window.openAddBureauModal = async function () {
     var r = await window.supabase.from('users').select('id,prenom,nom,email,photo,ville,is_bureau').in('role', ['member', 'admin']).eq('status', 'active').order('prenom');
     window._bureauAddCache = r.data || [];
     renderBureauAddList(window._bureauAddCache);
-  } catch (e) {
-    document.getElementById('bureau-add-list').innerHTML = '<div style="padding:20px;color:var(--danger);">Erreur : ' + escH(e.message) + '</div>';
-  }
+  } catch (e) { document.getElementById('bureau-add-list').innerHTML = '<div style="padding:20px;color:var(--danger);">Erreur : ' + escH(e.message) + '</div>'; }
 };
 
 function renderBureauAddList(members) {
   var el = document.getElementById('bureau-add-list'); if (!el) return;
   if (!members.length) { el.innerHTML = '<div style="padding:30px;text-align:center;color:var(--text);font-style:italic;">Aucun membre trouvé</div>'; return; }
   el.innerHTML = members.map(function (u) {
-    var photo = escH(u.photo || window.FALLBACK_AVATAR);
-    var isBureau = !!u.is_bureau;
-    return '<div class="bureau-add-item">'
-      + '<img src="' + photo + '" alt="" onerror="window.avatarOnError(this)">'
-      + '<div><div class="bai-name">' + escH((u.prenom || '') + ' ' + (u.nom || '')) + '</div>'
-      + '<div class="bai-sub">' + escH(u.ville || '—') + '</div></div>'
-      + (isBureau
-        ? '<span style="margin-left:auto;padding:4px 10px;background:#f3e5f5;color:#9c27b0;border-radius:5px;font-size:.72rem;font-weight:600;">✓ Bureau</span>'
-        : '<button class="bai-btn" onclick="addToBureau(\'' + u.id + '\',\'' + escH((u.prenom || '') + ' ' + (u.nom || '')) + '\')"><i class="fas fa-plus"></i> Ajouter</button>')
+    var photo = escH(u.photo || window.FALLBACK_AVATAR), isBureau = !!u.is_bureau;
+    return '<div class="bureau-add-item"><img src="' + photo + '" alt="" onerror="window.avatarOnError(this)"><div><div class="bai-name">' + escH((u.prenom || '') + ' ' + (u.nom || '')) + '</div><div class="bai-sub">' + escH(u.ville || '—') + '</div></div>'
+      + (isBureau ? '<span style="margin-left:auto;padding:4px 10px;background:#f3e5f5;color:#9c27b0;border-radius:5px;font-size:.72rem;font-weight:600;">✓ Bureau</span>' : '<button class="bai-btn" onclick="addToBureau(\'' + u.id + '\',\'' + escH((u.prenom || '') + ' ' + (u.nom || '')) + '\')"><i class="fas fa-plus"></i> Ajouter</button>')
       + '</div>';
   }).join('');
 }
@@ -2381,9 +1728,7 @@ function renderBureauAddList(members) {
 window.filterBureauAddList = function (q) {
   if (!window._bureauAddCache) return;
   var s = q.toLowerCase();
-  var filtered = s ? window._bureauAddCache.filter(function (u) {
-    return ((u.prenom || '') + ' ' + (u.nom || '') + ' ' + (u.ville || '')).toLowerCase().includes(s);
-  }) : window._bureauAddCache;
+  var filtered = s ? window._bureauAddCache.filter(function (u) { return ((u.prenom || '') + ' ' + (u.nom || '') + ' ' + (u.ville || '')).toLowerCase().includes(s); }) : window._bureauAddCache;
   renderBureauAddList(filtered);
 };
 
@@ -2391,12 +1736,7 @@ window.addToBureau = async function (userId, name) {
   try {
     var r = await window.supabase.from('users').update({ is_bureau: true, updated_at: new Date().toISOString() }).eq('id', userId);
     if (r.error) throw r.error;
-    if (window._bureauAddCache) {
-      var u = window._bureauAddCache.find(function (m) { return m.id === userId; });
-      if (u) u.is_bureau = true;
-      renderBureauAddList(window._bureauAddCache);
-    }
-    logAdminAction('bureau_toggle', 'users', userId, null, 'Ajout au bureau : ' + name, true);
+    if (window._bureauAddCache) { var u = window._bureauAddCache.find(function (m) { return m.id === userId; }); if (u) u.is_bureau = true; renderBureauAddList(window._bureauAddCache); }
     window.showToast(name + ' ajouté(e) au bureau', 'success');
     loadBureauMembers(); loadMembers();
     try { await window.supabase.from('notifications').insert([{ user_id: userId, title: '🎉 Vous faites partie du bureau !', message: 'Vous avez été ajouté(e) aux membres du bureau.', type: 'bureau', is_read: false, created_at: new Date().toISOString() }]); } catch (_) {}
@@ -2408,7 +1748,6 @@ window.toggleBureau = async function (userId, makeBureau) {
   try {
     var r = await window.supabase.from('users').update({ is_bureau: makeBureau, updated_at: new Date().toISOString() }).eq('id', userId);
     if (r.error) throw r.error;
-    logAdminAction('bureau_toggle', 'users', userId, null, (makeBureau ? 'Ajout au bureau' : 'Retrait du bureau') + ' — user:' + userId, true);
     window.showToast(makeBureau ? 'Ajouté au bureau' : 'Retiré du bureau', 'success');
     loadBureauMembers(); loadMembers();
     try { await window.supabase.from('notifications').insert([{ user_id: userId, title: makeBureau ? '🎉 Vous faites partie du bureau !' : 'Changement de statut', message: makeBureau ? 'Vous avez été ajouté(e) aux membres du bureau.' : 'Votre statut de membre du bureau a été retiré.', type: 'bureau', is_read: false, created_at: new Date().toISOString() }]); } catch (_) {}
@@ -2471,11 +1810,8 @@ window.saveEvent = async function (id) {
   if (file) img = await window.fileToBase64(file); else if (id) { var ex = await window.supabase.from('events').select('image').eq('id', id).single(); img = ex.data && ex.data.image || null; }
   var data = { title: title, location: document.getElementById('ev-location').value, date: new Date(date + 'T' + time).toISOString(), max_participants: parseInt(document.getElementById('ev-max').value, 10) || null, status: document.getElementById('ev-status').value, description: document.getElementById('ev-desc').value, image: img, created_by: currentUser.id, updated_at: new Date().toISOString() };
   try {
-    var evPrev = id ? (await window.supabase.from('events').select('*').eq('id', id).single()).data : null;
     var r = id ? await window.supabase.from('events').update(data).eq('id', id) : await window.supabase.from('events').insert([data]);
     if (r.error) throw r.error;
-    var newId = id || (r.data && r.data[0] && r.data[0].id) || 'new';
-    logAdminAction(id ? 'event_update' : 'event_create', 'events', id || newId, evPrev, (id ? 'Modification' : 'Création') + ' événement : ' + title, true);
     showFb('ev-fb', 'Enregistré !', 'ok'); setTimeout(function () { closeModal(); loadEvents(); }, 1200);
   } catch (e) { showFb('ev-fb', 'Erreur : ' + e.message, 'err'); }
 };
@@ -2495,10 +1831,8 @@ window.saveActivity = async function (id) {
   if (file) img = await window.fileToBase64(file); else if (id) { var ex = await window.supabase.from('activities').select('image').eq('id', id).single(); img = ex.data && ex.data.image || null; }
   var data = { title: title, location: document.getElementById('act-loc').value, date: document.getElementById('act-date').value || null, category: document.getElementById('act-cat').value, description: document.getElementById('act-desc').value, image: img, created_by: currentUser.id, updated_at: new Date().toISOString() };
   try {
-    var actPrev = id ? (await window.supabase.from('activities').select('*').eq('id', id).single()).data : null;
     var r = id ? await window.supabase.from('activities').update(data).eq('id', id) : await window.supabase.from('activities').insert([data]);
     if (r.error) throw r.error;
-    logAdminAction(id ? 'activity_update' : 'activity_create', 'activities', id || 'new', actPrev, (id ? 'Modification' : 'Création') + ' activité : ' + title, true);
     showFb('act-fb', 'Enregistré !', 'ok'); setTimeout(function () { closeModal(); loadActivities(); }, 1200);
   } catch (e) { showFb('act-fb', 'Erreur : ' + e.message, 'err'); }
 };
@@ -2520,10 +1854,8 @@ window.saveTeam = async function (id) {
   if (file) img = await window.fileToBase64(file); else if (id) { var ex = await window.supabase.from('team').select('photo').eq('id', id).single(); img = ex.data && ex.data.photo || null; }
   var data = { prenom: prenom, nom: nom, role: role, bio: document.getElementById('tm-bio').value, display_order: parseInt(document.getElementById('tm-order').value, 10) || 1, photo: img, social_links: { facebook: document.getElementById('tm-fb').value, linkedin: document.getElementById('tm-li').value }, updated_at: new Date().toISOString() };
   try {
-    var tmPrev = id ? (await window.supabase.from('team').select('*').eq('id', id).single()).data : null;
     var r = id ? await window.supabase.from('team').update(data).eq('id', id) : await window.supabase.from('team').insert([data]);
     if (r.error) throw r.error;
-    logAdminAction(id ? 'team_update' : 'team_create', 'team', id || 'new', tmPrev, (id ? 'Modification' : 'Ajout') + ' équipe : ' + prenom + ' ' + nom + ' — ' + role, true);
     showFb('tm-fb2', 'Enregistré !', 'ok'); setTimeout(function () { closeModal(); loadTeam(); }, 1200);
   } catch (e) { showFb('tm-fb2', 'Erreur : ' + e.message, 'err'); }
 };
@@ -2541,10 +1873,8 @@ window.saveAnnouncement = async function (id) {
   if (!title || !content) { showFb('an-fb', 'Titre et contenu requis.', 'err'); return; }
   var data = { title: title, content: content, type: document.getElementById('an-type').value, visibility: document.getElementById('an-vis').value, created_by: currentUser.id, updated_at: new Date().toISOString() };
   try {
-    var anPrev = id ? (await window.supabase.from('announcements').select('*').eq('id', id).single()).data : null;
     var r = id ? await window.supabase.from('announcements').update(data).eq('id', id) : await window.supabase.from('announcements').insert([data]);
     if (r.error) throw r.error;
-    logAdminAction(id ? 'announcement_update' : 'announcement_create', 'announcements', id || 'new', anPrev, (id ? 'Modification' : 'Création') + ' annonce : ' + title, true);
     showFb('an-fb', 'Enregistré !', 'ok'); setTimeout(function () { closeModal(); loadAnnouncements(); }, 1200);
   } catch (e) { showFb('an-fb', 'Erreur : ' + e.message, 'err'); }
 };
@@ -2572,8 +1902,7 @@ window.previewReportFiles = function (input) {
   var icons = { pdf: 'fa-file-pdf', doc: 'fa-file-word', docx: 'fa-file-word', xls: 'fa-file-excel', xlsx: 'fa-file-excel', ppt: 'fa-file-powerpoint', pptx: 'fa-file-powerpoint', txt: 'fa-file-alt', csv: 'fa-file-csv' };
   var colors = { pdf: '#f44336', doc: '#2196F3', docx: '#2196F3', xls: '#4CAF50', xlsx: '#4CAF50', ppt: '#ff9800', pptx: '#ff9800' };
   Array.from(input.files).forEach(function (file) {
-    var ext = file.name.split('.').pop().toLowerCase();
-    var size = file.size > 1024 * 1024 ? (file.size / (1024 * 1024)).toFixed(1) + ' Mo' : Math.round(file.size / 1024) + ' Ko';
+    var ext = file.name.split('.').pop().toLowerCase(), size = file.size > 1024 * 1024 ? (file.size / (1024 * 1024)).toFixed(1) + ' Mo' : Math.round(file.size / 1024) + ' Ko';
     var div = document.createElement('div'); div.style.cssText = 'display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--light);border-radius:6px;font-size:.82rem;';
     div.innerHTML = '<i class="fas ' + (icons[ext] || 'fa-file') + '" style="color:' + (colors[ext] || '#666') + ';font-size:1.1rem;width:18px;text-align:center;flex-shrink:0;"></i><span style="flex:1;color:var(--dark);font-weight:500;">' + window.escapeHtml(file.name) + '</span><span style="color:var(--text);">' + size + '</span>';
     container.appendChild(div);
@@ -2585,15 +1914,13 @@ window.saveReport = async function (id) {
   var imgFiles = Array.from(document.getElementById('rp-images').files), images = [];
   if (imgFiles.length) { for (var f of imgFiles) { try { images.push(await window.fileToBase64(f)); } catch (_) {} } }
   else if (id) { var exI = await window.supabase.from('activity_reports').select('images').eq('id', id).single(); images = exI.data && exI.data.images || []; }
-  var fileInputEl = document.getElementById('rp-files'); var attachedFiles = [];
+  var fileInputEl = document.getElementById('rp-files'), attachedFiles = [];
   if (fileInputEl && fileInputEl.files.length) { for (var ff of Array.from(fileInputEl.files)) { try { var b64 = await window.fileToBase64(ff); attachedFiles.push({ name: ff.name, type: ff.type, size: ff.size, data: b64 }); } catch (_) {} } }
   else if (id) { var exF = await window.supabase.from('activity_reports').select('attachments').eq('id', id).single(); attachedFiles = exF.data && exF.data.attachments || []; }
   var data = { title: title, activity_id: document.getElementById('rp-activity').value || null, date: document.getElementById('rp-date').value || null, content: document.getElementById('rp-content').value, images: images, attachments: attachedFiles, created_by: currentUser.id, updated_at: new Date().toISOString() };
   try {
-    var rpPrev = id ? (await window.supabase.from('activity_reports').select('id,title,content,date,activity_id').eq('id', id).single()).data : null;
     var r = id ? await window.supabase.from('activity_reports').update(data).eq('id', id) : await window.supabase.from('activity_reports').insert([data]);
     if (r.error) throw r.error;
-    logAdminAction(id ? 'report_update' : 'report_create', 'activity_reports', id || 'new', rpPrev, (id ? 'Modification' : 'Création') + ' compte rendu : ' + title, true);
     showFb('rp-fb', 'Enregistré !', 'ok'); setTimeout(function () { closeModal(); loadReports(); }, 1200);
   } catch (e) { showFb('rp-fb', 'Erreur : ' + e.message, 'err'); }
 };
@@ -2618,366 +1945,22 @@ window.saveGallery = async function () {
   try {
     var r = await window.supabase.from('gallery').insert(inserts);
     if (r.error) throw r.error;
-    logAdminAction('gallery_upload', 'gallery', 'batch', null, 'Upload de ' + inserts.length + ' image(s) dans la galerie', false);
     showFb('gl-fb', inserts.length + ' image(s) ajoutée(s) !', 'ok'); setTimeout(function () { closeModal(); loadGallery(); }, 1500);
   } catch (e) { showFb('gl-fb', 'Erreur : ' + e.message, 'err'); }
 };
 
-
-// ═══════════════════════════════════════════════════════════════
-// SYSTÈME DE JOURNALISATION DES ACTIONS ADMIN
-// ═══════════════════════════════════════════════════════════════
-
-// ─── Helper principal : enregistre une action dans admin_logs ────────────
-async function logAdminAction(actionType, tableName, recordId, recordData, details, isReversible) {
-  try {
-    if (!currentUser) return;
-    var adminName = ((currentUser.prenom || '') + ' ' + (currentUser.nom || '')).trim() || currentUser.email || 'Admin';
-    var reversibleUntil = null;
-    if (isReversible) {
-      var ru = new Date(); ru.setHours(ru.getHours() + 48);
-      reversibleUntil = ru.toISOString();
-    }
-    // Nettoyer record_data : supprimer les photos base64 volumineuses pour alléger
-    var safeData = recordData ? JSON.parse(JSON.stringify(recordData)) : null;
-    if (safeData) {
-      ['image','photo','data'].forEach(function(k) { if (safeData[k] && typeof safeData[k] === 'string' && safeData[k].startsWith('data:')) safeData[k] = '[base64 image omise]'; });
-      if (safeData.images && Array.isArray(safeData.images)) safeData.images = '[' + safeData.images.length + ' images omises]';
-      if (safeData.attachments && Array.isArray(safeData.attachments)) safeData.attachments = '[' + safeData.attachments.length + ' fichiers omis]';
-    }
-    await window.supabase.from('admin_logs').insert([{
-      admin_id: currentUser.id,
-      admin_name: adminName,
-      action_type: actionType,
-      table_name: tableName || null,
-      record_id: recordId ? String(recordId) : null,
-      record_data: safeData,
-      details: details || null,
-      user_agent: navigator.userAgent.slice(0, 200),
-      created_at: new Date().toISOString(),
-      is_reversible: !!isReversible,
-      reversible_until: reversibleUntil,
-      undone_by: null,
-      undone_at: null
-    }]);
-  } catch (_) {
-    // Journalisation silencieuse — ne jamais bloquer l'action principale
-  }
-}
-window.logAdminAction = logAdminAction;
-
-// ─── État de pagination des logs ────────────────────────────────────────
-var _logState = { page: 1, perPage: 50, total: 0, filters: {}, inited: false, allAdmins: [] };
-
-// ─── Init des filtres (chargement des admins) ────────────────────────────
-async function initAdminLogsFilters() {
-  if (_logState.inited) return;
-  _logState.inited = true;
-  try {
-    var r = await window.supabase.from('users').select('id,prenom,nom,email').in('role', ['admin', 'super_admin']).order('prenom');
-    _logState.allAdmins = r.data || [];
-    var sel = document.getElementById('log-filter-admin');
-    if (sel) {
-      sel.innerHTML = '<option value="">Tous les admins</option>'
-        + _logState.allAdmins.map(function(a) {
-            return '<option value="' + a.id + '">' + escH((a.prenom||'') + ' ' + (a.nom||'')) + '</option>';
-          }).join('');
-    }
-  } catch(_) {}
-}
-
-// ─── Réinitialiser les filtres ───────────────────────────────────────────
-window.resetLogFilters = function() {
-  ['log-filter-admin','log-filter-action','log-filter-table','log-filter-from','log-filter-to','log-filter-search'].forEach(function(id) {
-    var el = document.getElementById(id); if (el) el.value = '';
-  });
-  loadAdminLogs(1);
-};
-
-// ─── Chargement principal des logs ──────────────────────────────────────
-window.loadAdminLogs = async function(page) {
-  if (currentUser.role !== 'super_admin') return;
-  page = page || 1;
-  _logState.page = page;
-
-  var tbody = document.getElementById('logs-tbody');
-  if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text);">Chargement… <span style="display:inline-block;width:14px;height:14px;border:2px solid var(--primary);border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;vertical-align:middle;margin-left:6px;"></span></td></tr>';
-
-  var adminId  = document.getElementById('log-filter-admin')  ? document.getElementById('log-filter-admin').value  : '';
-  var action   = document.getElementById('log-filter-action') ? document.getElementById('log-filter-action').value : '';
-  var table    = document.getElementById('log-filter-table')  ? document.getElementById('log-filter-table').value  : '';
-  var from     = document.getElementById('log-filter-from')   ? document.getElementById('log-filter-from').value   : '';
-  var to       = document.getElementById('log-filter-to')     ? document.getElementById('log-filter-to').value     : '';
-  var search   = document.getElementById('log-filter-search') ? document.getElementById('log-filter-search').value.trim() : '';
-
-  try {
-    // Requête count
-    var qc = window.supabase.from('admin_logs').select('id', { count: 'exact', head: true });
-    if (adminId) qc = qc.eq('admin_id', adminId);
-    if (action)  qc = qc.eq('action_type', action);
-    if (table)   qc = qc.eq('table_name', table);
-    if (from)    qc = qc.gte('created_at', from + 'T00:00:00Z');
-    if (to)      qc = qc.lte('created_at', to + 'T23:59:59Z');
-    if (search)  qc = qc.or('details.ilike.%' + search + '%,admin_name.ilike.%' + search + '%,record_id.ilike.%' + search + '%');
-    var cr = await qc;
-    _logState.total = cr.count || 0;
-
-    // Requête data
-    var from2 = (_logState.page - 1) * _logState.perPage;
-    var to2   = from2 + _logState.perPage - 1;
-    var qd = window.supabase.from('admin_logs').select('*').order('created_at', { ascending: false }).range(from2, to2);
-    if (adminId) qd = qd.eq('admin_id', adminId);
-    if (action)  qd = qd.eq('action_type', action);
-    if (table)   qd = qd.eq('table_name', table);
-    if (from)    qd = qd.gte('created_at', from + 'T00:00:00Z');
-    if (to)      qd = qd.lte('created_at', to + 'T23:59:59Z');
-    if (search)  qd = qd.or('details.ilike.%' + search + '%,admin_name.ilike.%' + search + '%,record_id.ilike.%' + search + '%');
-    var dr = await qd;
-
-    renderLogTable(dr.data || []);
-    renderLogPagination();
-    renderLogSummary(dr.data || []);
-  } catch(e) {
-    if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--danger);">Erreur : ' + escH(e.message) + '<br><small>La table admin_logs n\'existe peut-être pas encore. Cliquez sur "SQL" pour obtenir le script de création.</small></td></tr>';
-  }
-};
-
-// ─── Rendu du tableau ────────────────────────────────────────────────────
-function renderLogTable(logs) {
-  var tbody = document.getElementById('logs-tbody');
-  if (!tbody) return;
-  var badge = document.getElementById('logs-count-badge');
-  if (badge) { badge.textContent = _logState.total; badge.style.display = _logState.total > 0 ? 'inline-block' : 'none'; }
-
-  if (!logs.length) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text);font-style:italic;">Aucune action journalisée</td></tr>';
-    return;
-  }
-
-  var now = Date.now();
-  var h24 = 24 * 3600 * 1000;
-
-  var CRITICAL_ACTIONS = { user_delete:1, user_reject:1, gallery_delete:1, team_delete:1, report_delete:1, event_delete:1, activity_delete:1, announcement_delete:1, document_delete:1 };
-  var ACTION_LABELS = {
-    user_approve:'✅ Approbation', user_reject:'❌ Rejet', user_update:'✏️ Modif membre', user_delete:'🗑️ Suppr. membre',
-    event_create:'📅 Créer événement', event_update:'📅 Modif événement', event_delete:'📅 Suppr. événement',
-    activity_create:'🏃 Créer activité', activity_update:'🏃 Modif activité', activity_delete:'🏃 Suppr. activité',
-    announcement_create:'📢 Créer annonce', announcement_update:'📢 Modif annonce', announcement_delete:'📢 Suppr. annonce',
-    gallery_upload:'🖼️ Upload galerie', gallery_delete:'🖼️ Suppr. galerie',
-    team_create:'👥 Créer équipe', team_update:'👥 Modif équipe', team_delete:'👥 Suppr. équipe',
-    report_create:'📋 Créer CR', report_update:'📋 Modif CR', report_delete:'📋 Suppr. CR',
-    document_upload:'📄 Upload doc', document_delete:'📄 Suppr. doc',
-    notification_send:'🔔 Notif envoyée', message_send:'💬 Message envoyé',
-    registration_cancel:'🚫 Annul. inscription', settings_update:'⚙️ Paramètres',
-    content_update:'📝 Contenu', access_rule_update:'🛡️ Règles accès', bureau_toggle:'🏅 Bureau',
-    undo:'↩️ Annulation'
-  };
-
-  function actionClass(t) {
-    if (t.includes('create') || t.includes('upload') || t === 'user_approve') return 'la-create';
-    if (t.includes('update') || t === 'bureau_toggle') return 'la-update';
-    if (t.includes('delete') || t === 'user_delete') return 'la-delete';
-    if (t === 'user_approve') return 'la-approve';
-    if (t === 'user_reject') return 'la-reject';
-    if (t === 'notification_send' || t === 'message_send') return 'la-send';
-    if (t === 'undo') return 'la-undo';
-    return 'la-other';
-  }
-
-  tbody.innerHTML = logs.map(function(log) {
-    var dt = new Date(log.created_at);
-    var dateStr = dt.toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric' });
-    var timeStr = dt.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
-    var isRecent = (now - dt.getTime()) < h24;
-    var isCritical = !!CRITICAL_ACTIONS[log.action_type];
-    var rowClass = log.undone_at ? 'log-row-undone' : (isRecent ? 'log-row-recent' : '');
-    var avatar = window.FALLBACK_AVATAR;
-    var admin = _logState.allAdmins.find(function(a) { return a.id === log.admin_id; });
-    if (admin && admin.photo) avatar = admin.photo;
-
-    var actionLabel = ACTION_LABELS[log.action_type] || log.action_type;
-    var actionCls   = actionClass(log.action_type);
-
-    // Bouton annulation
-    var undoCell = '';
-    if (log.undone_at) {
-      var undoneDate = new Date(log.undone_at).toLocaleDateString('fr-FR', { day:'numeric', month:'short' });
-      undoCell = '<span class="log-undone-tag">↩️ Annulé le ' + undoneDate + '</span>';
-    } else if (log.is_reversible && log.reversible_until) {
-      var deadline = new Date(log.reversible_until).getTime();
-      if (now < deadline) {
-        var remaining = Math.ceil((deadline - now) / 3600000);
-        undoCell = '<button class="log-undo-btn" onclick="undoLogAction(\'' + log.id + '\')" title="Annuler cette action (' + remaining + 'h restantes)">↩️ Annuler <small>(' + remaining + 'h)</small></button>';
-      } else {
-        undoCell = '<span class="log-undo-btn disabled" title="Délai de 48h dépassé">⏰ Délai dépassé</span>';
-      }
-    } else {
-      undoCell = '<span style="color:#ccc;font-size:.75rem;">—</span>';
-    }
-
-    return '<tr class="' + rowClass + '">'
-      + '<td style="font-size:.78rem;white-space:nowrap;">'
-      + (isRecent ? '<span style="display:inline-block;width:6px;height:6px;background:var(--primary);border-radius:50%;margin-right:4px;vertical-align:middle;"></span>' : '')
-      + '<strong>' + dateStr + '</strong><br><span style="color:var(--text);">' + timeStr + '</span></td>'
-      + '<td><div class="log-admin-cell"><img src="' + escH(avatar) + '" onerror="window.avatarOnError(this)"><span style="font-size:.8rem;">' + escH(log.admin_name || '—') + '</span></div></td>'
-      + '<td><span class="log-action-badge ' + actionCls + '">' + escH(actionLabel) + '</span>'
-      + (isCritical ? ' <span class="log-critical" title="Action critique">⚠️</span>' : '') + '</td>'
-      + '<td><code style="font-size:.75rem;background:#f5f5f5;padding:2px 6px;border-radius:4px;">' + escH(log.table_name || '—') + '</code></td>'
-      + '<td style="font-size:.8rem;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + escH(log.details || '') + '">' + escH(log.details || '—') + '</td>'
-      + '<td><code style="font-size:.72rem;color:var(--text);">' + escH(log.record_id ? log.record_id.slice(0, 12) + '…' : '—') + '</code></td>'
-      + '<td>' + undoCell + '</td>'
-      + '</tr>';
-  }).join('');
-}
-
-// ─── Pagination ──────────────────────────────────────────────────────────
-function renderLogPagination() {
-  var el = document.getElementById('logs-pagination'); if (!el) return;
-  var totalPages = Math.ceil(_logState.total / _logState.perPage) || 1;
-  var cur = _logState.page;
-  var from = (_logState.page - 1) * _logState.perPage + 1;
-  var to   = Math.min(_logState.page * _logState.perPage, _logState.total);
-
-  var btns = '';
-  btns += '<button class="pg-btn" onclick="loadAdminLogs(' + (cur - 1) + ')" ' + (cur <= 1 ? 'disabled' : '') + '>‹ Préc.</button>';
-  var startP = Math.max(1, cur - 2), endP = Math.min(totalPages, cur + 2);
-  for (var p = startP; p <= endP; p++) {
-    btns += '<button class="pg-btn' + (p === cur ? ' active' : '') + '" onclick="loadAdminLogs(' + p + ')">' + p + '</button>';
-  }
-  btns += '<button class="pg-btn" onclick="loadAdminLogs(' + (cur + 1) + ')" ' + (cur >= totalPages ? 'disabled' : '') + '>Suiv. ›</button>';
-
-  el.innerHTML = '<span class="pg-info">Affichage ' + from + '–' + to + ' sur <strong>' + _logState.total + '</strong> actions</span><div class="pg-btns">' + btns + '</div>';
-}
-
-// ─── Résumé visuel ──────────────────────────────────────────────────────
-function renderLogSummary(logs) {
-  var el = document.getElementById('logs-summary'); if (!el) return;
-  if (!logs.length) { el.style.display = 'none'; return; }
-  var critiques = logs.filter(function(l) { return ['user_delete','event_delete','activity_delete','gallery_delete','announcement_delete','team_delete','report_delete','document_delete'].indexOf(l.action_type) !== -1; }).length;
-  var annulables = logs.filter(function(l) { return l.is_reversible && !l.undone_at && l.reversible_until && new Date(l.reversible_until).getTime() > Date.now(); }).length;
-  var deja_annules = logs.filter(function(l) { return !!l.undone_at; }).length;
-  el.style.display = 'flex';
-  el.innerHTML = '<i class="fas fa-info-circle" style="color:var(--primary);"></i>'
-    + '<span>Page actuelle : <strong>' + logs.length + '</strong> actions</span>'
-    + (critiques ? '<span>⚠️ <strong style="color:var(--danger);">' + critiques + '</strong> action(s) critique(s)</span>' : '')
-    + (annulables ? '<span>↩️ <strong style="color:#2e7d32;">' + annulables + '</strong> annulable(s)</span>' : '')
-    + (deja_annules ? '<span>🔄 <strong style="color:var(--warning);">' + deja_annules + '</strong> déjà annulée(s)</span>' : '');
-}
-
-// ─── Annulation d'une action (UNDO) ─────────────────────────────────────
-window.undoLogAction = async function(logId) {
-  if (currentUser.role !== 'super_admin') { window.showToast('Accès refusé', 'error'); return; }
-  try {
-    var lr = await window.supabase.from('admin_logs').select('*').eq('id', logId).single();
-    if (lr.error || !lr.data) { window.showToast('Log introuvable', 'error'); return; }
-    var log = lr.data;
-
-    if (log.undone_at) { window.showToast('Déjà annulée', 'warning'); return; }
-    if (!log.is_reversible || !log.reversible_until) { window.showToast('Action non annulable', 'warning'); return; }
-    if (new Date(log.reversible_until).getTime() < Date.now()) { window.showToast('Délai de 48h dépassé', 'warning'); return; }
-    if (!confirm('Annuler cette action ?\n\n"' + (log.details || log.action_type) + '"\n\nCette opération est irréversible et sera elle-même journalisée.')) return;
-
-    var restored = false;
-    var restoreMsg = '';
-
-    // Restauration selon le type d'action
-    if (log.action_type === 'user_delete' && log.record_data) {
-      var ud = await window.supabase.from('users').insert([log.record_data]);
-      if (!ud.error) { restored = true; restoreMsg = 'Membre restauré'; }
-    } else if (log.action_type === 'user_update' && log.record_data && log.record_id) {
-      var uu = await window.supabase.from('users').update(log.record_data).eq('id', log.record_id);
-      if (!uu.error) { restored = true; restoreMsg = 'Membre restauré à l\'état précédent'; }
-    } else if (log.action_type === 'user_approve' && log.record_data && log.record_id) {
-      var ua = await window.supabase.from('users').update({ role: log.record_data.role || 'pending', status: log.record_data.status || 'pending' }).eq('id', log.record_id);
-      if (!ua.error) { restored = true; restoreMsg = 'Approbation annulée'; }
-    } else if (log.action_type.includes('_delete') && log.record_data && log.record_id) {
-      var tbl = log.table_name;
-      var ins = await window.supabase.from(tbl).insert([log.record_data]);
-      if (!ins.error) { restored = true; restoreMsg = 'Enregistrement restauré dans ' + tbl; }
-    } else if (log.action_type.includes('_update') && log.record_data && log.record_id) {
-      var tbl2 = log.table_name;
-      var upd = await window.supabase.from(tbl2).update(log.record_data).eq('id', log.record_id);
-      if (!upd.error) { restored = true; restoreMsg = 'Données restaurées dans ' + tbl2; }
-    } else if (log.action_type.includes('_create') && log.record_id && log.table_name) {
-      var del = await window.supabase.from(log.table_name).delete().eq('id', log.record_id);
-      if (!del.error) { restored = true; restoreMsg = 'Création annulée (enregistrement supprimé)'; }
-    } else {
-      restoreMsg = 'Type d\'action non restaurable automatiquement';
-    }
-
-    // Marquer le log comme annulé
-    await window.supabase.from('admin_logs').update({ undone_by: currentUser.id, undone_at: new Date().toISOString() }).eq('id', logId);
-
-    // Journaliser l'annulation
-    await logAdminAction('undo', log.table_name, log.record_id, { original_log_id: logId, original_action: log.action_type }, 'Annulation de : ' + (log.details || log.action_type), false);
-
-    window.showToast(restored ? '↩️ ' + restoreMsg : '⚠️ ' + restoreMsg, restored ? 'success' : 'warning', 5000);
-    loadAdminLogs(_logState.page);
-    // Rafraîchir le panel concerné si ouvert
-    if (log.table_name === 'users') { loadMembers(); loadPending(); }
-    else if (log.table_name === 'events') loadEvents();
-    else if (log.table_name === 'activities') loadActivities();
-    else if (log.table_name === 'gallery') loadGallery();
-    else if (log.table_name === 'team') loadTeam();
-    else if (log.table_name === 'announcements') loadAnnouncements();
-    else if (log.table_name === 'activity_reports') loadReports();
-
-  } catch(e) { window.showToast('Erreur annulation : ' + e.message, 'error'); }
-};
-
-// ─── Export CSV des logs ─────────────────────────────────────────────────
-window.exportLogsCSV = async function() {
-  try {
-    window.showToast('Export en cours…', 'info', 2000);
-    var q = window.supabase.from('admin_logs').select('*').order('created_at', { ascending: false }).limit(5000);
-    var adminId = document.getElementById('log-filter-admin')  ? document.getElementById('log-filter-admin').value  : '';
-    var action  = document.getElementById('log-filter-action') ? document.getElementById('log-filter-action').value : '';
-    var table   = document.getElementById('log-filter-table')  ? document.getElementById('log-filter-table').value  : '';
-    var from    = document.getElementById('log-filter-from')   ? document.getElementById('log-filter-from').value   : '';
-    var to      = document.getElementById('log-filter-to')     ? document.getElementById('log-filter-to').value     : '';
-    if (adminId) q = q.eq('admin_id', adminId);
-    if (action)  q = q.eq('action_type', action);
-    if (table)   q = q.eq('table_name', table);
-    if (from)    q = q.gte('created_at', from + 'T00:00:00Z');
-    if (to)      q = q.lte('created_at', to + 'T23:59:59Z');
-    var r = await q;
-    var rows = r.data || [];
-    if (!rows.length) { window.showToast('Aucune donnée à exporter', 'warning'); return; }
-    var cols = ['created_at','admin_name','action_type','table_name','record_id','details','is_reversible','undone_at'];
-    var csv = cols.join(';') + '\n' + rows.map(function(row) {
-      return cols.map(function(c) {
-        var v = row[c]; if (v === null || v === undefined) v = '';
-        return '"' + String(v).replace(/"/g, '""') + '"';
-      }).join(';');
-    }).join('\n');
-    var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a'); a.href = url;
-    a.download = 'admin_logs_' + new Date().toISOString().slice(0,10) + '.csv';
-    a.click(); URL.revokeObjectURL(url);
-    window.showToast(rows.length + ' entrées exportées', 'success');
-  } catch(e) { window.showToast('Erreur export : ' + e.message, 'error'); }
-};
-
-
 window.deleteRecord = async function (table, id, reload) {
   if (!confirm('Supprimer ? Irréversible.')) return;
   try {
-    var drPrev = await window.supabase.from(table).select('*').eq('id', id).single();
     var r = await window.supabase.from(table).delete().eq('id', id);
     if (r.error) throw r.error;
-    var tMap = { events:'event_delete', activities:'activity_delete', gallery:'gallery_delete', team:'team_delete', announcements:'announcement_delete', activity_reports:'report_delete', documents:'document_delete' };
-    var actType = tMap[table] || (table + '_delete');
-    var drData = drPrev.data || {};
-    var label = drData.title || drData.nom || drData.name || id;
-    logAdminAction(actType, table, id, drPrev.data, 'Suppression de "' + label + '" dans ' + table, true);
     window.showToast('Supprimé', 'success'); if (reload) reload();
   } catch (e) { window.showToast('Erreur : ' + e.message, 'error'); }
 };
 
 function filterTable(tableId, q) {
   var tb = document.getElementById(tableId); if (!tb) return;
-  var rows = tb.querySelectorAll('tbody tr'); var s = q.toLowerCase();
+  var rows = tb.querySelectorAll('tbody tr'), s = q.toLowerCase();
   rows.forEach(function (r) { r.style.display = r.textContent.toLowerCase().includes(s) ? '' : 'none'; });
 }
 
@@ -2996,6 +1979,5 @@ window.FALLBACK_IMG = window.FALLBACK_IMG || 'data:image/svg+xml,%3Csvg xmlns="h
 window.avatarOnError = window.avatarOnError || function (img) { img.src = window.FALLBACK_AVATAR; };
 window.imgOnError = window.imgOnError || function (img) { img.src = window.FALLBACK_IMG; };
 </script>
-<script src="../export-excel.js"></script>
 </body>
 </html>
