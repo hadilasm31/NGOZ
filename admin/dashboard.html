@@ -33,6 +33,19 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;color:var(--text);over
 .refresh-dot.active{background:#4caf50}
 .refresh-dot.paused{background:#ff9800}
 
+/* ── OVERLAY BASCULEMENT AUTOMATIQUE ── */
+#role-switch-overlay{
+  display:none;position:fixed;inset:0;z-index:99999;
+  background:rgba(0,0,0,.85);
+  align-items:center;justify-content:center;
+  flex-direction:column;gap:18px;text-align:center;
+}
+#role-switch-overlay.show{display:flex}
+.rso-spinner{width:52px;height:52px;border:5px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:rso-spin .8s linear infinite}
+@keyframes rso-spin{to{transform:rotate(360deg)}}
+.rso-text{color:white;font-size:1.1rem;font-weight:600;max-width:340px;line-height:1.5}
+.rso-sub{color:rgba(255,255,255,.6);font-size:.82rem;margin-top:4px}
+
 .sidebar{position:fixed;top:52px;left:0;width:var(--sidebar);height:calc(100vh - 52px);background:#fdfdfd;display:flex;flex-direction:column;z-index:200;transition:transform .32s cubic-bezier(.4,0,.2,1);overflow-y:auto}
 .sb-logo{padding:18px;border-bottom:1px solid #d9cfc0;display:flex;align-items:center;gap:10px}
 .sb-logo img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--primary)}
@@ -241,16 +254,12 @@ tr:hover td{background:#fafafa}
 
 .sm-members-scroll{overflow-y:auto;max-height:380px;border-radius:0 0 8px 8px}
 .sm-members-scroll::-webkit-scrollbar{width:6px}
-.sm-members-scroll::-webkit-scrollbar-track{background:#f5f5f5;border-radius:3px}
 .sm-members-scroll::-webkit-scrollbar-thumb{background:#ddd;border-radius:3px}
-.sm-members-scroll::-webkit-scrollbar-thumb:hover{background:#bbb}
 .sm-members-scroll table thead th{position:sticky;top:0;z-index:2;background:var(--light);box-shadow:0 1px 0 #eee}
 
 .sm-small-scroll{overflow-y:auto;max-height:280px}
 .sm-small-scroll::-webkit-scrollbar{width:5px}
-.sm-small-scroll::-webkit-scrollbar-track{background:#f5f5f5}
 .sm-small-scroll::-webkit-scrollbar-thumb{background:#ddd;border-radius:3px}
-.sm-small-scroll::-webkit-scrollbar-thumb:hover{background:#bbb}
 .sm-small-scroll table thead th{position:sticky;top:0;z-index:2;background:var(--light);box-shadow:0 1px 0 #eee}
 
 .bureau-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:4px}
@@ -292,6 +301,15 @@ tr:hover td{background:#fafafa}
 </style>
 </head>
 <body>
+
+<!-- ── OVERLAY BASCULEMENT AUTOMATIQUE ── -->
+<div id="role-switch-overlay">
+  <div class="rso-spinner"></div>
+  <div>
+    <div class="rso-text" id="rso-text">Mise à jour en cours…</div>
+    <div class="rso-sub" id="rso-sub">Veuillez patienter</div>
+  </div>
+</div>
 
 <nav class="top-navbar">
   <div class="top-navbar-left">
@@ -554,9 +572,9 @@ tr:hover td{background:#fafafa}
 <script src="../email-service.js"></script>
 <script>
 // ================================================================
-// SESSION WATCHER v1 — Ngozistes du Royaume
-// Vérifie le rôle et le statut en DB toutes les 10 secondes.
-// Si changement : applique immédiatement sans déconnecter.
+// SESSION WATCHER v2 — Admin Dashboard — Ngozistes du Royaume
+// Vérifie rôle, statut, bureau toutes les 10 secondes.
+// BASCULE AUTOMATIQUEMENT sans aucune interaction utilisateur.
 // ================================================================
 window.SessionWatcher = (function () {
   var INTERVAL      = 10000;
@@ -565,9 +583,6 @@ window.SessionWatcher = (function () {
   var _lastRole     = null;
   var _lastStatus   = null;
   var _lastIsBureau = null;
-  var _onRoleChange   = null;
-  var _onStatusChange = null;
-  var _onBureauChange = null;
 
   var ROLE_LABELS = {
     super_admin : 'Super Administrateur',
@@ -581,136 +596,132 @@ window.SessionWatcher = (function () {
     return (p.includes('/admin/') || p.includes('/member/')) ? '../' : '';
   }
 
-  function _syncLocalSession(freshData) {
+  function _syncLocalSession(data) {
     try {
       var key  = 'ngozistes_session';
       var sess = JSON.parse(localStorage.getItem(key) || '{}');
-      Object.assign(sess, freshData);
+      Object.assign(sess, data);
       localStorage.setItem(key, JSON.stringify(sess));
       window._currentUser = sess;
     } catch (_) {}
   }
 
-  function _showBanner(id, html, color, actions, autoDismiss) {
-    var existing = document.getElementById(id);
-    if (existing) existing.remove();
-
-    if (!document.getElementById('sw-style-global')) {
-      var st = document.createElement('style');
-      st.id  = 'sw-style-global';
-      st.textContent = '@keyframes swIn{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}'
-        + '.sw-banner{animation:swIn .4s cubic-bezier(.22,1,.36,1);}';
-      document.head.appendChild(st);
-    }
-
-    var banner = document.createElement('div');
-    banner.id        = id;
-    banner.className = 'sw-banner';
-    banner.style.cssText = [
-      'position:fixed', 'top:52px',
-      'left:var(--sidebar,0px)', 'right:0', 'z-index:9997',
-      'background:' + color, 'color:white',
-      'padding:12px 20px', 'display:flex', 'align-items:center',
-      'justify-content:center', 'gap:12px', 'font-size:.9rem',
-      'font-family:inherit', 'box-shadow:0 3px 12px rgba(0,0,0,.25)',
-      'flex-wrap:wrap'
-    ].join(';');
-
-    var msgEl = document.createElement('span');
-    msgEl.innerHTML = html;
-    banner.appendChild(msgEl);
-
-    (actions || []).forEach(function (a) {
-      var btn = document.createElement('button');
-      btn.textContent = a.label;
-      btn.style.cssText = 'padding:5px 14px;border:2px solid white;background:transparent;'
-        + 'color:white;border-radius:20px;cursor:pointer;font-size:.82rem;font-weight:600;'
-        + 'transition:all .2s;white-space:nowrap;';
-      btn.onmouseover = function () { btn.style.background = 'white'; btn.style.color = color; };
-      btn.onmouseout  = function () { btn.style.background = 'transparent'; btn.style.color = 'white'; };
-      btn.onclick = function () { banner.remove(); if (a.action) a.action(); };
-      banner.appendChild(btn);
-    });
-
-    var closeBtn = document.createElement('button');
-    closeBtn.innerHTML = '&times;';
-    closeBtn.title = 'Fermer';
-    closeBtn.style.cssText = 'background:none;border:none;color:white;font-size:1.3rem;cursor:pointer;padding:0 4px;opacity:.8;margin-left:4px;';
-    closeBtn.onclick = function () { banner.remove(); };
-    banner.appendChild(closeBtn);
-
-    document.body.appendChild(banner);
-
-    function adj() {
-      var b = document.getElementById(id); if (!b) return;
-      b.style.left = window.innerWidth <= 768 ? '0' : 'var(--sidebar,0px)';
-    }
-    window.addEventListener('resize', adj);
-    adj();
-
-    if (autoDismiss) {
-      setTimeout(function () { var b = document.getElementById(id); if (b) b.remove(); }, autoDismiss);
-    }
+  // ── Overlay de transition automatique ──────────────────────
+  function showSwitchOverlay(text, sub) {
+    var ov  = document.getElementById('role-switch-overlay');
+    var txt = document.getElementById('rso-text');
+    var sb  = document.getElementById('rso-sub');
+    if (txt) txt.textContent = text || 'Mise à jour en cours…';
+    if (sb)  sb.textContent  = sub  || 'Veuillez patienter';
+    if (ov)  ov.classList.add('show');
+    // Stopper l'auto-refresh pendant la transition
+    if (window.stopAutoRefresh) window.stopAutoRefresh();
   }
 
+  // ── Changement de RÔLE — basculement auto ─────────────────
   function applyRoleChange(oldRole, newRole, fresh) {
     _syncLocalSession({ role: newRole });
-    if (_onRoleChange) { _onRoleChange(oldRole, newRole, fresh); return; }
     var newLabel = ROLE_LABELS[newRole] || newRole;
-    if (newRole === 'admin' || newRole === 'super_admin') {
-      _showBanner('sw-banner-role',
-        '🎉 Votre rôle est maintenant <strong>' + newLabel + '</strong>',
-        '#4CAF50',
-        [{ label: 'Accéder au panneau Admin', action: function () { window.location.href = _getBase() + 'admin/dashboard.html'; } },
-         { label: 'Plus tard', action: function () {} }],
-        null
-      );
-    } else if (newRole === 'member') {
-      _showBanner('sw-banner-role',
-        '⚠️ Votre rôle a changé : <strong>' + newLabel + '</strong>. Redirection dans 5s…',
-        '#ff9800',
-        [{ label: 'Aller sur mon espace', action: function () { window.location.href = _getBase() + 'member/dashboard.html'; } }],
-        null
-      );
-      setTimeout(function () { window.location.href = _getBase() + 'member/dashboard.html'; }, 5000);
-    } else if (newRole === 'pending') {
-      _showBanner('sw-banner-role', '⏳ Votre compte est <strong>en attente de validation</strong>', '#ff9800', [], null);
-    } else {
-      if (window.showToast) window.showToast('Rôle mis à jour : ' + newLabel, 'info', 5000);
-    }
-  }
 
-  function applyStatusChange(oldStatus, newStatus, fresh) {
-    _syncLocalSession({ status: newStatus });
-    if (_onStatusChange) { _onStatusChange(oldStatus, newStatus, fresh); return; }
-    if (newStatus === 'inactive') {
-      _showBanner('sw-banner-status',
-        '🚫 Votre compte a été <strong>désactivé</strong>. Déconnexion dans 5s.',
-        '#f44336',
-        [{ label: 'Se déconnecter', action: function () { if (window.Auth) window.Auth.logout(); } }],
-        null
+    if (newRole === 'member' || newRole === 'pending') {
+      // Rétrogradé ou mis en attente → redirection vers espace membre
+      showSwitchOverlay(
+        '⚠️ Vos droits ont été modifiés',
+        'Redirection vers votre espace membre…'
       );
-      setTimeout(function () { if (window.Auth) window.Auth.logout(); }, 5000);
+      setTimeout(function () {
+        window.location.href = _getBase() + 'member/dashboard.html';
+      }, 2500);
       return;
     }
+
+    if (newRole === 'super_admin' && oldRole === 'admin') {
+      // Promu super_admin → rechargement pour activer toutes les options SA
+      showSwitchOverlay(
+        '🎉 Vous êtes maintenant ' + newLabel,
+        'Rechargement pour activer toutes les fonctionnalités…'
+      );
+      setTimeout(function () {
+        window.location.reload();
+      }, 2000);
+      return;
+    }
+
+    if (newRole === 'admin' && oldRole === 'super_admin') {
+      // Rétrogradé de SA à admin → rechargement
+      showSwitchOverlay(
+        'ℹ️ Vos permissions ont été mises à jour',
+        'Rechargement en cours…'
+      );
+      setTimeout(function () {
+        window.location.reload();
+      }, 2000);
+      return;
+    }
+
+    // Autre changement → simple rechargement
+    showSwitchOverlay('Mise à jour du rôle : ' + newLabel, 'Rechargement…');
+    setTimeout(function () { window.location.reload(); }, 1500);
+  }
+
+  // ── Changement de STATUT — basculement auto ────────────────
+  function applyStatusChange(oldStatus, newStatus, fresh) {
+    _syncLocalSession({ status: newStatus });
+
+    if (newStatus === 'inactive') {
+      // Compte désactivé → déconnexion automatique immédiate
+      showSwitchOverlay(
+        '🚫 Votre compte a été désactivé',
+        'Déconnexion automatique en cours…'
+      );
+      setTimeout(function () {
+        if (window.Auth) window.Auth.logout();
+      }, 2500);
+      return;
+    }
+
+    if (newStatus === 'pending') {
+      // Mis en attente → redirection vers espace membre
+      showSwitchOverlay(
+        '⏳ Votre compte est en attente de validation',
+        'Redirection vers votre espace…'
+      );
+      setTimeout(function () {
+        window.location.href = _getBase() + 'member/dashboard.html';
+      }, 2000);
+      return;
+    }
+
     if (newStatus === 'active' && oldStatus !== 'active') {
-      _showBanner('sw-banner-status', '✅ Votre compte est maintenant <strong>actif</strong> !',
-        '#4CAF50', [{ label: 'OK', action: function () {} }], 15000);
+      // Réactivé → rechargement
+      showSwitchOverlay(
+        '✅ Votre compte est maintenant actif !',
+        'Rechargement de l\'interface…'
+      );
+      setTimeout(function () {
+        window.location.reload();
+      }, 2000);
     }
   }
 
+  // ── Changement BUREAU — basculement auto ──────────────────
   function applyBureauChange(isBureau, fresh) {
     _syncLocalSession({ is_bureau: isBureau });
-    if (_onBureauChange) { _onBureauChange(isBureau, fresh); return; }
     if (isBureau) {
-      _showBanner('sw-banner-bureau',
-        '🏅 Vous avez été ajouté(e) au <strong>bureau</strong> de l\'association !',
-        '#9c27b0', [{ label: 'Super !', action: function () {} }], 20000);
+      showSwitchOverlay(
+        '🏅 Vous faites partie du bureau !',
+        'Mise à jour de l\'interface…'
+      );
     } else {
-      if (window.showToast) window.showToast('ℹ️ Vous avez été retiré(e) du bureau', 'info', 5000);
+      showSwitchOverlay(
+        'ℹ️ Vous avez été retiré(e) du bureau',
+        'Mise à jour de l\'interface…'
+      );
     }
+    setTimeout(function () { window.location.reload(); }, 2000);
   }
 
+  // ── Tick principal ─────────────────────────────────────────
   async function _tick() {
     if (!window.supabase) return;
     var user = window.Auth ? window.Auth.getCurrentUser() : null;
@@ -723,16 +734,36 @@ window.SessionWatcher = (function () {
         .single();
       if (r.error) return;
       var fresh = r.data;
-      if (_lastRole !== null && fresh.role !== _lastRole) applyRoleChange(_lastRole, fresh.role, fresh);
+
+      // ── Vérifier changement de rôle ──
+      if (_lastRole !== null && fresh.role !== _lastRole) {
+        applyRoleChange(_lastRole, fresh.role, fresh);
+        _lastRole = fresh.role;
+        return; // La page va se recharger / rediriger
+      }
       _lastRole = fresh.role;
-      if (_lastStatus !== null && fresh.status !== _lastStatus) applyStatusChange(_lastStatus, fresh.status, fresh);
+
+      // ── Vérifier changement de statut ──
+      if (_lastStatus !== null && fresh.status !== _lastStatus) {
+        applyStatusChange(_lastStatus, fresh.status, fresh);
+        _lastStatus = fresh.status;
+        return;
+      }
       _lastStatus = fresh.status;
+
+      // ── Vérifier changement bureau ──
       var isBureau = !!fresh.is_bureau;
-      if (_lastIsBureau !== null && isBureau !== _lastIsBureau) applyBureauChange(isBureau, fresh);
+      if (_lastIsBureau !== null && isBureau !== _lastIsBureau) {
+        applyBureauChange(isBureau, fresh);
+        _lastIsBureau = isBureau;
+        return;
+      }
       _lastIsBureau = isBureau;
+
+      // ── Sync photo si changée ──
       if (fresh.photo && fresh.photo !== user.photo) {
         _syncLocalSession({ photo: fresh.photo });
-        ['sb-avatar','tb-avatar'].forEach(function (id) {
+        ['sb-avatar', 'tb-avatar'].forEach(function (id) {
           var el = document.getElementById(id);
           if (el && el.src !== fresh.photo) el.src = fresh.photo;
         });
@@ -744,20 +775,22 @@ window.SessionWatcher = (function () {
     if (_running) return;
     var user = window.Auth ? window.Auth.getCurrentUser() : null;
     if (!user) return;
+
     _lastRole     = user.role      || null;
     _lastStatus   = user.status    || null;
     _lastIsBureau = user.is_bureau != null ? !!user.is_bureau : null;
+
     opts = opts || {};
-    if (opts.onRoleChange)   _onRoleChange   = opts.onRoleChange;
-    if (opts.onStatusChange) _onStatusChange = opts.onStatusChange;
-    if (opts.onBureauChange) _onBureauChange = opts.onBureauChange;
-    if (opts.interval)       INTERVAL        = opts.interval;
+    if (opts.interval) INTERVAL = opts.interval;
+
     _running = true;
     _timer   = setInterval(_tick, INTERVAL);
+
     document.addEventListener('visibilitychange', function () {
       if (document.visibilityState === 'visible') _tick();
     });
-    console.log('[SessionWatcher] Démarré — intervalle : ' + INTERVAL + 'ms');
+
+    console.log('[SessionWatcher v2 Admin] Démarré — intervalle : ' + INTERVAL + 'ms — basculement AUTO');
   }
 
   function stop() {
@@ -767,14 +800,7 @@ window.SessionWatcher = (function () {
 
   window.addEventListener('beforeunload', stop);
 
-  return {
-    start      : start,
-    stop       : stop,
-    forceCheck : _tick,
-    onRoleChange   : function (fn) { _onRoleChange   = fn; },
-    onStatusChange : function (fn) { _onStatusChange = fn; },
-    onBureauChange : function (fn) { _onBureauChange = fn; }
-  };
+  return { start: start, stop: stop, forceCheck: _tick };
 })();
 </script>
 <script>
@@ -832,6 +858,7 @@ function toggleAutoRefresh() {
   updateRefreshUI();
 }
 window.toggleAutoRefresh = toggleAutoRefresh;
+window.stopAutoRefresh = stopAutoRefresh;
 
 function isModalOpen() { var modal = document.getElementById('modal'); return modal && modal.classList.contains('active'); }
 function userIsInteracting() { var active = document.activeElement; if (!active) return false; var tag = active.tagName; return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT'; }
@@ -925,7 +952,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   ]);
   loadNotifRecipients();
   startAutoRefresh();
-  // Démarrer le Session Watcher (surveille rôle/statut/bureau en temps réel)
+  // Démarrer le SessionWatcher (basculement automatique)
   setTimeout(function () {
     if (window.SessionWatcher) window.SessionWatcher.start();
   }, 1500);
