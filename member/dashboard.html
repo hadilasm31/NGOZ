@@ -33,6 +33,10 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;color:var(--text);over
 .sb-logo img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--primary)}
 .sb-logo-text .sb-name{font-size:.9rem;font-weight:600;color:#2a2a2a}
 .sb-logo-text .sb-role{font-size:.68rem;color:var(--primary);display:block;margin-top:1px}
+.sb-status-pill{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:.62rem;font-weight:600;margin-top:3px}
+.sb-status-pill.active{background:#e8f5e9;color:#2e7d32}
+.sb-status-pill.inactive{background:#ffebee;color:#c62828}
+.sb-status-pill.pending{background:#fff3e0;color:#e65100}
 .sb-nav{flex:1;padding:10px 0}
 .sb-section{padding:7px 14px 3px;font-size:.65rem;text-transform:uppercase;letter-spacing:1px;color:#999}
 .sb-item{display:flex;align-items:center;gap:10px;padding:9px 16px;color:#5a5a5a;text-decoration:none;transition:var(--tr);cursor:pointer;border:none;background:none;width:100%;font-size:.88rem;text-align:left;border-left:3px solid transparent}
@@ -46,15 +50,36 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;color:var(--text);over
 
 /* ── MAIN ── */
 .main{margin-left:var(--sidebar);min-height:100vh;padding:72px 22px 22px}
-.topbar{background:white;padding:12px 20px;border-radius:10px;box-shadow:var(--shadow);margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+.topbar{background:white;padding:12px 20px;border-radius:10px;box-shadow:var(--shadow);margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .topbar h1{font-size:1.2rem;color:var(--dark);font-weight:600}
+.user-mini{display:flex;align-items:center;gap:9px}
 .user-mini img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid var(--primary)}
 .user-mini span{font-weight:500;color:var(--dark);font-size:.88rem}
+
+/* ── STATUS BANNER (topbar) ── */
+.status-topbar-badge{padding:4px 12px;border-radius:20px;font-size:.75rem;font-weight:600;display:inline-flex;align-items:center;gap:5px}
+.status-topbar-badge.active{background:#e8f5e9;color:#2e7d32}
+.status-topbar-badge.inactive{background:#ffebee;color:#c62828}
+.status-topbar-badge.pending{background:#fff3e0;color:#e65100}
 
 /* ── INDICATEUR TEMPS RÉEL ── */
 .realtime-indicator{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;color:#888;margin-left:10px}
 .realtime-dot{width:7px;height:7px;border-radius:50%;background:#4CAF50;animation:pulse-dot 2s infinite}
 @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+
+/* ── OVERLAY TRANSITION RÔLE ── */
+#role-switch-overlay{
+  display:none;position:fixed;inset:0;z-index:99999;
+  background:rgba(0,0,0,.82);
+  align-items:center;justify-content:center;
+  flex-direction:column;gap:18px;
+  text-align:center;
+}
+#role-switch-overlay.show{display:flex}
+.rso-spinner{width:52px;height:52px;border:5px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:rso-spin 0.8s linear infinite}
+@keyframes rso-spin{to{transform:rotate(360deg)}}
+.rso-text{color:white;font-size:1.1rem;font-weight:600;max-width:320px;line-height:1.5}
+.rso-sub{color:rgba(255,255,255,.6);font-size:.82rem;margin-top:4px}
 
 /* ── PANELS ── */
 .panel{display:none}.panel.active{display:block}
@@ -62,12 +87,21 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;color:var(--text);over
 .card h2{font-size:1rem;color:var(--dark);font-weight:600;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #eee;display:flex;align-items:center;gap:8px}
 
 /* ── STATS ── */
-.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:20px}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
 .stat-card{background:white;border-radius:10px;padding:16px;box-shadow:var(--shadow);display:flex;align-items:center;gap:13px;border:1px solid rgba(0,0,0,.04)}
 .stat-icon{width:48px;height:48px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:white;flex-shrink:0}
 .ic-green{background:var(--primary)}.ic-blue{background:var(--secondary)}.ic-orange{background:var(--warning)}.ic-red{background:var(--danger)}.ic-purple{background:#9c27b0}
 .stat-val{font-size:1.6rem;font-weight:700;color:var(--dark);line-height:1}
 .stat-lbl{font-size:.75rem;color:var(--text);margin-top:2px}
+
+/* ── ÉCRAN COMPTE INACTIF/EN ATTENTE ── */
+.blocked-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:40px 20px}
+.blocked-icon{font-size:4rem;margin-bottom:20px}
+.blocked-title{font-size:1.4rem;font-weight:700;color:var(--dark);margin-bottom:10px}
+.blocked-text{font-size:.95rem;color:var(--text);line-height:1.6;max-width:480px;margin:0 auto 24px}
+.blocked-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:20px;font-size:.82rem;font-weight:600;margin-bottom:20px}
+.blocked-badge.inactive{background:#ffebee;color:#c62828}
+.blocked-badge.pending{background:#fff3e0;color:#e65100}
 
 /* ── TABLES ── */
 .table-wrap{overflow-x:auto}
@@ -170,60 +204,33 @@ tr:hover td{background:#fafafa}
 .loading-row td,.empty-row td{text-align:center;padding:30px;color:var(--text);font-style:italic}
 .error-row td{text-align:center;padding:20px;color:var(--danger)}
 
-/* ── SESSION WATCHER BANNER ── */
-#sw-member-banner{
-  position:fixed;
-  top:52px;
-  left:var(--sidebar,250px);
-  right:0;
-  z-index:9997;
-  padding:12px 20px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:12px;
-  font-size:.9rem;
-  font-family:inherit;
-  box-shadow:0 3px 10px rgba(0,0,0,.2);
-  flex-wrap:wrap;
-  animation:swBannerIn .4s cubic-bezier(.22,1,.36,1);
-}
-@keyframes swBannerIn{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}
-.sw-banner-btn{
-  padding:5px 14px;
-  border:2px solid white;
-  background:transparent;
-  color:white;
-  border-radius:20px;
-  cursor:pointer;
-  font-size:.82rem;
-  font-weight:600;
-  transition:all .2s;
-  white-space:nowrap;
-}
-.sw-banner-close{
-  background:none;
-  border:none;
-  color:white;
-  font-size:1.2rem;
-  cursor:pointer;
-  padding:0 4px;
-  opacity:.8;
-  line-height:1;
-}
-
+/* ── RESPONSIVE ── */
 @media(max-width:768px){
   .sidebar{transform:translateX(-110%)}.sidebar.open{transform:translateX(0)}
   .main{margin-left:0;padding:72px 12px 12px}
   .form-row{grid-template-columns:1fr}
-  .stats-row{grid-template-columns:repeat(2,1fr)}
-  .events-grid,.more-events-wrap{grid-template-columns:repeat(2,1fr);gap:9px}
-  #sw-member-banner{left:0}
+  .stats-row{grid-template-columns:repeat(2,1fr)!important}
+  #panel-overview .stats-row{grid-template-columns:repeat(2,1fr)!important}
+  .events-grid,.more-events-wrap{grid-template-columns:repeat(2,1fr)!important;gap:9px}
+  #msg-layout{grid-template-columns:1fr!important}
 }
-@media(max-width:480px){.stats-row{grid-template-columns:1fr}}
+@media(max-width:480px){
+  .stats-row{grid-template-columns:repeat(2,1fr)!important}
+  #panel-overview .stats-row{grid-template-columns:repeat(2,1fr)!important}
+  .events-grid,.more-events-wrap{grid-template-columns:repeat(2,1fr)!important;gap:8px}
+}
 </style>
 </head>
 <body>
+
+<!-- ── OVERLAY BASCULEMENT AUTOMATIQUE ── -->
+<div id="role-switch-overlay">
+  <div class="rso-spinner"></div>
+  <div>
+    <div class="rso-text" id="rso-text">Mise à jour de votre espace…</div>
+    <div class="rso-sub" id="rso-sub">Redirection en cours</div>
+  </div>
+</div>
 
 <nav class="top-navbar">
   <div class="top-navbar-left">
@@ -243,6 +250,7 @@ tr:hover td{background:#fafafa}
     <div class="sb-logo-text">
       <span class="sb-name" id="sb-name">Membre</span>
       <span class="sb-role" id="sb-role">Membre</span>
+      <span class="sb-status-pill" id="sb-status-pill">actif</span>
     </div>
   </div>
   <nav class="sb-nav">
@@ -277,7 +285,8 @@ tr:hover td{background:#fafafa}
         <span style="font-size:.7rem;color:#aaa;font-weight:400;">en direct</span>
       </span>
     </h1>
-    <div style="display:flex;align-items:center;gap:8px;">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <span id="topbar-status-badge" class="status-topbar-badge active" style="display:none;"></span>
       <button id="tb-notif-btn" title="Notifications"
               onclick="window.Notif&&window.Notif.openPanel()"
               style="background:none;border:none;cursor:pointer;font-size:1.2rem;padding:5px 7px;border-radius:50%;position:relative;">
@@ -288,7 +297,7 @@ tr:hover td{background:#fafafa}
               style="background:none;border:none;cursor:pointer;font-size:.95rem;padding:5px 7px;border-radius:50%;color:#888;">
         <i class="fas fa-volume-up"></i>
       </button>
-      <div class="user-mini" style="display:flex;align-items:center;gap:9px;">
+      <div class="user-mini">
         <img id="tb-avatar" src="" alt="Avatar" onerror="window.avatarOnError(this)">
         <span id="tb-name">Membre</span>
       </div>
@@ -300,7 +309,7 @@ tr:hover td{background:#fafafa}
     <div class="stats-row" id="ov-stats">
       <div class="stat-card" style="grid-column:1/-1;text-align:center;padding:30px;">Chargement…</div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;flex-wrap:wrap;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
       <div class="card">
         <h2><i class="fas fa-calendar-alt" style="color:var(--primary)"></i> Prochains événements</h2>
         <div id="ov-events-list"></div>
@@ -338,7 +347,6 @@ tr:hover td{background:#fafafa}
       <div class="fg"><label>Bio</label><textarea id="pf-bio" rows="3"></textarea></div>
       <div id="pf-fb"></div>
       <button class="btn-primary" onclick="saveProfile()"><i class="fas fa-save"></i> Enregistrer</button>
-
       <div class="section-separator">
         <h3 style="font-size:.95rem;color:var(--dark);margin-bottom:14px;">
           <i class="fas fa-lock" style="color:var(--primary);margin-right:7px;"></i>Changer le mot de passe
@@ -347,9 +355,7 @@ tr:hover td{background:#fafafa}
           <label>Mot de passe actuel</label>
           <div class="password-wrapper">
             <input type="password" id="pwd-old" placeholder="••••••••" autocomplete="current-password">
-            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('pwd-old',this)">
-              <i class="fas fa-eye"></i>
-            </button>
+            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('pwd-old',this)"><i class="fas fa-eye"></i></button>
           </div>
         </div>
         <div class="form-row">
@@ -357,25 +363,19 @@ tr:hover td{background:#fafafa}
             <label>Nouveau mot de passe</label>
             <div class="password-wrapper">
               <input type="password" id="pwd-new" placeholder="••••••••" autocomplete="new-password">
-              <button type="button" class="toggle-password" onclick="togglePasswordVisibility('pwd-new',this)">
-                <i class="fas fa-eye"></i>
-              </button>
+              <button type="button" class="toggle-password" onclick="togglePasswordVisibility('pwd-new',this)"><i class="fas fa-eye"></i></button>
             </div>
           </div>
           <div class="fg">
             <label>Confirmer</label>
             <div class="password-wrapper">
               <input type="password" id="pwd-new2" placeholder="••••••••" autocomplete="new-password">
-              <button type="button" class="toggle-password" onclick="togglePasswordVisibility('pwd-new2',this)">
-                <i class="fas fa-eye"></i>
-              </button>
+              <button type="button" class="toggle-password" onclick="togglePasswordVisibility('pwd-new2',this)"><i class="fas fa-eye"></i></button>
             </div>
           </div>
         </div>
         <div id="pwd-fb"></div>
-        <button class="btn-blue" onclick="submitPasswordChange()">
-          <i class="fas fa-key"></i> Modifier le mot de passe
-        </button>
+        <button class="btn-blue" onclick="submitPasswordChange()"><i class="fas fa-key"></i> Modifier le mot de passe</button>
       </div>
     </div>
   </div>
@@ -383,8 +383,7 @@ tr:hover td{background:#fafafa}
   <!-- ── ÉVÉNEMENTS ── -->
   <div class="panel" id="panel-events">
     <div class="card">
-      <h2>
-        <i class="fas fa-calendar-alt" style="color:var(--primary)"></i> Événements à venir
+      <h2><i class="fas fa-calendar-alt" style="color:var(--primary)"></i> Événements à venir
         <span style="font-size:.72rem;color:#aaa;font-weight:400;margin-left:8px;">• Mis à jour automatiquement</span>
       </h2>
       <div id="events-grid" class="events-grid"></div>
@@ -433,8 +432,8 @@ tr:hover td{background:#fafafa}
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:18px;">
-        <div class="card" id="msg-read-zone" style="flex:1;">
-          <div id="msg-read-header" style="margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #eee;">
+        <div class="card" style="flex:1;">
+          <div style="margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #eee;">
             <div style="font-size:1.05rem;font-weight:600;color:var(--dark);" id="msg-read-subject">Sélectionnez un message</div>
             <div style="font-size:.8rem;color:var(--text);margin-top:4px;" id="msg-read-meta"></div>
           </div>
@@ -454,7 +453,7 @@ tr:hover td{background:#fafafa}
     </div>
   </div>
 
-  <!-- ── NOTIFICATIONS ── -->
+  <!-- ── NOTIFICATIONS PREFS ── -->
   <div class="panel" id="panel-notif-prefs">
     <div class="card" style="max-width:600px;">
       <h2><i class="fas fa-bell" style="color:var(--primary)"></i> Préférences de notifications</h2>
@@ -475,13 +474,10 @@ tr:hover td{background:#fafafa}
           <div style="font-weight:500;color:var(--dark);font-size:.88rem;">Tester le son</div>
           <div style="font-size:.75rem;color:var(--text);" id="member-current-snd">Son : défaut</div>
         </div>
-        <button class="btn-primary" onclick="window.Notif&&window.Notif.playTest()">
-          <i class="fas fa-play"></i> Tester
-        </button>
+        <button class="btn-primary" onclick="window.Notif&&window.Notif.playTest()"><i class="fas fa-play"></i> Tester</button>
       </div>
     </div>
   </div>
-
 </main>
 
 <!-- Modal inscription événement -->
@@ -499,92 +495,388 @@ tr:hover td{background:#fafafa}
       <textarea id="reg-message" rows="3" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:7px;font-family:inherit;font-size:.88rem;resize:vertical;"></textarea>
     </div>
     <div id="reg-fb" style="margin-bottom:10px;"></div>
-    <button class="btn-primary" onclick="doRegister()" style="width:100%;justify-content:center;">
-      <i class="fas fa-check"></i> Confirmer
-    </button>
+    <button class="btn-primary" onclick="doRegister()" style="width:100%;justify-content:center;"><i class="fas fa-check"></i> Confirmer</button>
   </div>
 </div>
 
 <script src="../components.js"></script>
-<script src="../session-watcher.js"></script>
 <script>
 'use strict';
 
-// ─── Toggle mot de passe ───
-window.togglePasswordVisibility = function(inputId, button) {
-  var input = document.getElementById(inputId);
-  if (!input) return;
-  var show = input.type === 'password';
+// ================================================================
+// SESSION WATCHER v2 — Ngozistes du Royaume
+// Vérifie rôle, statut, bureau toutes les 10 secondes.
+// BASCULE AUTOMATIQUEMENT sans aucune interaction utilisateur.
+// ================================================================
+window.SessionWatcher = (function () {
+  var INTERVAL      = 10000;
+  var _timer        = null;
+  var _running      = false;
+  var _lastRole     = null;
+  var _lastStatus   = null;
+  var _lastIsBureau = null;
+
+  var ROLE_LABELS = {
+    super_admin: 'Super Administrateur',
+    admin: 'Administrateur',
+    member: 'Membre',
+    pending: 'En attente'
+  };
+
+  // ── Sync localStorage ──────────────────────────────────────
+  function _syncLocalSession(data) {
+    try {
+      var key  = 'ngozistes_session';
+      var sess = JSON.parse(localStorage.getItem(key) || '{}');
+      Object.assign(sess, data);
+      localStorage.setItem(key, JSON.stringify(sess));
+      window._currentUser = sess;
+    } catch (_) {}
+  }
+
+  // ── Overlay de transition automatique ──────────────────────
+  function showSwitchOverlay(text, sub) {
+    var ov  = document.getElementById('role-switch-overlay');
+    var txt = document.getElementById('rso-text');
+    var sb  = document.getElementById('rso-sub');
+    if (txt) txt.textContent = text || 'Mise à jour en cours…';
+    if (sb)  sb.textContent  = sub  || 'Veuillez patienter';
+    if (ov)  ov.classList.add('show');
+  }
+
+  // ── Appliquer changement de STATUT — basculement auto ──────
+  function applyStatusChange(oldStatus, newStatus, fresh) {
+    _syncLocalSession({ status: newStatus });
+
+    // Mise à jour visuelle immédiate
+    updateStatusUI(newStatus);
+
+    if (newStatus === 'inactive') {
+      // Compte désactivé → déconnexion auto immédiate
+      showSwitchOverlay(
+        '🚫 Votre compte a été désactivé',
+        'Déconnexion automatique en cours…'
+      );
+      setTimeout(function () {
+        if (window.Auth) window.Auth.logout();
+      }, 2500);
+      return;
+    }
+
+    if (newStatus === 'pending') {
+      // Passage en attente → rechargement auto de la page
+      showSwitchOverlay(
+        '⏳ Votre compte est en attente de validation',
+        'Mise à jour de l\'interface…'
+      );
+      setTimeout(function () {
+        window.location.reload();
+      }, 2000);
+      return;
+    }
+
+    if (newStatus === 'active' && oldStatus !== 'active') {
+      // Compte réactivé → rechargement auto pour tout débloquer
+      showSwitchOverlay(
+        '✅ Votre compte est maintenant actif !',
+        'Chargement de toutes les fonctionnalités…'
+      );
+      setTimeout(function () {
+        window.location.reload();
+      }, 2000);
+    }
+  }
+
+  // ── Appliquer changement de RÔLE — basculement auto ────────
+  function applyRoleChange(oldRole, newRole, fresh) {
+    _syncLocalSession({ role: newRole });
+
+    var newLabel = ROLE_LABELS[newRole] || newRole;
+
+    if (newRole === 'admin' || newRole === 'super_admin') {
+      // Promu admin/super_admin → redirection automatique vers le dashboard admin
+      showSwitchOverlay(
+        '🎉 Vous êtes maintenant ' + newLabel,
+        'Redirection automatique vers le panneau administrateur…'
+      );
+      setTimeout(function () {
+        window.location.href = '../admin/dashboard.html';
+      }, 2500);
+      return;
+    }
+
+    if (newRole === 'pending') {
+      showSwitchOverlay(
+        '⏳ Votre compte est en attente de validation',
+        'Mise à jour de l\'interface…'
+      );
+      setTimeout(function () {
+        window.location.reload();
+      }, 2000);
+      return;
+    }
+
+    if (newRole === 'member' && (oldRole === 'admin' || oldRole === 'super_admin')) {
+      // Rétrogradé → rechargement
+      showSwitchOverlay(
+        'ℹ️ Vos droits ont été mis à jour',
+        'Rechargement de votre espace membre…'
+      );
+      setTimeout(function () {
+        window.location.reload();
+      }, 2000);
+      return;
+    }
+
+    // Autre changement de rôle mineur → simple rechargement
+    showSwitchOverlay('Mise à jour du rôle', 'Rechargement en cours…');
+    setTimeout(function () { window.location.reload(); }, 1500);
+  }
+
+  // ── Appliquer changement BUREAU — basculement auto ──────────
+  function applyBureauChange(isBureau, fresh) {
+    _syncLocalSession({ is_bureau: isBureau });
+    if (isBureau) {
+      showSwitchOverlay(
+        '🏅 Vous faites partie du bureau !',
+        'Mise à jour de votre espace…'
+      );
+    } else {
+      showSwitchOverlay(
+        'ℹ️ Vous avez été retiré(e) du bureau',
+        'Mise à jour de votre espace…'
+      );
+    }
+    setTimeout(function () { window.location.reload(); }, 2000);
+  }
+
+  // ── Tick principal ──────────────────────────────────────────
+  async function _tick() {
+    if (!window.supabase) return;
+    var user = window.Auth ? window.Auth.getCurrentUser() : null;
+    if (!user || !user.id) return;
+    try {
+      var r = await window.supabase
+        .from('users')
+        .select('id,role,status,is_bureau,prenom,nom,photo')
+        .eq('id', user.id)
+        .single();
+      if (r.error) return;
+      var fresh = r.data;
+
+      // ── Vérifier changement de rôle ──
+      if (_lastRole !== null && fresh.role !== _lastRole) {
+        applyRoleChange(_lastRole, fresh.role, fresh);
+        _lastRole = fresh.role;
+        return; // Arrêter ici, la page va se recharger
+      }
+      _lastRole = fresh.role;
+
+      // ── Vérifier changement de statut ──
+      if (_lastStatus !== null && fresh.status !== _lastStatus) {
+        applyStatusChange(_lastStatus, fresh.status, fresh);
+        _lastStatus = fresh.status;
+        return; // Arrêter ici, la page va se recharger
+      }
+      _lastStatus = fresh.status;
+
+      // ── Vérifier changement bureau ──
+      var isBureau = !!fresh.is_bureau;
+      if (_lastIsBureau !== null && isBureau !== _lastIsBureau) {
+        applyBureauChange(isBureau, fresh);
+        _lastIsBureau = isBureau;
+        return;
+      }
+      _lastIsBureau = isBureau;
+
+      // ── Sync photo si changée ──
+      if (fresh.photo && fresh.photo !== user.photo) {
+        _syncLocalSession({ photo: fresh.photo });
+        ['sb-avatar', 'tb-avatar', 'profile-photo-prev'].forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el && el.src !== fresh.photo) el.src = fresh.photo;
+        });
+      }
+    } catch (_) {}
+  }
+
+  function start(opts) {
+    if (_running) return;
+    var user = window.Auth ? window.Auth.getCurrentUser() : null;
+    if (!user) return;
+
+    // Initialiser les valeurs de référence depuis la session actuelle
+    _lastRole     = user.role      || null;
+    _lastStatus   = user.status    || null;
+    _lastIsBureau = user.is_bureau != null ? !!user.is_bureau : null;
+
+    opts = opts || {};
+    if (opts.interval) INTERVAL = opts.interval;
+
+    _running = true;
+    _timer   = setInterval(_tick, INTERVAL);
+
+    // Vérifier aussi dès que la page redevient visible
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'visible') _tick();
+    });
+
+    console.log('[SessionWatcher v2] Démarré — intervalle : ' + INTERVAL + 'ms — basculement AUTO');
+  }
+
+  function stop() {
+    _running = false;
+    if (_timer) { clearInterval(_timer); _timer = null; }
+  }
+
+  window.addEventListener('beforeunload', stop);
+
+  return {
+    start:      start,
+    stop:       stop,
+    forceCheck: _tick
+  };
+})();
+
+// ================================================================
+// MISE À JOUR INTERFACE SELON STATUT
+// ================================================================
+var PANELS_REQUIRE_ACTIVE = ['events', 'announcements', 'messages', 'notif-prefs'];
+
+function updateStatusUI(status) {
+  var isActive   = status === 'active';
+  var isPending  = status === 'pending';
+  var isInactive = status === 'inactive';
+
+  // 1. Pill sidebar
+  var pill = document.getElementById('sb-status-pill');
+  if (pill) {
+    pill.className = 'sb-status-pill ' + status;
+    var pillLabels = { active: '● actif', pending: '⏳ en attente', inactive: '🚫 désactivé' };
+    pill.textContent = pillLabels[status] || status;
+  }
+
+  // 2. Badge topbar
+  var topBadge = document.getElementById('topbar-status-badge');
+  if (topBadge) {
+    if (!isActive) {
+      topBadge.style.display = 'inline-flex';
+      topBadge.className = 'status-topbar-badge ' + status;
+      var badgeLabels = { pending: '⏳ En attente de validation', inactive: '🚫 Compte désactivé' };
+      topBadge.textContent = badgeLabels[status] || status;
+    } else {
+      topBadge.style.display = 'none';
+    }
+  }
+
+  // 3. Fond topbar selon statut
+  var topbar = document.querySelector('.topbar');
+  if (topbar) {
+    if (isInactive)     { topbar.style.borderLeft = '4px solid #f44336'; topbar.style.background = '#fff5f5'; }
+    else if (isPending) { topbar.style.borderLeft = '4px solid #ff9800'; topbar.style.background = '#fffdf5'; }
+    else                { topbar.style.borderLeft = ''; topbar.style.background = ''; }
+  }
+
+  // 4. Navigation : désactiver panels si non-actif
+  PANELS_REQUIRE_ACTIVE.forEach(function (panelId) {
+    var btn = document.querySelector('.sb-item[data-panel="' + panelId + '"]');
+    if (!btn) return;
+    if (!isActive) {
+      btn.style.opacity = '0.4';
+      btn.style.pointerEvents = 'none';
+      btn.title = isPending ? 'En attente de validation' : 'Compte désactivé';
+    } else {
+      btn.style.opacity = '';
+      btn.style.pointerEvents = '';
+      btn.title = '';
+    }
+  });
+
+  // 5. Remplacer contenu des panels bloqués
+  if (!isActive) {
+    var icon     = isInactive ? '🚫' : '⏳';
+    var title    = isInactive ? 'Compte désactivé' : 'En attente de validation';
+    var text     = isInactive
+      ? 'Votre compte a été désactivé par un administrateur. Vous ne pouvez plus accéder à cette section. Pour toute question, contactez-nous.'
+      : 'Votre adhésion est en cours de traitement. Dès qu\'un administrateur aura validé votre compte, vous aurez accès à toutes les fonctionnalités.';
+    var badgeCls = isInactive ? 'inactive' : 'pending';
+    var badgeTxt = isInactive ? '🚫 Compte désactivé' : '⏳ En attente de validation';
+
+    var blockedHtml = '<div class="blocked-screen">'
+      + '<div class="blocked-icon">' + icon + '</div>'
+      + '<span class="blocked-badge ' + badgeCls + '">' + badgeTxt + '</span>'
+      + '<div class="blocked-title">' + title + '</div>'
+      + '<div class="blocked-text">' + text + '</div>'
+      + (isPending
+          ? '<button class="btn-primary" onclick="window.Auth&&window.Auth.logout()" style="background:#ff9800;">'
+            + '<i class="fas fa-sign-out-alt"></i> Se déconnecter</button>'
+          : '')
+      + '</div>';
+
+    PANELS_REQUIRE_ACTIVE.forEach(function (panelId) {
+      var panelEl = document.getElementById('panel-' + panelId);
+      if (panelEl) panelEl.innerHTML = blockedHtml;
+    });
+
+    // Avertissement dans l'overview
+    var ovPanel = document.getElementById('panel-overview');
+    var existWarn = document.getElementById('ov-blocked-warn');
+    if (ovPanel && !existWarn) {
+      var warn = document.createElement('div');
+      warn.id = 'ov-blocked-warn';
+      if (isInactive) {
+        var ovStats = document.getElementById('ov-stats');
+        if (ovStats) ovStats.innerHTML = '';
+        var ovCols = document.querySelector('#panel-overview > div:last-child');
+        if (ovCols) ovCols.style.display = 'none';
+        warn.innerHTML = '<div style="background:#ffebee;border:1px solid #ef9a9a;border-radius:10px;padding:18px 20px;margin-bottom:18px;display:flex;align-items:center;gap:14px;">'
+          + '<span style="font-size:2rem;">🚫</span>'
+          + '<div><div style="font-weight:600;color:#c62828;margin-bottom:4px;">Compte désactivé</div>'
+          + '<div style="font-size:.85rem;color:#555;">Votre compte a été désactivé par un administrateur. Contactez-nous pour plus d\'informations.</div></div></div>';
+      } else {
+        warn.innerHTML = '<div style="background:#fff3e0;border:1px solid #ffcc80;border-radius:10px;padding:18px 20px;margin-bottom:18px;display:flex;align-items:center;gap:14px;">'
+          + '<span style="font-size:2rem;">⏳</span>'
+          + '<div><div style="font-weight:600;color:#e65100;margin-bottom:4px;">Adhésion en cours de validation</div>'
+          + '<div style="font-size:.85rem;color:#555;">Un administrateur examinera votre dossier prochainement. Vous recevrez une notification dès que votre compte sera activé.</div></div></div>';
+      }
+      ovPanel.insertBefore(warn, ovPanel.firstChild);
+    }
+  } else {
+    // Compte actif : nettoyer les avertissements
+    var existWarn3 = document.getElementById('ov-blocked-warn');
+    if (existWarn3) existWarn3.remove();
+    var ovCols2 = document.querySelector('#panel-overview > div:last-child');
+    if (ovCols2) ovCols2.style.display = '';
+  }
+}
+
+// ── Sauvegarde HTML original des panels ──────────────────────────
+var _eventsOrigHTML = '';
+var _annOrigHTML    = '';
+var _msgOrigHTML    = '';
+var _notifOrigHTML  = '';
+
+// ────────────────────────────────────────────────────────────────
+
+window.togglePasswordVisibility = function (inputId, button) {
+  var input = document.getElementById(inputId); if (!input) return;
+  var show  = input.type === 'password';
   input.type = show ? 'text' : 'password';
   var ic = button.querySelector('i');
   if (ic) ic.className = 'fas fa-eye' + (show ? '-slash' : '');
 };
 
-var currentUser    = null;
-var inboxMessages  = [];
-var sentMessages   = [];
-var openMessageId  = null;
-
+var currentUser   = null;
+var inboxMessages = [];
+var sentMessages  = [];
+var openMessageId = null;
 var _eventsAllData  = [];
 var _eventsMyRegIds = new Set();
 
 var PANEL_TITLES = {
-  overview:      'Accueil',
-  profile:       'Mon profil',
-  events:        'Événements',
-  announcements: 'Annonces',
-  messages:      'Messages',
-  'notif-prefs': 'Notifications'
+  overview: 'Accueil', profile: 'Mon profil', events: 'Événements',
+  announcements: 'Annonces', messages: 'Messages', 'notif-prefs': 'Notifications'
 };
-
-// ═══════════════════════════════
-// SESSION WATCHER — bannière membre
-// ═══════════════════════════════
-function showMemberBanner(html, color, actions, autoDismissMs) {
-  var existing = document.getElementById('sw-member-banner');
-  if (existing) existing.remove();
-
-  var banner = document.createElement('div');
-  banner.id = 'sw-member-banner';
-  banner.style.cssText = 'position:fixed;top:52px;left:var(--sidebar,250px);right:0;z-index:9997;'
-    + 'background:' + color + ';color:white;padding:12px 20px;'
-    + 'display:flex;align-items:center;justify-content:center;gap:12px;'
-    + 'font-size:.9rem;font-family:inherit;box-shadow:0 3px 10px rgba(0,0,0,.2);'
-    + 'flex-wrap:wrap;animation:swBannerIn .4s cubic-bezier(.22,1,.36,1);';
-
-  var msgEl = document.createElement('span');
-  msgEl.innerHTML = html;
-  banner.appendChild(msgEl);
-
-  (actions || []).forEach(function (a) {
-    var btn = document.createElement('button');
-    btn.textContent = a.label;
-    btn.className = 'sw-banner-btn';
-    btn.onmouseover = function () { btn.style.background = 'white'; btn.style.color = color; };
-    btn.onmouseout  = function () { btn.style.background = 'transparent'; btn.style.color = 'white'; };
-    btn.onclick = function () { banner.remove(); if (a.action) a.action(); };
-    banner.appendChild(btn);
-  });
-
-  var closeBtn = document.createElement('button');
-  closeBtn.innerHTML = '&times;';
-  closeBtn.className = 'sw-banner-close';
-  closeBtn.onclick = function () { banner.remove(); };
-  banner.appendChild(closeBtn);
-
-  document.body.appendChild(banner);
-
-  // Responsive
-  function adj() {
-    var b = document.getElementById('sw-member-banner');
-    if (b) b.style.left = window.innerWidth <= 768 ? '0' : 'var(--sidebar,250px)';
-  }
-  window.addEventListener('resize', adj);
-
-  // Auto-fermeture
-  var ms = autoDismissMs !== undefined ? autoDismissMs : 30000;
-  if (ms > 0) setTimeout(function () { if (banner.parentNode) banner.remove(); }, ms);
-}
 
 // ═══════════════════════════════
 // INIT
@@ -596,10 +888,16 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   var valid = await window.Auth.validateSession();
   if (!valid) {
-    window.showToast('Session expirée, reconnectez-vous.', 'warning', 3000);
+    window.showToast && window.showToast('Session expirée, reconnectez-vous.', 'warning', 3000);
     setTimeout(function () { window.location.href = '../login.html'; }, 1500);
     return;
   }
+
+  // Sauvegarder le HTML original des panels
+  _eventsOrigHTML = document.getElementById('panel-events').innerHTML;
+  _annOrigHTML    = document.getElementById('panel-announcements').innerHTML;
+  _msgOrigHTML    = document.getElementById('panel-messages').innerHTML;
+  _notifOrigHTML  = document.getElementById('panel-notif-prefs').innerHTML;
 
   initSidebar();
   initPanels();
@@ -607,138 +905,51 @@ document.addEventListener('DOMContentLoaded', async function () {
   initMemberNotifPrefs();
   updateMemberSilenceUI();
 
+  // Appliquer le statut initial
+  updateStatusUI(currentUser.status || 'active');
+
+  // Charger les données
+  var isActive = currentUser.status === 'active';
   await Promise.allSettled([
     loadOverview(),
     loadProfile(),
-    loadEvents(),
-    loadAnnouncements(),
-    loadMessages()
+    isActive ? loadEvents()        : Promise.resolve(),
+    isActive ? loadAnnouncements() : Promise.resolve(),
+    isActive ? loadMessages()      : Promise.resolve()
   ]);
 
-  // ── Démarrer le SessionWatcher ─────────────────────────────
+  // ── Démarrer le SessionWatcher (basculement automatique) ──
   setTimeout(function () {
-    if (!window.SessionWatcher) return;
+    if (window.SessionWatcher) window.SessionWatcher.start();
+  }, 1500);
 
-    window.SessionWatcher.start({
-
-      onRoleChange: function (oldRole, newRole, user) {
-        var LABELS = { super_admin:'Super Administrateur', admin:'Administrateur', member:'Membre', pending:'En attente' };
-        var newLabel = LABELS[newRole] || newRole;
-
-        // Promotion → admin ou super_admin
-        if (newRole === 'admin' || newRole === 'super_admin') {
-          showMemberBanner(
-            '🎉 Félicitations ! Vous êtes maintenant <strong>' + newLabel + '</strong>',
-            '#4CAF50',
-            [{
-              label: 'Accéder au panneau Admin',
-              action: function () { window.location.href = '../admin/dashboard.html'; }
-            }, {
-              label: 'Rester ici',
-              action: function () {}
-            }],
-            0 // pas d'auto-fermeture
-          );
-          window.showToast && window.showToast('🎉 Nouveau rôle : ' + newLabel, 'success', 8000);
-          return;
-        }
-
-        // Pending
-        if (newRole === 'pending') {
-          showMemberBanner(
-            '⏳ Votre compte est <strong>en attente de validation</strong>',
-            '#ff9800', [], 0
-          );
-          return;
-        }
-
-        // Cas général (ex: member → member, autre)
-        window.showToast && window.showToast('Rôle mis à jour : ' + newLabel, 'info', 5000);
-      },
-
-      onStatusChange: function (oldStatus, newStatus, user) {
-        // Désactivé → déconnexion forcée
-        if (newStatus === 'inactive') {
-          showMemberBanner(
-            '🚫 Votre compte a été <strong>désactivé</strong>. Vous allez être déconnecté dans 5 secondes.',
-            '#f44336',
-            [{ label: 'Se déconnecter maintenant', action: function () { window.Auth.logout(); } }],
-            0
-          );
-          setTimeout(function () { window.Auth.logout(); }, 5000);
-          return;
-        }
-
-        // Réactivé
-        if (newStatus === 'active' && oldStatus !== 'active') {
-          showMemberBanner(
-            '✅ Votre compte est maintenant <strong>actif</strong> !',
-            '#4CAF50',
-            [{ label: 'OK', action: function () {} }],
-            10000
-          );
-          window.showToast && window.showToast('✅ Compte réactivé', 'success', 5000);
-          return;
-        }
-
-        // Pending
-        if (newStatus === 'pending') {
-          showMemberBanner(
-            '⏳ Votre compte est <strong>en attente de validation</strong>',
-            '#ff9800', [], 0
-          );
-        }
-      },
-
-      onBureauChange: function (isBureau, user) {
-        if (isBureau) {
-          showMemberBanner(
-            '🏅 Vous avez été ajouté(e) au <strong>bureau</strong> de l\'association !',
-            '#9c27b0',
-            [{ label: 'Super !', action: function () {} }],
-            20000
-          );
-          window.showToast && window.showToast('🎉 Vous faites partie du bureau !', 'success', 7000);
-        } else {
-          window.showToast && window.showToast('ℹ️ Vous avez été retiré(e) du bureau', 'info', 5000);
-        }
-      }
-
-    }); // fin start()
-  }, 1500); // délai post-init
-
-  // ── Polling messages & notifications toutes les 30s ────────
+  // ── Polling toutes les 30s ────────────────────────────────
   setInterval(function () {
     if (document.visibilityState === 'hidden') return;
-    var activePanel = document.querySelector('.panel.active');
-    if (!activePanel) return;
+    var activePanel = document.querySelector('.panel.active'); if (!activePanel) return;
     var pid = activePanel.id;
-    if (pid === 'panel-messages')      loadMessages();
-    else if (pid === 'panel-events')   loadEvents();
-    else if (pid === 'panel-overview') loadOverview();
+    if      (pid === 'panel-messages')      loadMessages();
+    else if (pid === 'panel-events')        loadEvents();
+    else if (pid === 'panel-overview')      loadOverview();
     else if (pid === 'panel-announcements') loadAnnouncements();
   }, 30000);
 
-  // Badge notifications toutes les 5s
+  // Badge notifs toutes les 5s
   setInterval(function () {
+    var tb = document.getElementById('tb-badge'); if (!tb) return;
     var g  = document.getElementById('notif-badge-global');
-    var tb = document.getElementById('tb-badge');
-    if (!tb) return;
     var cnt = (g && g.style.display !== 'none') ? parseInt(g.textContent, 10) || 0 : 0;
     if (cnt > 0) { tb.textContent = cnt > 99 ? '99+' : String(cnt); tb.style.display = 'flex'; }
     else tb.style.display = 'none';
   }, 5000);
 });
 
-// ─── Sidebar ───
+// ─── Sidebar ─────────────────────────────────────────────────────
 function initSidebar() {
-  var btn = document.getElementById('ham-btn');
-  var sb  = document.getElementById('sidebar');
-  var overlay = document.createElement('div');
-  overlay.className = 'sb-overlay';
-  document.body.appendChild(overlay);
-  function openSb()  { sb.classList.add('open'); overlay.classList.add('show'); btn.classList.add('active'); btn.setAttribute('aria-expanded','true'); }
-  function closeSb() { sb.classList.remove('open'); overlay.classList.remove('show'); btn.classList.remove('active'); btn.setAttribute('aria-expanded','false'); }
+  var btn = document.getElementById('ham-btn'), sb = document.getElementById('sidebar');
+  var overlay = document.createElement('div'); overlay.className = 'sb-overlay'; document.body.appendChild(overlay);
+  function openSb()  { sb.classList.add('open'); overlay.classList.add('show'); btn.classList.add('active'); btn.setAttribute('aria-expanded', 'true'); }
+  function closeSb() { sb.classList.remove('open'); overlay.classList.remove('show'); btn.classList.remove('active'); btn.setAttribute('aria-expanded', 'false'); }
   btn.addEventListener('click', function () { sb.classList.contains('open') ? closeSb() : openSb(); });
   overlay.addEventListener('click', closeSb);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && sb.classList.contains('open')) closeSb(); });
@@ -748,12 +959,13 @@ function initSidebar() {
 function initPanels() {
   document.querySelectorAll('.sb-item[data-panel]').forEach(function (btn) {
     btn.addEventListener('click', function () {
+      var status = currentUser && currentUser.status ? currentUser.status : 'active';
+      if (status !== 'active' && PANELS_REQUIRE_ACTIVE.includes(btn.dataset.panel)) return;
       document.querySelectorAll('.sb-item').forEach(function (b) { b.classList.remove('active'); });
       btn.classList.add('active');
       var id = btn.dataset.panel;
       document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('active'); });
-      var p = document.getElementById('panel-' + id);
-      if (p) p.classList.add('active');
+      var p = document.getElementById('panel-' + id); if (p) p.classList.add('active');
       document.getElementById('panel-title').innerHTML = (PANEL_TITLES[id] || id)
         + '<span class="realtime-indicator" title="Données en temps réel"><span class="realtime-dot"></span><span style="font-size:.7rem;color:#aaa;font-weight:400;">en direct</span></span>';
       if (window._closeSidebar) window._closeSidebar();
@@ -763,63 +975,47 @@ function initPanels() {
 
 function renderHeader() {
   var photo = currentUser.photo || window.FALLBACK_AVATAR;
-  ['sb-avatar','tb-avatar'].forEach(function (id) {
-    var el = document.getElementById(id); if (el) el.src = photo;
-  });
+  ['sb-avatar', 'tb-avatar'].forEach(function (id) { var el = document.getElementById(id); if (el) el.src = photo; });
   var prenom = escH(currentUser.prenom || '');
-  ['sb-name','tb-name'].forEach(function (id) {
-    var el = document.getElementById(id); if (el) el.textContent = prenom;
-  });
+  ['sb-name', 'tb-name'].forEach(function (id) { var el = document.getElementById(id); if (el) el.textContent = prenom; });
   var roleEl = document.getElementById('sb-role');
   if (roleEl) {
-    var roleLabels = { super_admin:'Super Admin', admin:'Administrateur', member:'Membre', pending:'En attente' };
+    var roleLabels = { super_admin: 'Super Admin', admin: 'Administrateur', member: 'Membre', pending: 'En attente' };
     roleEl.textContent = roleLabels[currentUser.role] || 'Membre';
   }
 }
 
-// ─── Silence & sons ───
+// ─── Silence & sons ──────────────────────────────────────────────
 function updateMemberSilenceUI() {
   var isSil = window.Notif ? window.Notif.isSilenced() : (localStorage.getItem('ngozistes_silence') === '1');
-  var tog = document.getElementById('member-silence-toggle');
-  if (tog) tog.checked = isSil;
+  var tog = document.getElementById('member-silence-toggle'); if (tog) tog.checked = isSil;
   var tbSil = document.getElementById('tb-silence-btn');
-  if (tbSil) {
-    tbSil.querySelector('i').className = 'fas fa-volume-' + (isSil ? 'mute' : 'up');
-    tbSil.style.color = isSil ? '#f44336' : '#888';
-  }
+  if (tbSil) { tbSil.querySelector('i').className = 'fas fa-volume-' + (isSil ? 'mute' : 'up'); tbSil.style.color = isSil ? '#f44336' : '#888'; }
 }
 window.onMemberSilenceToggle = function (checked) {
   if (window.Notif) window.Notif.silence(checked);
   else { try { localStorage.setItem('ngozistes_silence', checked ? '1' : '0'); } catch (_) {} }
   updateMemberSilenceUI();
-  window.showToast(checked ? '🔇 Silence activé' : '🔔 Son activé', 'info', 2000);
+  window.showToast && window.showToast(checked ? '🔇 Silence activé' : '🔔 Son activé', 'info', 2000);
 };
-window.toggleMemberSilence = function () {
-  if (window.Notif) window.Notif.silence();
-  updateMemberSilenceUI();
-};
+window.toggleMemberSilence = function () { if (window.Notif) window.Notif.silence(); updateMemberSilenceUI(); };
 
 function initMemberNotifPrefs() {
   setTimeout(function () {
     updateMemberSilenceUI();
-    var labels = window.Notif ? window.Notif.getSoundLabels() : { default:'Ding', chime:'Carillon', pop:'Pop', ping:'Ping', soft:'Doux', none:'Aucun' };
-    var icons  = { default:'🔔', chime:'🎵', pop:'💥', ping:'✨', soft:'🌊', none:'🔇' };
+    var labels = window.Notif ? window.Notif.getSoundLabels() : { default: 'Ding', chime: 'Carillon', pop: 'Pop', ping: 'Ping', soft: 'Doux', none: 'Aucun' };
+    var icons  = { default: '🔔', chime: '🎵', pop: '💥', ping: '✨', soft: '🌊', none: '🔇' };
     var cur    = window.Notif ? window.Notif.getSound() : (localStorage.getItem('ngozistes_notif_sound') || 'default');
-    var grid   = document.getElementById('member-sound-grid');
-    if (!grid) return;
+    var grid   = document.getElementById('member-sound-grid'); if (!grid) return;
     grid.innerHTML = Object.keys(labels).map(function (k) {
       return '<div class="sound-card' + (k === cur ? ' selected' : '') + '" data-sound="' + k + '" onclick="memberSelectSound(\'' + k + '\')">'
-        + '<div class="s-icon">' + (icons[k] || '🔔') + '</div>'
-        + '<div class="s-name">' + escH(labels[k]) + '</div></div>';
+        + '<div class="s-icon">' + (icons[k] || '🔔') + '</div><div class="s-name">' + escH(labels[k]) + '</div></div>';
     }).join('');
-    var snd = document.getElementById('member-current-snd');
-    if (snd) snd.textContent = 'Son : ' + (labels[cur] || cur);
+    var snd = document.getElementById('member-current-snd'); if (snd) snd.textContent = 'Son : ' + (labels[cur] || cur);
   }, 600);
 }
 window.memberSelectSound = function (name) {
-  document.querySelectorAll('#member-sound-grid .sound-card').forEach(function (c) {
-    c.classList.toggle('selected', c.dataset.sound === name);
-  });
+  document.querySelectorAll('#member-sound-grid .sound-card').forEach(function (c) { c.classList.toggle('selected', c.dataset.sound === name); });
   if (window.Notif) window.Notif.setSound(name);
   else { try { localStorage.setItem('ngozistes_notif_sound', name); } catch (_) {} }
 };
@@ -831,18 +1027,19 @@ async function loadOverview() {
   try {
     var now = new Date().toISOString();
     var results = await Promise.allSettled([
-      window.supabase.from('events').select('*',{count:'exact',head:true}).eq('status','published').gte('date',now),
-      window.supabase.from('event_registrations').select('*',{count:'exact',head:true}).eq('user_id',currentUser.id),
-      window.supabase.from('messages').select('*',{count:'exact',head:true}).eq('receiver_id',currentUser.id).eq('is_read',false),
-      window.supabase.from('announcements').select('*',{count:'exact',head:true}).in('visibility',['public','members'])
+      window.supabase.from('events').select('*', { count: 'exact', head: true }).eq('status', 'published').gte('date', now),
+      window.supabase.from('event_registrations').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id),
+      window.supabase.from('messages').select('*', { count: 'exact', head: true }).eq('receiver_id', currentUser.id).eq('is_read', false),
+      window.supabase.from('announcements').select('*', { count: 'exact', head: true }).in('visibility', ['public', 'members'])
     ]);
     var stats = [
-      { v: results[0].status==='fulfilled' ? results[0].value.count||0 : 0, l:'Événements à venir', ic:'ic-green',  i:'fa-calendar-alt' },
-      { v: results[1].status==='fulfilled' ? results[1].value.count||0 : 0, l:'Mes inscriptions',   ic:'ic-blue',   i:'fa-clipboard-list' },
-      { v: results[2].status==='fulfilled' ? results[2].value.count||0 : 0, l:'Messages non lus',   ic:'ic-orange', i:'fa-envelope' },
-      { v: results[3].status==='fulfilled' ? results[3].value.count||0 : 0, l:'Annonces',            ic:'ic-purple', i:'fa-bullhorn' }
+      { v: results[0].status === 'fulfilled' ? results[0].value.count || 0 : 0, l: 'Événements à venir', ic: 'ic-green',  i: 'fa-calendar-alt' },
+      { v: results[1].status === 'fulfilled' ? results[1].value.count || 0 : 0, l: 'Mes inscriptions',   ic: 'ic-blue',   i: 'fa-clipboard-list' },
+      { v: results[2].status === 'fulfilled' ? results[2].value.count || 0 : 0, l: 'Messages non lus',   ic: 'ic-orange', i: 'fa-envelope' },
+      { v: results[3].status === 'fulfilled' ? results[3].value.count || 0 : 0, l: 'Annonces',            ic: 'ic-purple', i: 'fa-bullhorn' }
     ];
-    document.getElementById('ov-stats').innerHTML = stats.map(function (s) {
+    var el = document.getElementById('ov-stats');
+    if (el) el.innerHTML = stats.map(function (s) {
       return '<div class="stat-card">'
         + '<div class="stat-icon ' + s.ic + '"><i class="fas ' + s.i + '"></i></div>'
         + '<div><div class="stat-val">' + s.v + '</div><div class="stat-lbl">' + s.l + '</div></div></div>';
@@ -852,13 +1049,13 @@ async function loadOverview() {
   try {
     var now2 = new Date().toISOString();
     var evR = await window.supabase.from('events').select('id,title,date,location')
-      .eq('status','published').gte('date',now2).order('date',{ascending:true}).limit(4);
+      .eq('status', 'published').gte('date', now2).order('date', { ascending: true }).limit(4);
     var evEl = document.getElementById('ov-events-list');
-    evEl.innerHTML = (evR.data||[]).length
-      ? (evR.data||[]).map(function (ev) {
-          var d = new Date(ev.date).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});
+    if (evEl) evEl.innerHTML = (evR.data || []).length
+      ? (evR.data || []).map(function (ev) {
+          var d = new Date(ev.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
           return '<div style="padding:10px 0;border-bottom:1px solid #f0f0f0;">'
-            + '<div style="font-weight:600;color:var(--dark);font-size:.88rem;">' + escH(ev.title||'') + '</div>'
+            + '<div style="font-weight:600;color:var(--dark);font-size:.88rem;">' + escH(ev.title || '') + '</div>'
             + '<div style="font-size:.76rem;color:var(--text);margin-top:3px;"><i class="fas fa-calendar" style="color:var(--primary);margin-right:4px;"></i>' + d + '</div></div>';
         }).join('')
       : '<p style="text-align:center;font-style:italic;color:var(--text);font-size:.84rem;">Aucun événement à venir</p>';
@@ -866,15 +1063,15 @@ async function loadOverview() {
 
   try {
     var annR = await window.supabase.from('announcements').select('id,title,type,created_at')
-      .in('visibility',['public','members']).order('created_at',{ascending:false}).limit(4);
+      .in('visibility', ['public', 'members']).order('created_at', { ascending: false }).limit(4);
     var annEl = document.getElementById('ov-ann-list');
-    var colors2 = { info:'var(--primary)', important:'var(--warning)', urgent:'var(--danger)' };
-    annEl.innerHTML = (annR.data||[]).length
-      ? (annR.data||[]).map(function (a) {
-          var d = new Date(a.created_at).toLocaleDateString('fr-FR',{day:'numeric',month:'short'});
+    var colors2 = { info: 'var(--primary)', important: 'var(--warning)', urgent: 'var(--danger)' };
+    if (annEl) annEl.innerHTML = (annR.data || []).length
+      ? (annR.data || []).map(function (a) {
+          var d = new Date(a.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
           return '<div style="padding:10px 0;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:8px;">'
-            + '<span style="width:8px;height:8px;border-radius:50%;background:' + (colors2[a.type]||'var(--primary)') + ';flex-shrink:0;"></span>'
-            + '<div><div style="font-size:.87rem;font-weight:500;color:var(--dark);">' + escH(a.title||'') + '</div>'
+            + '<span style="width:8px;height:8px;border-radius:50%;background:' + (colors2[a.type] || 'var(--primary)') + ';flex-shrink:0;"></span>'
+            + '<div><div style="font-size:.87rem;font-weight:500;color:var(--dark);">' + escH(a.title || '') + '</div>'
             + '<div style="font-size:.72rem;color:var(--text);">' + d + '</div></div></div>';
         }).join('')
       : '<p style="text-align:center;font-style:italic;color:var(--text);font-size:.84rem;">Aucune annonce</p>';
@@ -886,7 +1083,7 @@ async function loadOverview() {
 // ═══════════════════════════════
 async function loadProfile() {
   try {
-    var r = await window.supabase.from('users').select('id,email,nom,prenom,ville,phone,telephone,bio,photo').eq('id',currentUser.id).single();
+    var r = await window.supabase.from('users').select('id,email,nom,prenom,ville,phone,telephone,bio,photo').eq('id', currentUser.id).single();
     if (r.error || !r.data) return;
     var u = r.data;
     document.getElementById('pf-prenom').value = u.prenom || '';
@@ -897,14 +1094,11 @@ async function loadProfile() {
     document.getElementById('pf-bio').value    = u.bio    || '';
     var prev = document.getElementById('profile-photo-prev');
     if (prev) prev.src = u.photo || window.FALLBACK_AVATAR;
-
-    var fileInput = document.getElementById('profile-photo-file');
-    if (fileInput && !fileInput._init) {
-      fileInput._init = true;
-      fileInput.addEventListener('change', async function (e) {
+    var fi = document.getElementById('profile-photo-file');
+    if (fi && !fi._init) {
+      fi._init = true;
+      fi.addEventListener('change', async function (e) {
         var file = e.target.files[0]; if (!file) return;
-        var check = window.validateImageFile ? window.validateImageFile(file, 3) : { ok:true };
-        if (!check.ok) { window.showToast(check.msg,'error'); return; }
         var b64 = await fileToBase64(file);
         document.getElementById('profile-photo-prev').src = b64;
       });
@@ -915,80 +1109,72 @@ async function loadProfile() {
 window.saveProfile = async function () {
   var prenom = document.getElementById('pf-prenom').value.trim();
   var nom    = document.getElementById('pf-nom').value.trim();
-  if (!prenom || !nom) { showFb('pf-fb','Prénom et Nom requis.','err'); return; }
-
+  if (!prenom || !nom) { showFb('pf-fb', 'Prénom et Nom requis.', 'err'); return; }
   var photo = null;
-  var fileInput = document.getElementById('profile-photo-file');
-  if (fileInput && fileInput.files[0]) {
-    try { photo = await window.uploadImage(fileInput.files[0],'avatars','profiles'); }
-    catch (_) { photo = await fileToBase64(fileInput.files[0]); }
+  var fi = document.getElementById('profile-photo-file');
+  if (fi && fi.files[0]) {
+    try { photo = await window.uploadImage(fi.files[0], 'avatars', 'profiles'); }
+    catch (_) { photo = await fileToBase64(fi.files[0]); }
   } else {
-    var cur = await window.supabase.from('users').select('photo').eq('id',currentUser.id).single();
+    var cur = await window.supabase.from('users').select('photo').eq('id', currentUser.id).single();
     photo = cur.data ? cur.data.photo : null;
   }
-
   try {
     var r = await window.supabase.from('users').update({
-      prenom: prenom, nom: nom,
+      prenom, nom,
       ville: document.getElementById('pf-ville').value.trim(),
       phone: document.getElementById('pf-phone').value.trim(),
       bio:   document.getElementById('pf-bio').value.trim(),
-      photo: photo, updated_at: new Date().toISOString()
+      photo, updated_at: new Date().toISOString()
     }).eq('id', currentUser.id);
     if (r.error) throw r.error;
     currentUser.prenom = prenom; currentUser.nom = nom; currentUser.photo = photo;
     try {
-      var sess = JSON.parse(localStorage.getItem('ngozistes_session')||'{}');
-      Object.assign(sess,{prenom,nom,photo});
-      localStorage.setItem('ngozistes_session',JSON.stringify(sess));
+      var sess = JSON.parse(localStorage.getItem('ngozistes_session') || '{}');
+      Object.assign(sess, { prenom, nom, photo });
+      localStorage.setItem('ngozistes_session', JSON.stringify(sess));
     } catch (_) {}
     renderHeader();
-    showFb('pf-fb','Profil enregistré !','ok');
-    window.showToast('Profil mis à jour','success');
-  } catch (e) { showFb('pf-fb','Erreur : '+e.message,'err'); }
+    showFb('pf-fb', 'Profil enregistré !', 'ok');
+    window.showToast && window.showToast('Profil mis à jour', 'success');
+  } catch (e) { showFb('pf-fb', 'Erreur : ' + e.message, 'err'); }
 };
 
 window.submitPasswordChange = async function () {
   var oldPwd  = document.getElementById('pwd-old').value;
   var newPwd  = document.getElementById('pwd-new').value;
   var newPwd2 = document.getElementById('pwd-new2').value;
-  if (!oldPwd||!newPwd||!newPwd2) { showFb('pwd-fb','Remplissez tous les champs.','err'); return; }
-  if (newPwd !== newPwd2)          { showFb('pwd-fb','Les mots de passe ne correspondent pas.','err'); return; }
-  if (newPwd.length < 8)           { showFb('pwd-fb','Nouveau mot de passe trop court (8 car. min.).','err'); return; }
-  if (oldPwd === newPwd)           { showFb('pwd-fb','Le nouveau mot de passe doit être différent.','err'); return; }
+  if (!oldPwd || !newPwd || !newPwd2) { showFb('pwd-fb', 'Remplissez tous les champs.', 'err'); return; }
+  if (newPwd !== newPwd2)             { showFb('pwd-fb', 'Les mots de passe ne correspondent pas.', 'err'); return; }
+  if (newPwd.length < 8)              { showFb('pwd-fb', 'Nouveau mot de passe trop court (8 car. min.).', 'err'); return; }
+  if (oldPwd === newPwd)              { showFb('pwd-fb', 'Le nouveau mot de passe doit être différent.', 'err'); return; }
   try {
     var result = await window.Auth.changePassword(oldPwd, newPwd);
-    if (result === false) { showFb('pwd-fb','Ancien mot de passe incorrect.','err'); return; }
-    ['pwd-old','pwd-new','pwd-new2'].forEach(function(id){ document.getElementById(id).value=''; });
-    showFb('pwd-fb','Mot de passe modifié avec succès !','ok');
-    window.showToast('Mot de passe mis à jour','success');
-  } catch (e) { showFb('pwd-fb','Erreur : '+e.message,'err'); }
+    if (result === false) { showFb('pwd-fb', 'Ancien mot de passe incorrect.', 'err'); return; }
+    ['pwd-old', 'pwd-new', 'pwd-new2'].forEach(function (id) { document.getElementById(id).value = ''; });
+    showFb('pwd-fb', 'Mot de passe modifié avec succès !', 'ok');
+    window.showToast && window.showToast('Mot de passe mis à jour', 'success');
+  } catch (e) { showFb('pwd-fb', 'Erreur : ' + e.message, 'err'); }
 };
 
 // ═══════════════════════════════
 // ÉVÉNEMENTS
 // ═══════════════════════════════
 async function loadEvents() {
-  var grid = document.getElementById('events-grid');
-  if (!grid) return;
-  if (!grid.innerHTML) {
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--text);">Chargement…</div>';
-  }
-  document.getElementById('more-events-wrap').innerHTML = '';
-  document.getElementById('more-events-wrap').classList.remove('show');
-  document.getElementById('show-more-wrap').style.display = 'none';
-
+  var grid = document.getElementById('events-grid'); if (!grid) return;
+  if (!grid.innerHTML) grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--text);">Chargement…</div>';
+  var mw = document.getElementById('more-events-wrap'); if (mw) { mw.innerHTML = ''; mw.classList.remove('show'); }
+  var sw = document.getElementById('show-more-wrap'); if (sw) sw.style.display = 'none';
   try {
-    var now = new Date().toISOString();
-    var r = await window.supabase.from('events').select('*')
-      .eq('status','published').gte('date',now).order('date',{ascending:true});
-    var regR = await window.supabase.from('event_registrations').select('event_id').eq('user_id',currentUser.id);
-    _eventsMyRegIds = new Set((regR.data||[]).map(function(r2){ return r2.event_id; }));
+    var now  = new Date().toISOString();
+    var r    = await window.supabase.from('events').select('*').eq('status', 'published').gte('date', now).order('date', { ascending: true });
+    var regR = await window.supabase.from('event_registrations').select('event_id').eq('user_id', currentUser.id);
+    _eventsMyRegIds = new Set((regR.data || []).map(function (r2) { return r2.event_id; }));
     _eventsAllData  = r.data || [];
     renderEventsGrid(_eventsAllData);
     loadMyRegs();
   } catch (e) {
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--danger);">Erreur de chargement</div>';
+    if (grid) grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--danger);">Erreur de chargement</div>';
   }
 }
 
@@ -998,34 +1184,24 @@ function renderEventsGrid(events) {
   var smWrap  = document.getElementById('show-more-wrap');
   var smBtn   = document.getElementById('show-more-btn');
   var plusCnt = document.getElementById('plus-count');
-
   if (!events || !events.length) {
     grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;font-style:italic;color:var(--text);padding:30px;">Aucun événement à venir pour le moment</div>';
-    moreDiv.innerHTML = ''; moreDiv.classList.remove('show');
-    smWrap.style.display = 'none';
-    return;
+    if (moreDiv) { moreDiv.innerHTML = ''; moreDiv.classList.remove('show'); }
+    if (smWrap) smWrap.style.display = 'none'; return;
   }
-
-  var initial = events.slice(0,4);
-  var rest    = events.slice(4);
-
-  grid.innerHTML    = initial.map(evCardHtml).join('');
-  moreDiv.innerHTML = rest.map(evCardHtml).join('');
-  moreDiv.classList.remove('show');
-
-  if (rest.length) {
-    var cnt = rest.length;
-    plusCnt.textContent = '+' + cnt;
-    smWrap.style.display = 'flex';
+  var initial = events.slice(0, 4), rest = events.slice(4);
+  grid.innerHTML = initial.map(evCardHtml).join('');
+  if (moreDiv) moreDiv.innerHTML = rest.map(evCardHtml).join('');
+  if (moreDiv) moreDiv.classList.remove('show');
+  if (rest.length && smWrap && smBtn && plusCnt) {
+    var cnt = rest.length; plusCnt.textContent = '+' + cnt; smWrap.style.display = 'flex';
     smBtn.onclick = function () {
       var open = moreDiv.classList.toggle('show');
       smBtn.innerHTML = open
         ? '<i class="fas fa-chevron-up"></i> Voir moins'
         : '<i class="fas fa-chevron-down"></i> Voir <span class="plus-count">+' + cnt + '</span>';
     };
-  } else {
-    smWrap.style.display = 'none';
-  }
+  } else if (smWrap) smWrap.style.display = 'none';
 }
 
 function evCardHtml(ev) {
@@ -1033,57 +1209,43 @@ function evCardHtml(ev) {
   var img     = escH(ev.image || window.FALLBACK_IMG);
   var title   = escH(ev.title || '');
   var loc     = escH(truncT(ev.location || '—', 18));
-  var dateStr = d.toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});
-  var timeStr = d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  var dateStr = d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+  var timeStr = d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
   var isReg   = _eventsMyRegIds.has(ev.id);
-  var full    = ev.max_participants && (ev.current_participants||0) >= ev.max_participants;
+  var full    = ev.max_participants && (ev.current_participants || 0) >= ev.max_participants;
   var footHtml = isReg
     ? '<span class="badge badge-green" style="font-size:.68rem;"><i class="fas fa-check"></i> Inscrit</span>'
-      + '<button class="btn-action danger" style="font-size:.72rem;padding:4px 9px;" onclick="event.stopPropagation();cancelReg(\'' + ev.id + '\')">'
-      + '<i class="fas fa-times"></i> Annuler</button>'
+      + '<button class="btn-action danger" style="font-size:.72rem;padding:4px 9px;" onclick="event.stopPropagation();cancelReg(\'' + ev.id + '\')"><i class="fas fa-times"></i> Annuler</button>'
     : full
       ? '<span class="badge badge-red" style="font-size:.68rem;">Complet</span>'
-      : '<button class="btn-action primary" style="font-size:.72rem;padding:4px 9px;" onclick="event.stopPropagation();openRegModal(\'' + ev.id + '\',\'' + title + '\')">'
-        + '<i class="fas fa-plus"></i> S\'inscrire</button>';
-
+      : '<button class="btn-action primary" style="font-size:.72rem;padding:4px 9px;" onclick="event.stopPropagation();openRegModal(\'' + ev.id + '\',\'' + title + '\')"><i class="fas fa-plus"></i> S\'inscrire</button>';
   return '<div class="ev-card">'
-    + '<div class="ev-img-wrap">'
-    + '<img src="' + img + '" alt="' + title + '" loading="lazy" onerror="window.imgOnError(this)">'
-    + '<span class="ev-badge">À venir</span>'
-    + '</div>'
-    + '<div class="ev-body">'
-    + '<div class="ev-date-row"><i class="fas fa-calendar-alt"></i>' + dateStr + '</div>'
+    + '<div class="ev-img-wrap"><img src="' + img + '" alt="' + title + '" loading="lazy" onerror="window.imgOnError(this)"><span class="ev-badge">À venir</span></div>'
+    + '<div class="ev-body"><div class="ev-date-row"><i class="fas fa-calendar-alt"></i>' + dateStr + '</div>'
     + '<div class="ev-title">' + title + '</div>'
-    + '<div class="ev-meta">'
-    + '<div class="ev-meta-row"><i class="fas fa-clock"></i>' + timeStr + '</div>'
+    + '<div class="ev-meta"><div class="ev-meta-row"><i class="fas fa-clock"></i>' + timeStr + '</div>'
     + '<div class="ev-meta-row"><i class="fas fa-map-marker-alt"></i>' + loc + '</div>'
-    + '<div class="ev-meta-row"><i class="fas fa-users"></i>'
-    + (ev.current_participants||0) + (ev.max_participants ? ' / ' + ev.max_participants : ' inscrits') + '</div>'
+    + '<div class="ev-meta-row"><i class="fas fa-users"></i>' + (ev.current_participants || 0) + (ev.max_participants ? ' / ' + ev.max_participants : ' inscrits') + '</div>'
     + '</div></div>'
-    + '<div class="ev-footer">' + footHtml + '</div>'
-    + '</div>';
+    + '<div class="ev-footer">' + footHtml + '</div></div>';
 }
 
 async function loadMyRegs() {
-  var tb = document.getElementById('my-regs-tbody');
+  var tb = document.getElementById('my-regs-tbody'); if (!tb) return;
   try {
     var r = await window.supabase.from('event_registrations')
-      .select('*,event:event_id(id,title,date)').eq('user_id',currentUser.id)
-      .order('registered_at',{ascending:false});
-    tb.innerHTML = (r.data||[]).length
-      ? (r.data||[]).map(function (reg) {
+      .select('*,event:event_id(id,title,date)').eq('user_id', currentUser.id).order('registered_at', { ascending: false });
+    tb.innerHTML = (r.data || []).length
+      ? (r.data || []).map(function (reg) {
           var ev   = reg.event || {};
-          var d    = ev.date ? new Date(ev.date).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'}) : '—';
-          var regD = new Date(reg.registered_at).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});
-          return '<tr><td>' + escH(ev.title||'—') + '</td><td>' + d + '</td>'
-            + '<td style="text-align:center;">' + (reg.guests||0) + '</td><td>' + regD + '</td>'
-            + '<td><button class="btn-action danger" onclick="cancelReg(\'' + ev.id + '\')">'
-            + '<i class="fas fa-times"></i> Annuler</button></td></tr>';
+          var d    = ev.date ? new Date(ev.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+          var regD = new Date(reg.registered_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+          return '<tr><td>' + escH(ev.title || '—') + '</td><td>' + d + '</td>'
+            + '<td style="text-align:center;">' + (reg.guests || 0) + '</td><td>' + regD + '</td>'
+            + '<td><button class="btn-action danger" onclick="cancelReg(\'' + ev.id + '\')"><i class="fas fa-times"></i> Annuler</button></td></tr>';
         }).join('')
       : '<tr class="empty-row"><td colspan="5">Aucune inscription</td></tr>';
-  } catch (e) {
-    if (tb) tb.innerHTML = '<tr class="error-row"><td colspan="5">Erreur</td></tr>';
-  }
+  } catch (e) { if (tb) tb.innerHTML = '<tr class="error-row"><td colspan="5">Erreur</td></tr>'; }
 }
 
 window.openRegModal = function (evId, evTitle) {
@@ -1092,67 +1254,58 @@ window.openRegModal = function (evId, evTitle) {
   document.getElementById('reg-guests').value  = '0';
   document.getElementById('reg-message').value = '';
   document.getElementById('reg-fb').innerHTML  = '';
-  modal.dataset.evid = evId;
-  modal.style.display = 'flex';
+  modal.dataset.evid = evId; modal.style.display = 'flex';
 };
 
 window.doRegister = async function () {
-  var modal   = document.getElementById('reg-modal');
-  var evId    = modal.dataset.evid;
-  var guests  = parseInt(document.getElementById('reg-guests').value,10) || 0;
+  var modal   = document.getElementById('reg-modal'), evId = modal.dataset.evid;
+  var guests  = parseInt(document.getElementById('reg-guests').value, 10) || 0;
   var message = document.getElementById('reg-message').value.trim();
   var fb      = document.getElementById('reg-fb');
   try {
     var r = await window.supabase.from('event_registrations').insert([{
-      event_id:evId, user_id:currentUser.id,
-      guests:guests, message:message,
-      registered_at:new Date().toISOString()
+      event_id: evId, user_id: currentUser.id, guests, message, registered_at: new Date().toISOString()
     }]);
-    if (r.error) {
-      if (r.error.code === '23505') { showFbEl(fb,'Déjà inscrit.','err'); return; }
-      throw r.error;
-    }
-    var ev2 = await window.supabase.from('events').select('current_participants').eq('id',evId).single();
-    await window.supabase.from('events').update({current_participants:(ev2.data?.current_participants||0)+guests+1}).eq('id',evId);
-    showFbEl(fb,'Inscription confirmée !','ok');
-    setTimeout(function(){ modal.style.display='none'; loadEvents(); },1200);
-  } catch (e) { showFbEl(fb,'Erreur : '+e.message,'err'); }
+    if (r.error) { if (r.error.code === '23505') { showFbEl(fb, 'Déjà inscrit.', 'err'); return; } throw r.error; }
+    var ev2 = await window.supabase.from('events').select('current_participants').eq('id', evId).single();
+    await window.supabase.from('events').update({ current_participants: (ev2.data?.current_participants || 0) + guests + 1 }).eq('id', evId);
+    showFbEl(fb, 'Inscription confirmée !', 'ok');
+    setTimeout(function () { modal.style.display = 'none'; loadEvents(); }, 1200);
+  } catch (e) { showFbEl(fb, 'Erreur : ' + e.message, 'err'); }
 };
 
 window.cancelReg = async function (evId) {
   if (!confirm('Annuler votre inscription ?')) return;
   try {
-    var regR = await window.supabase.from('event_registrations').select('guests').eq('event_id',evId).eq('user_id',currentUser.id).single();
-    var taken = (regR.data?.guests||0)+1;
-    await window.supabase.from('event_registrations').delete().eq('event_id',evId).eq('user_id',currentUser.id);
-    var ev2 = await window.supabase.from('events').select('current_participants').eq('id',evId).single();
-    await window.supabase.from('events').update({current_participants:Math.max(0,(ev2.data?.current_participants||0)-taken)}).eq('id',evId);
-    window.showToast('Inscription annulée','success');
+    var regR = await window.supabase.from('event_registrations').select('guests').eq('event_id', evId).eq('user_id', currentUser.id).single();
+    var taken = (regR.data?.guests || 0) + 1;
+    await window.supabase.from('event_registrations').delete().eq('event_id', evId).eq('user_id', currentUser.id);
+    var ev2 = await window.supabase.from('events').select('current_participants').eq('id', evId).single();
+    await window.supabase.from('events').update({ current_participants: Math.max(0, (ev2.data?.current_participants || 0) - taken) }).eq('id', evId);
+    window.showToast && window.showToast('Inscription annulée', 'success');
     loadEvents();
-  } catch (e) { window.showToast('Erreur : '+e.message,'error'); }
+  } catch (e) { window.showToast && window.showToast('Erreur : ' + e.message, 'error'); }
 };
 
 // ═══════════════════════════════
 // ANNONCES
 // ═══════════════════════════════
 async function loadAnnouncements() {
-  var el = document.getElementById('ann-list');
+  var el = document.getElementById('ann-list'); if (!el) return;
   try {
     var r = await window.supabase.from('announcements').select('*')
-      .in('visibility',['public','members']).order('created_at',{ascending:false});
-    el.innerHTML = (r.data||[]).length
-      ? (r.data||[]).map(function (a) {
-          var d = new Date(a.created_at).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
-          var typeBadge = { info:'badge-blue', important:'badge-orange', urgent:'badge-red' }[a.type] || 'badge-blue';
-          return '<div class="ann-item ' + escH(a.type||'') + '">'
-            + '<div class="ann-title">' + escH(a.title||'') + '</div>'
-            + '<div class="ann-meta">' + d + ' · <span class="badge ' + typeBadge + '">' + escH(a.type||'info') + '</span></div>'
-            + '<div class="ann-body">' + escH(a.content||'') + '</div></div>';
+      .in('visibility', ['public', 'members']).order('created_at', { ascending: false });
+    el.innerHTML = (r.data || []).length
+      ? (r.data || []).map(function (a) {
+          var d        = new Date(a.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+          var typeBadge = { info: 'badge-blue', important: 'badge-orange', urgent: 'badge-red' }[a.type] || 'badge-blue';
+          return '<div class="ann-item ' + escH(a.type || '') + '">'
+            + '<div class="ann-title">' + escH(a.title || '') + '</div>'
+            + '<div class="ann-meta">' + d + ' · <span class="badge ' + typeBadge + '">' + escH(a.type || 'info') + '</span></div>'
+            + '<div class="ann-body">' + escH(a.content || '') + '</div></div>';
         }).join('')
       : '<p style="text-align:center;font-style:italic;color:var(--text);">Aucune annonce</p>';
-  } catch (e) {
-    el.innerHTML = '<p style="color:var(--danger);text-align:center;">Erreur de chargement</p>';
-  }
+  } catch (e) { if (el) el.innerHTML = '<p style="color:var(--danger);text-align:center;">Erreur de chargement</p>'; }
 }
 
 // ═══════════════════════════════
@@ -1160,84 +1313,76 @@ async function loadAnnouncements() {
 // ═══════════════════════════════
 async function loadMessages() {
   try {
-    var delR = await window.supabase.from('message_deletions').select('message_id').eq('user_id',currentUser.id);
-    var deletedIds = new Set((delR.data||[]).map(function(d){ return d.message_id; }));
-
+    var delR      = await window.supabase.from('message_deletions').select('message_id').eq('user_id', currentUser.id);
+    var deletedIds = new Set((delR.data || []).map(function (d) { return d.message_id; }));
     var inR = await window.supabase.from('messages')
-      .select('*,sender:sender_id(id,nom,prenom,photo)').eq('receiver_id',currentUser.id)
-      .order('sent_at',{ascending:false});
-    inboxMessages = (inR.data||[]).filter(function(m){ return !deletedIds.has(m.id); });
-
+      .select('*,sender:sender_id(id,nom,prenom,photo)').eq('receiver_id', currentUser.id).order('sent_at', { ascending: false });
+    inboxMessages = (inR.data || []).filter(function (m) { return !deletedIds.has(m.id); });
     var outR = await window.supabase.from('messages')
-      .select('*,receiver:receiver_id(id,nom,prenom)').eq('sender_id',currentUser.id)
-      .order('sent_at',{ascending:false});
-    sentMessages = (outR.data||[]).filter(function(m){ return !deletedIds.has(m.id); });
-
-    renderInbox();
-    renderSent();
-
-    var unread = inboxMessages.filter(function(m){ return !m.is_read; }).length;
+      .select('*,receiver:receiver_id(id,nom,prenom)').eq('sender_id', currentUser.id).order('sent_at', { ascending: false });
+    sentMessages = (outR.data || []).filter(function (m) { return !deletedIds.has(m.id); });
+    renderInbox(); renderSent();
+    var unread = inboxMessages.filter(function (m) { return !m.is_read; }).length;
     var badge  = document.getElementById('msg-badge');
-    if (badge) { badge.textContent = unread; badge.style.display = unread>0?'inline-block':'none'; }
+    if (badge) { badge.textContent = unread; badge.style.display = unread > 0 ? 'inline-block' : 'none'; }
     var ic = document.getElementById('inbox-count');
-    if (ic) { ic.textContent = unread; ic.style.display = unread>0?'inline-block':'none'; }
+    if (ic) { ic.textContent = unread; ic.style.display = unread > 0 ? 'inline-block' : 'none'; }
   } catch (e) { console.error(e); }
 }
 
 function renderInbox() {
-  var el = document.getElementById('inbox-list');
+  var el = document.getElementById('inbox-list'); if (!el) return;
   if (!inboxMessages.length) { el.innerHTML = '<div class="msg-empty">Aucun message reçu</div>'; return; }
   el.innerHTML = inboxMessages.map(function (m) {
-    var sender  = m.sender ? escH((m.sender.prenom||'') + ' ' + (m.sender.nom||'')) : 'Équipe';
-    var preview = escH(truncT(m.content||'',42));
-    var dateStr = new Date(m.sent_at).toLocaleDateString('fr-FR',{day:'numeric',month:'short'});
-    return '<div class="msg-item' + (m.is_read?'':' unread') + '" data-msgid="' + m.id + '" onclick="readMsg(\'' + m.id + '\',\'inbox\')">'
-      + '<div class="msg-sender">' + sender + (!m.is_read?' <span style="width:7px;height:7px;background:#f44336;border-radius:50%;display:inline-block;margin-left:4px;"></span>':'') + '</div>'
-      + '<div class="msg-preview">' + preview + '</div>'
-      + '<div class="msg-time">' + dateStr + '</div></div>';
+    var sender   = m.sender ? escH((m.sender.prenom || '') + ' ' + (m.sender.nom || '')) : 'Équipe';
+    var preview  = escH(truncT(m.content || '', 42));
+    var dateStr  = new Date(m.sent_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+    return '<div class="msg-item' + (m.is_read ? '' : ' unread') + '" data-msgid="' + m.id + '" onclick="readMsg(\'' + m.id + '\',\'inbox\')">'
+      + '<div class="msg-sender">' + sender + (!m.is_read ? ' <span style="width:7px;height:7px;background:#f44336;border-radius:50%;display:inline-block;margin-left:4px;"></span>' : '') + '</div>'
+      + '<div class="msg-preview">' + preview + '</div><div class="msg-time">' + dateStr + '</div></div>';
   }).join('');
 }
 
 function renderSent() {
-  var el = document.getElementById('sent-list');
+  var el = document.getElementById('sent-list'); if (!el) return;
   if (!sentMessages.length) { el.innerHTML = '<div class="msg-empty">Aucun message envoyé</div>'; return; }
-  el.innerHTML = sentMessages.slice(0,6).map(function (m) {
-    var rec     = m.receiver ? escH((m.receiver.prenom||'') + ' ' + (m.receiver.nom||'')) : 'Admins';
-    var preview = escH(truncT(m.content||'',40));
-    var dateStr = new Date(m.sent_at).toLocaleDateString('fr-FR',{day:'numeric',month:'short'});
+  el.innerHTML = sentMessages.slice(0, 6).map(function (m) {
+    var rec     = m.receiver ? escH((m.receiver.prenom || '') + ' ' + (m.receiver.nom || '')) : 'Admins';
+    var preview = escH(truncT(m.content || '', 40));
+    var dateStr = new Date(m.sent_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
     return '<div class="msg-item" data-msgid="' + m.id + '" onclick="readMsg(\'' + m.id + '\',\'sent\')">'
       + '<div class="msg-sender" style="color:var(--secondary);">→ ' + rec + '</div>'
-      + '<div class="msg-preview">' + preview + '</div>'
-      + '<div class="msg-time">' + dateStr + '</div></div>';
+      + '<div class="msg-preview">' + preview + '</div><div class="msg-time">' + dateStr + '</div></div>';
   }).join('');
 }
 
 window.readMsg = async function (msgId, type) {
-  document.querySelectorAll('.msg-item').forEach(function (el) {
-    el.classList.toggle('active', el.dataset.msgid === msgId);
-  });
-  var msg = (type==='inbox'?inboxMessages:sentMessages).find(function(m){ return String(m.id)===String(msgId); });
+  document.querySelectorAll('.msg-item').forEach(function (el) { el.classList.toggle('active', el.dataset.msgid === msgId); });
+  var msg = (type === 'inbox' ? inboxMessages : sentMessages).find(function (m) { return String(m.id) === String(msgId); });
   if (!msg) return;
-  document.getElementById('msg-read-subject').textContent = msg.subject || '(sans sujet)';
-  document.getElementById('msg-read-body').textContent    = msg.content || '';
+  var sub     = document.getElementById('msg-read-subject');
+  var body    = document.getElementById('msg-read-body');
+  var meta    = document.getElementById('msg-read-meta');
+  if (sub)  sub.textContent  = msg.subject || '(sans sujet)';
+  if (body) body.textContent = msg.content || '';
   var actZone = document.getElementById('msg-actions-zone');
   if (type === 'inbox') {
-    var sender = msg.sender ? escH((msg.sender.prenom||'') + ' ' + (msg.sender.nom||'')) : 'Équipe admin';
-    document.getElementById('msg-read-meta').innerHTML = 'De : <strong>' + sender + '</strong> — ' + new Date(msg.sent_at).toLocaleString('fr-FR');
-    actZone.style.display = 'block';
+    var sender = msg.sender ? escH((msg.sender.prenom || '') + ' ' + (msg.sender.nom || '')) : 'Équipe admin';
+    if (meta) meta.innerHTML = 'De : <strong>' + sender + '</strong> — ' + new Date(msg.sent_at).toLocaleString('fr-FR');
+    if (actZone) actZone.style.display = 'block';
     if (!msg.is_read) {
-      await window.supabase.from('messages').update({is_read:true}).eq('id',msgId);
+      await window.supabase.from('messages').update({ is_read: true }).eq('id', msgId);
       msg.is_read = true;
       var item = document.querySelector('.msg-item[data-msgid="' + msgId + '"]');
       if (item) item.classList.remove('unread');
-      var unread = inboxMessages.filter(function(m){ return !m.is_read; }).length;
+      var unread = inboxMessages.filter(function (m) { return !m.is_read; }).length;
       var b = document.getElementById('msg-badge');
-      if (b) { b.textContent=unread; b.style.display=unread>0?'inline-block':'none'; }
+      if (b) { b.textContent = unread; b.style.display = unread > 0 ? 'inline-block' : 'none'; }
     }
   } else {
-    var rec = msg.receiver ? escH((msg.receiver.prenom||'') + ' ' + (msg.receiver.nom||'')) : 'Admins';
-    document.getElementById('msg-read-meta').innerHTML = 'À : <strong>' + rec + '</strong> — ' + new Date(msg.sent_at).toLocaleString('fr-FR');
-    actZone.style.display = 'none';
+    var rec = msg.receiver ? escH((msg.receiver.prenom || '') + ' ' + (msg.receiver.nom || '')) : 'Admins';
+    if (meta) meta.innerHTML = 'À : <strong>' + rec + '</strong> — ' + new Date(msg.sent_at).toLocaleString('fr-FR');
+    if (actZone) actZone.style.display = 'none';
   }
   openMessageId = msgId;
 };
@@ -1245,73 +1390,58 @@ window.readMsg = async function (msgId, type) {
 window.deleteMyMsg = async function () {
   if (!openMessageId || !confirm('Supprimer ce message ?')) return;
   try {
-    await window.supabase.from('message_deletions').delete()
-      .eq('message_id',openMessageId).eq('user_id',currentUser.id);
+    await window.supabase.from('message_deletions').delete().eq('message_id', openMessageId).eq('user_id', currentUser.id);
     await window.supabase.from('message_deletions').insert([{
-      message_id:openMessageId, user_id:currentUser.id,
-      delete_for_all:false, deleted_at:new Date().toISOString()
+      message_id: openMessageId, user_id: currentUser.id, delete_for_all: false, deleted_at: new Date().toISOString()
     }]);
-    inboxMessages = inboxMessages.filter(function(m){ return m.id !== openMessageId; });
+    inboxMessages = inboxMessages.filter(function (m) { return m.id !== openMessageId; });
     openMessageId = null;
-    document.getElementById('msg-read-subject').textContent = 'Sélectionnez un message';
-    document.getElementById('msg-read-meta').innerHTML = '';
-    document.getElementById('msg-read-body').textContent = 'Message supprimé.';
-    document.getElementById('msg-actions-zone').style.display = 'none';
-    window.showToast('Message supprimé','success');
+    var sub  = document.getElementById('msg-read-subject');
+    var body = document.getElementById('msg-read-body');
+    var meta = document.getElementById('msg-read-meta');
+    if (sub)  sub.textContent  = 'Sélectionnez un message';
+    if (meta) meta.innerHTML   = '';
+    if (body) body.textContent = 'Message supprimé.';
+    var az = document.getElementById('msg-actions-zone'); if (az) az.style.display = 'none';
+    window.showToast && window.showToast('Message supprimé', 'success');
     loadMessages();
-  } catch (e) { window.showToast('Erreur : '+e.message,'error'); }
+  } catch (e) { window.showToast && window.showToast('Erreur : ' + e.message, 'error'); }
 };
 
 window.sendNewMessage = async function () {
   var subject = document.getElementById('new-msg-subject').value.trim();
   var body    = document.getElementById('new-msg-body').value.trim();
   var fb      = document.getElementById('new-msg-fb');
-  if (!body) { showFbEl(fb,'Écrivez un message.','err'); return; }
+  if (!body) { showFbEl(fb, 'Écrivez un message.', 'err'); return; }
   try {
-    var admins = await window.supabase.from('users').select('id').in('role',['admin','super_admin']).eq('status','active');
-    var inserts = (admins.data||[]).map(function(a){
-      return { sender_id:currentUser.id, receiver_id:a.id, subject:subject||'(sans sujet)', content:body, sent_at:new Date().toISOString() };
+    var admins  = await window.supabase.from('users').select('id').in('role', ['admin', 'super_admin']).eq('status', 'active');
+    var inserts = (admins.data || []).map(function (a) {
+      return { sender_id: currentUser.id, receiver_id: a.id, subject: subject || '(sans sujet)', content: body, sent_at: new Date().toISOString() };
     });
-    if (!inserts.length) { showFbEl(fb,'Aucun administrateur trouvé.','err'); return; }
+    if (!inserts.length) { showFbEl(fb, 'Aucun administrateur trouvé.', 'err'); return; }
     var r = await window.supabase.from('messages').insert(inserts);
     if (r.error) throw r.error;
     document.getElementById('new-msg-subject').value = '';
     document.getElementById('new-msg-body').value    = '';
-    showFbEl(fb,'Message envoyé à l\'équipe !','ok');
+    showFbEl(fb, "Message envoyé à l'équipe !", 'ok');
     loadMessages();
-  } catch (e) { showFbEl(fb,'Erreur : '+e.message,'err'); }
+  } catch (e) { showFbEl(fb, 'Erreur : ' + e.message, 'err'); }
 };
 
-// ─── Helpers ───
-function escH(s) {
-  if (s==null) return '';
-  var d=document.createElement('div'); d.textContent=String(s); return d.innerHTML;
-}
-function truncT(t,n) { return t&&t.length>n ? t.slice(0,n)+'…' : (t||''); }
-function showFb(id,msg,type) {
-  var el=document.getElementById(id); if(!el) return;
-  el.className=type==='ok'?'fb-ok':'fb-err'; el.textContent=msg;
-  setTimeout(function(){ el.textContent=''; el.className=''; },4000);
-}
-function showFbEl(el,msg,type) {
-  if(!el) return;
-  el.className=type==='ok'?'fb-ok':'fb-err'; el.textContent=msg;
-  setTimeout(function(){ el.textContent=''; el.className=''; },4500);
-}
-function fileToBase64(file) {
-  return new Promise(function(resolve,reject){
-    var r=new FileReader(); r.onload=function(){ resolve(r.result); }; r.onerror=reject; r.readAsDataURL(file);
-  });
-}
+// ─── Helpers ─────────────────────────────────────────────────────
+function escH(s) { if (s == null) return ''; var d = document.createElement('div'); d.textContent = String(s); return d.innerHTML; }
+function truncT(t, n) { return t && t.length > n ? t.slice(0, n) + '…' : (t || ''); }
+function showFb(id, msg, type) { var el = document.getElementById(id); if (!el) return; el.className = type === 'ok' ? 'fb-ok' : 'fb-err'; el.textContent = msg; setTimeout(function () { el.textContent = ''; el.className = ''; }, 4000); }
+function showFbEl(el, msg, type) { if (!el) return; el.className = type === 'ok' ? 'fb-ok' : 'fb-err'; el.textContent = msg; setTimeout(function () { el.textContent = ''; el.className = ''; }, 4500); }
+function fileToBase64(file) { return new Promise(function (resolve, reject) { var r = new FileReader(); r.onload = function () { resolve(r.result); }; r.onerror = reject; r.readAsDataURL(file); }); }
 
 window.FALLBACK_AVATAR = window.FALLBACK_AVATAR || 'https://ui-avatars.com/api/?name=N&background=2196F3&color=fff';
 window.FALLBACK_IMG    = window.FALLBACK_IMG    || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="60"%3E%3Crect fill="%23e0e0e0" width="100" height="60"/%3E%3C/svg%3E';
-window.avatarOnError   = window.avatarOnError   || function(img){ img.src=window.FALLBACK_AVATAR; };
-window.imgOnError      = window.imgOnError      || function(img){ img.src=window.FALLBACK_IMG; };
+window.avatarOnError   = window.avatarOnError   || function (img) { img.src = window.FALLBACK_AVATAR; };
+window.imgOnError      = window.imgOnError      || function (img) { img.src = window.FALLBACK_IMG; };
 
 window.addEventListener('beforeunload', function () {
   if (window.SessionWatcher) window.SessionWatcher.stop();
-  if (window.RealtimeSync)   window.RealtimeSync.stop();
 });
 </script>
 </body>
